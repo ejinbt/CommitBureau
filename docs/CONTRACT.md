@@ -15,7 +15,7 @@ The UI imports game functions only from `src/api.js`. Change this contract only 
 ```js
 parseRepo(input)                                 // "https://github.com/a/b" or "a/b" -> { owner, repo }
 setToken(token)                                  // optional GitHub token, kept in memory only
-buildGame({ owner, repo }, level, { difficulty }) // -> Promise<Round[]>  (5 rounds), difficulty "easy" | "medium"
+buildGame({ owner, repo }, level, { difficulty }) // -> Promise<Round[]>  (up to 5 rounds), difficulty "easy" | "medium"; level 5 accepts null instead of a repo
 newGame(level)                                   // -> fresh game state
 scoreAnswer(state, round, pickedIndex, usedHint) // -> new game state; state.last = { correct, points }
 finalReport(state)                               // -> { score, correctCount, total, percent, rank, unlocked, bestStreak, skills, suggestion }
@@ -44,6 +44,10 @@ Errors are thrown as `Error` with a friendly `.message` (invalid URL, repo not f
   command: "git show 3f2a1c9"
 }
 ```
+
+Level 5 rounds also have `optionNotes`: one string per option, same order, saying what that command would have done. Show the note for the option the player picked when they get it wrong.
+
+A game can have fewer than 5 rounds (small repo, or API budget used up). Use `rounds.length`, not 5.
 
 ## Game rules
 
