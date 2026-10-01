@@ -1,7 +1,6 @@
 /* ==========================================================================
    BUREAU BRIEFING / HERO (ELECTRIC GREEN & PITCH BLACK)
-   Inspired by reference: Dark glassmorphism, glowing accents, pure white text
-   Zero AI pills, authentic human developer design
+   Guaranteed visible 3D terminal, modern high-end CTA buttons
    ========================================================================== */
 
 .cb-hero-section {
@@ -32,7 +31,6 @@
   flex-direction: column;
 }
 
-/* Authentic Engineering Eyebrow (No generic AI pill borders) */
 .cb-hero-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -75,21 +73,88 @@
   margin-bottom: 2rem;
 }
 
+/* Actions Row */
 .cb-hero-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.15rem;
   flex-wrap: wrap;
   margin-bottom: 2.75rem;
 }
 
-.cb-btn-arrow {
+/* Primary High-Impact Button */
+.cb-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-family: var(--cb-font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.85rem 1.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 255, 102, 0.7);
+  background: linear-gradient(135deg, #00ff66 0%, #00e65c 40%, #10b981 100%);
+  color: #030604;
+  cursor: pointer;
+  box-shadow: 
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.85),
+    0 4px 20px rgba(0, 255, 102, 0.35);
+  transition: all 0.25s var(--cb-ease);
+  text-decoration: none;
+}
+
+.cb-cta-primary:hover {
+  background: linear-gradient(135deg, #2eff82 0%, #00ff66 40%, #12c98d 100%);
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 1),
+    0 8px 30px rgba(0, 255, 102, 0.55);
+  transform: translateY(-2px);
+}
+
+.cb-cta-primary:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.cb-cta-arrow {
   font-size: 1rem;
   transition: transform 0.25s var(--cb-ease);
 }
 
-.cb-btn-emerald:hover .cb-btn-arrow {
+.cb-cta-primary:hover .cb-cta-arrow {
   transform: translateY(3px);
+}
+
+/* Secondary Dark Glass Button */
+.cb-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--cb-font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.85rem 1.65rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(13, 23, 18, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.25s var(--cb-ease);
+  text-decoration: none;
+}
+
+.cb-cta-secondary:hover {
+  border-color: rgba(0, 255, 102, 0.45);
+  background: rgba(18, 32, 25, 0.85);
+  color: var(--cb-green-vivid);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 255, 102, 0.15);
+}
+
+.cb-cta-secondary:active {
+  transform: translateY(1px);
 }
 
 /* Metrics Row */
@@ -127,11 +192,12 @@
   background-color: var(--cb-border-subtle);
 }
 
-/* Right Column: Visual Terminal */
+/* Right Column: 3D Tilting Terminal */
 .cb-hero-visual {
   position: relative;
   display: flex;
   justify-content: center;
+  perspective: 1000px;
 }
 
 .cb-ambient-glow {
@@ -139,9 +205,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle, rgba(0, 255, 102, 0.18) 0%, rgba(9, 72, 40, 0.05) 50%, transparent 70%);
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(0, 255, 102, 0.2) 0%, rgba(9, 72, 40, 0.06) 50%, transparent 70%);
   filter: blur(40px);
   pointer-events: none;
   z-index: 0;
@@ -151,8 +217,18 @@
   width: 100%;
   max-width: 500px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   overflow: hidden;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  background: rgba(10, 16, 12, 0.85);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  border-radius: var(--cb-radius-lg);
+  box-shadow: 
+    0 20px 50px -10px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(0, 255, 102, 0.1);
+  will-change: transform;
 }
 
 .cb-terminal-header {
@@ -160,8 +236,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.85rem 1.15rem;
-  background: rgba(4, 8, 5, 0.7);
-  border-bottom: 1px solid var(--cb-border);
+  background: rgba(4, 8, 5, 0.8);
+  border-bottom: 1px solid rgba(0, 255, 102, 0.15);
 }
 
 .cb-terminal-dots {
@@ -210,10 +286,10 @@
 }
 
 .cb-terminal-diff {
-  padding: 1.25rem 1.15rem;
-  font-size: 0.82rem;
+  padding: 1.35rem 1.15rem;
+  font-size: 0.84rem;
   line-height: 1.7;
-  background: rgba(2, 4, 2, 0.9);
+  background: rgba(2, 4, 2, 0.95);
   overflow-x: auto;
 }
 
@@ -257,8 +333,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.85rem 1.15rem;
-  background: rgba(4, 8, 5, 0.75);
-  border-top: 1px solid var(--cb-border);
+  background: rgba(4, 8, 5, 0.85);
+  border-top: 1px solid rgba(0, 255, 102, 0.15);
   flex-wrap: wrap;
   gap: 0.5rem;
 }
@@ -305,8 +381,8 @@
     align-items: stretch;
   }
 
-  .cb-btn-emerald,
-  .cb-btn-glass {
+  .cb-cta-primary,
+  .cb-cta-secondary {
     width: 100%;
   }
 

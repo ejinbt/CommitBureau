@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import Header from '../components/Header';
 import BureauBriefing from '../components/BureauBriefing';
+import CaseIntakeConsole from '../components/CaseIntakeConsole';
 
 /**
  * MainPage
@@ -8,7 +9,7 @@ import BureauBriefing from '../components/BureauBriefing';
  * - Section 1: Bureau Briefing (Hero & Concept)
  * - Section 2: Case Intake Console (Target selection)
  */
-export default function MainPage({ _onStartCase, level = 1, rank = 'Rookie' }) {
+export default function MainPage({ onStartCase, level = 1, rank = 'Rookie' }) {
   const intakeSectionRef = useRef(null);
 
   const handleScrollToIntake = () => {
@@ -26,9 +27,9 @@ export default function MainPage({ _onStartCase, level = 1, rank = 'Rookie' }) {
         {/* SECTION 1: Bureau Briefing & Forensics Mission */}
         <BureauBriefing onScrollToIntake={handleScrollToIntake} />
 
-        {/* SECTION 2 Anchor: Case Intake Console (Next section) */}
-        <div ref={intakeSectionRef} id="case-intake">
-          {/* Section 2 will be mounted here */}
+        {/* SECTION 2: Case Intake Console (Repository Selection) */}
+        <div ref={intakeSectionRef}>
+          <CaseIntakeConsole onSelectRepo={onStartCase} />
         </div>
       </main>
     </div>

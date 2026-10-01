@@ -1,12 +1,96 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import gsap from 'gsap';
 import './BureauBriefing.css';
 
 /**
  * Section 1: Bureau Briefing
- * High-impact hero with clean engineering typography.
- * Removed the generic AI pill badge; replaced with authentic metadata.
+ * High-impact hero with clean, modern buttons, 100% reliable terminal rendering,
+ * and 3D gyroscopic cursor physics.
  */
 export default function BureauBriefing({ onScrollToIntake }) {
+  const terminalRef = useRef(null);
+  const primaryBtnRef = useRef(null);
+
+  useEffect(() => {
+    const terminal = terminalRef.current;
+    if (!terminal) return;
+
+    // 3D Gyroscopic Tilt on Terminal Window
+    const handleMouseMove = (e) => {
+      const rect = terminal.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
+
+      gsap.to(terminal, {
+        rotateX,
+        rotateY,
+        transformPerspective: 1000,
+        duration: 0.3,
+        ease: 'power2.out'
+      });
+    };
+
+    const handleMouseLeave = () => {
+      gsap.to(terminal, {
+        rotateX: 0,
+        rotateY: 0,
+        duration: 0.7,
+        ease: 'elastic.out(1, 0.5)'
+      });
+    };
+
+    terminal.addEventListener('mousemove', handleMouseMove);
+    terminal.addEventListener('mouseleave', handleMouseLeave);
+
+    // Magnetic physics on Primary CTA Button
+    const btn = primaryBtnRef.current;
+    let cleanupBtn = null;
+    if (btn) {
+      const onBtnMove = (e) => {
+        const rect = btn.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const deltaX = (e.clientX - centerX) * 0.25;
+        const deltaY = (e.clientY - centerY) * 0.25;
+
+        gsap.to(btn, {
+          x: deltaX,
+          y: deltaY,
+          duration: 0.25,
+          ease: 'power2.out'
+        });
+      };
+
+      const onBtnLeave = () => {
+        gsap.to(btn, {
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: 'elastic.out(1, 0.4)'
+        });
+      };
+
+      btn.addEventListener('mousemove', onBtnMove);
+      btn.addEventListener('mouseleave', onBtnLeave);
+
+      cleanupBtn = () => {
+        btn.removeEventListener('mousemove', onBtnMove);
+        btn.removeEventListener('mouseleave', onBtnLeave);
+      };
+    }
+
+    return () => {
+      terminal.removeEventListener('mousemove', handleMouseMove);
+      terminal.removeEventListener('mouseleave', handleMouseLeave);
+      if (cleanupBtn) cleanupBtn();
+    };
+  }, []);
+
   return (
     <section className="cb-hero-section">
       <div className="cb-container">
@@ -29,19 +113,21 @@ export default function BureauBriefing({ onScrollToIntake }) {
               uncover rogue authors, and master genuine terminal Git commands.
             </p>
 
+            {/* Actions Row */}
             <div className="cb-hero-actions">
               <button 
+                ref={primaryBtnRef}
                 type="button" 
-                className="cb-btn-emerald"
+                className="cb-cta-primary"
                 onClick={onScrollToIntake}
               >
                 <span>Start Investigation</span>
-                <span className="cb-btn-arrow" aria-hidden="true">↓</span>
+                <span className="cb-cta-arrow" aria-hidden="true">↓</span>
               </button>
 
               <button 
                 type="button" 
-                className="cb-btn-glass"
+                className="cb-cta-secondary"
                 onClick={onScrollToIntake}
               >
                 Featured Repos
@@ -67,10 +153,10 @@ export default function BureauBriefing({ onScrollToIntake }) {
             </div>
           </div>
 
-          {/* Right Column: Glowing Dark Glass Terminal Card */}
+          {/* Right Column: Always Visible 3D Tilting Terminal Card */}
           <div className="cb-hero-visual">
             <div className="cb-ambient-glow" aria-hidden="true" />
-            <div className="cb-glass-card cb-terminal-window">
+            <div ref={terminalRef} className="cb-glass-card cb-terminal-window">
               {/* Window Header */}
               <div className="cb-terminal-header">
                 <div className="cb-terminal-dots">
