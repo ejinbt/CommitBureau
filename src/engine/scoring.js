@@ -31,60 +31,66 @@ export const SKILL_LABELS = {
   inspect: 'Inspecting changes',
 }
 
+// The UI keeps its own copy of this state, so every function tolerates missing fields.
 export function newGame(level = 1) {
-  return { level, score: 0, streak: 0, bestStreak: 0, answers: [], last: null }
+  return { level, score: 0, streak: 0, maxStreak: 0, answers: [], last: null }
 }
 
-export function scoreAnswer(state, round, pickedIndex, usedHint) {
-  const correct = pickedIndex === round.answer
-  const streak = correct ? state.streak + 1 : 0
+export function scoreAnswer(state, round, pickedIndex, usedHint = false) {
+  const isCorrect = pickedIndex === round.answer
+  const streak = isCorrect ? (state.streak || 0) + 1 : 0
 
   let points = 0
-  if (correct) {
+  if (isCorrect) {
     points = POINTS_CORRECT - (usedHint ? HINT_PENALTY : 0)
     points += Math.min((streak - 1) * STREAK_BONUS, MAX_STREAK_BONUS)
   }
 
   return {
     ...state,
-    score: state.score + points,
+    score: (state.score || 0) + points,
     streak,
-    bestStreak: Math.max(state.bestStreak, streak),
-    answers: [...state.answers, { roundId: round.id, type: round.type, correct, usedHint }],
-    last: { correct, points },
+    maxStreak: Math.max(state.maxStreak || 0, streak),
+    answers: [...(state.answers || []), { roundId: round.id, type: round.type, isCorrect, pickedIndex, usedHint, points }],
+    last: { isCorrect, points },
   }
 }
 
-export function finalReport(state) {
-  const total = state.answers.length
-  const correctCount = state.answers.filter((a) => a.correct).length
-  const percent = total ? Math.round((correctCount / total) * 100) : 0
+// `level` defaults to the one stored in state, since the UI's own state may not carry it.
+export function finalReport(state, level = state.level || 1) {
+  const answers = state.answers || []
+  const totalCount = answers.length
+  const correctCount = answers.filter((a) => a.isCorrect).length
+  const percent = totalCount ? Math.round((correctCount / totalCount) * 100) : 0
   const unlocked = percent >= PASS_PERCENT
 
   // Level 1 is Rookie. Passing a level promotes you to the next rank, up to Chief.
-  const rank = RANKS[Math.min(unlocked ? state.level : state.level - 1, RANKS.length - 1)]
+  const rank = RANKS[Math.min(unlocked ? level : level - 1, RANKS.length - 1)]
 
   // Skills report: right answers per question type, e.g. "Finding the author 1/2".
-  const skills = {}
-  for (const a of state.answers) {
-    skills[a.type] ??= { label: SKILL_LABELS[a.type] || a.type, correct: 0, total: 0 }
-    skills[a.type].total++
-    if (a.correct) skills[a.type].correct++
+  const byType = {}
+  for (const a of answers) {
+    byType[a.type] ??= { type: a.type, label: SKILL_LABELS[a.type] || a.type, correct: 0, total: 0 }
+    byType[a.type].total++
+    if (a.isCorrect) byType[a.type].correct++
   }
+  const skills = Object.values(byType).map((s) => ({
+    ...s,
+    ratio: `${s.correct}/${s.total}`,
+    percentage: Math.round((s.correct / s.total) * 100),
+  }))
 
   // Suggest replaying the weakest question type.
-  const weakest = Object.values(skills)
-    .filter((s) => s.correct < s.total)
-    .sort((x, y) => x.correct / x.total - y.correct / y.total)[0]
+  const weakest = skills.filter((s) => s.correct < s.total).sort((x, y) => x.percentage - y.percentage)[0]
 
   return {
-    score: state.score,
+    score: state.score || 0,
     correctCount,
-    total,
+    totalCount,
     percent,
     rank,
     unlocked,
-    bestStreak: state.bestStreak,
+    maxStreak: state.maxStreak || 0,
     skills,
     suggestion: weakest ? `Practise: ${weakest.label}` : 'Clean sheet. Try the next level.',
   }

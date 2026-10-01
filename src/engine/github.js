@@ -17,6 +17,17 @@ export function setToken(value) {
   token = (value || '').trim()
 }
 
+// The UI's token field saves to localStorage under this key. Read it on every request so a newly
+// saved token works straight away. localStorage can be missing (Node) or blocked (private mode).
+const TOKEN_KEY = 'cb_github_token'
+function storedToken() {
+  try {
+    return globalThis.localStorage?.getItem(TOKEN_KEY)?.trim() || ''
+  } catch {
+    return ''
+  }
+}
+
 export function gh(path) {
   // Cache the promise, not the result, so two calls for the same URL at once share one request.
   if (!cache.has(path)) {
@@ -31,7 +42,8 @@ export function gh(path) {
 
 async function fetchJson(path) {
   const headers = { Accept: 'application/vnd.github+json' }
-  if (token) headers.Authorization = `Bearer ${token}`
+  const auth = token || storedToken()
+  if (auth) headers.Authorization = `Bearer ${auth}`
   networkCalls++
 
   let res

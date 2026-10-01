@@ -14,15 +14,18 @@ The UI imports game functions only from `src/api.js`. Change this contract only 
 
 ```js
 parseRepo(input)                                 // "https://github.com/a/b" or "a/b" -> { owner, repo }
-setToken(token)                                  // optional GitHub token, kept in memory only
+setToken(token)                                  // optional; the engine also reads localStorage "cb_github_token"
+FEATURED_REPOS                                   // [{ owner, repo, title, description, tag }]
 buildGame({ owner, repo }, level, { difficulty }) // -> Promise<Round[]>  (up to 5 rounds), difficulty "easy" | "medium"; level 5 accepts null instead of a repo
 newGame(level)                                   // -> fresh game state
-scoreAnswer(state, round, pickedIndex, usedHint) // -> new game state; state.last = { correct, points }
-finalReport(state)                               // -> { score, correctCount, total, percent, rank, unlocked, bestStreak, skills, suggestion }
+scoreAnswer(state, round, pickedIndex, usedHint) // -> new state; answers[i] = { roundId, type, isCorrect, pickedIndex, usedHint, points }
+finalReport(state, level)                        // -> { score, correctCount, totalCount, percent, rank, unlocked, maxStreak, skills, suggestion }
 getUserRepos(username)                           // -> Promise<{ owner, repo, description, language, pushedAt, fork }[]>
 ```
 
-`skills` looks like `{ real_or_fake: { label: "Reading commit messages", correct: 2, total: 3 }, ... }`.
+Game state is `{ score, streak, maxStreak, answers }`.
+
+`skills` is an array: `[{ type: "real_or_fake", label: "Reading commit messages", correct: 2, total: 3, ratio: "2/3", percentage: 67 }, ...]`.
 
 Game state is a plain object. Keep it in React state and replace it with whatever `scoreAnswer` returns. Don't mutate it.
 

@@ -6,6 +6,7 @@ import { fetchUserRepos } from './github.js'
 
 export { parseRepo } from './parseRepo.js'
 export { setToken } from './github.js'
+export { FEATURED_REPOS } from '../data/featuredRepos.js'
 export { buildGame, ROUNDS_PER_GAME } from './game.js'
 export { newGame, scoreAnswer, finalReport, RANKS, PASS_PERCENT } from './scoring.js'
 
