@@ -1,0 +1,219 @@
+.verdict-pane {
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-top: 18px;
+  background: #060b07;
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  font-family: inherit;
+  animation: verdictIn 0.25s ease-out;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+}
+
+@keyframes verdictIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.verdict-success {
+  border-left: 4px solid #00ff66;
+  border-color: rgba(0, 255, 102, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 255, 102, 0.12), inset 0 1px 0 rgba(0, 255, 102, 0.2);
+}
+
+.verdict-failure {
+  border-left: 4px solid #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.12);
+}
+
+.verdict-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.verdict-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.verdict-icon-ok {
+  color: #00ff66;
+}
+
+.verdict-icon-bad {
+  color: #ef4444;
+}
+
+.verdict-state-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.verdict-success .verdict-state-text {
+  color: #00ff66;
+}
+
+.verdict-failure .verdict-state-text {
+  color: #f87171;
+}
+
+.verdict-score-delta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.verdict-success .verdict-score-delta {
+  color: #00ff66;
+  text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+}
+
+.verdict-failure .verdict-score-delta {
+  color: #ef4444;
+}
+
+.verdict-explanation {
+  margin-bottom: 16px;
+}
+
+.explanation-paragraph {
+  color: #e5e7eb;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* CLI command bar */
+.verdict-cli-bar {
+  background: #030604;
+  border: 1px solid rgba(0, 255, 102, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.cli-bar-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: #34d399;
+  margin-bottom: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.cli-bar-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #08110a;
+  border: 1px solid rgba(0, 255, 102, 0.15);
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.cli-dollar {
+  color: #00ff66;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.82rem;
+  user-select: none;
+}
+
+.cli-cmd-str {
+  flex: 1;
+  color: #a7f3d0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.cli-copy-action {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 255, 102, 0.1);
+  border: 1px solid rgba(0, 255, 102, 0.3);
+  color: #00ff66;
+  font-size: 0.68rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cli-copy-action:hover {
+  background: rgba(0, 255, 102, 0.25);
+  color: #ffffff;
+}
+
+/* Action row */
+.verdict-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.verdict-key-hint {
+  font-size: 0.72rem;
+  color: #6ee7b7;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.verdict-key-hint kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(0, 255, 102, 0.1);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+}
+
+.verdict-proceed-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #00ff66;
+  color: #040805;
+  border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 14px rgba(0, 255, 102, 0.35);
+}
+
+.verdict-proceed-btn:hover {
+  background: #1aff75;
+  box-shadow: 0 6px 20px rgba(0, 255, 102, 0.5);
+  transform: translateY(-1px);
+}

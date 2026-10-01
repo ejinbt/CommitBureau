@@ -1,0 +1,646 @@
+/* ==========================================================================
+   SECTION 2: CASE INTAKE CONSOLE — FORENSIC FOLDER DOSSIER CARDS
+   Authentic folder shape with tab, electric green accents, smooth GSAP transitions
+   ========================================================================== */
+
+.cb-intake-section {
+  width: 100%;
+  padding-top: 4.5rem;
+  padding-bottom: 6rem;
+  position: relative;
+}
+
+/* Header */
+.cb-intake-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 3rem auto;
+}
+
+.cb-intake-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--cb-text-muted);
+  margin-bottom: 1rem;
+}
+
+.cb-intake-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.cb-intake-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--cb-text-muted);
+}
+
+/* Tab Switcher */
+.cb-tabs-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.75rem;
+}
+
+.cb-intake-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(13, 23, 18, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--cb-border);
+  padding: 0.35rem;
+  border-radius: var(--cb-radius-pill);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.cb-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--cb-font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--cb-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--cb-radius-pill);
+  cursor: pointer;
+  transition: all 0.2s var(--cb-ease);
+}
+
+.cb-tab-btn:hover {
+  color: #ffffff;
+}
+
+.cb-tab-btn.active {
+  background: rgba(0, 255, 102, 0.12);
+  border-color: rgba(0, 255, 102, 0.3);
+  color: var(--cb-green-vivid);
+  box-shadow: 0 0 16px rgba(0, 255, 102, 0.15);
+}
+
+.cb-tab-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+  color: #ffffff;
+}
+
+.cb-tab-btn.active .cb-tab-count {
+  background: var(--cb-green-vivid);
+  color: #040805;
+}
+
+/* ==========================================================================
+   FORENSIC FOLDER DOSSIER CARDS
+   ========================================================================== */
+
+.cb-folders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+.cb-folder-card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.3s var(--cb-ease);
+}
+
+.cb-folder-card:hover {
+  transform: translateY(-6px);
+}
+
+/* The Folder Tab on Top */
+.cb-folder-tab {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(16, 28, 21, 0.95);
+  border: 1px solid var(--cb-border);
+  border-bottom: 1px solid rgba(16, 28, 21, 0.95);
+  border-radius: 12px 16px 0 0;
+  padding: 0.45rem 1.4rem 0.45rem 1.15rem;
+  margin-bottom: -1px;
+  z-index: 2;
+  position: relative;
+  transition: border-color 0.25s var(--cb-ease);
+}
+
+.cb-folder-tab-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--cb-green-vivid);
+}
+
+.cb-folder-tab-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--cb-text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+}
+
+/* The Main Folder Sleeve Body */
+.cb-folder-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(10, 18, 13, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--cb-border);
+  border-radius: 0 16px 16px 16px; /* Seamless top-left connection */
+  padding: 1.65rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s var(--cb-ease);
+  height: 100%;
+}
+
+.cb-folder-card:hover .cb-folder-tab,
+.cb-folder-card:hover .cb-folder-body {
+  border-color: rgba(0, 255, 102, 0.45);
+}
+
+.cb-folder-card:hover .cb-folder-body {
+  box-shadow: 
+    0 22px 50px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(0, 255, 102, 0.15);
+}
+
+.cb-folder-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.15rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+
+.cb-folder-stamp {
+  color: var(--cb-green-vivid);
+  background: rgba(0, 255, 102, 0.08);
+  border: 1px solid rgba(0, 255, 102, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.cb-folder-level {
+  color: var(--cb-text-faint);
+}
+
+.cb-folder-name {
+  font-size: 1.35rem;
+  color: #ffffff;
+  margin-bottom: 0.35rem;
+}
+
+.cb-folder-repo {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  color: var(--cb-text-faint);
+  margin-bottom: 0.9rem;
+}
+
+.cb-folder-summary {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--cb-text-muted);
+  margin-bottom: 1.65rem;
+}
+
+.cb-folder-open-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--cb-font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.75rem 1.15rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  background: rgba(0, 255, 102, 0.06);
+  color: var(--cb-green-vivid);
+  cursor: pointer;
+  transition: all 0.25s var(--cb-ease);
+}
+
+.cb-folder-open-btn:hover {
+  background: var(--cb-green-vivid);
+  color: #040805;
+  border-color: var(--cb-green-vivid);
+  box-shadow: 0 4px 18px rgba(0, 255, 102, 0.45);
+}
+
+.cb-folder-open-arrow {
+  transition: transform 0.2s var(--cb-ease);
+}
+
+.cb-folder-open-btn:hover .cb-folder-open-arrow {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   TAB 2 & 3: CUSTOM & ARCHIVE FOLDERS
+   ========================================================================== */
+
+.cb-custom-wrapper,
+.cb-archive-wrapper {
+  max-width: 780px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.cb-custom-body,
+.cb-archive-body {
+  border-radius: 0 16px 16px 16px;
+  padding: 2.25rem;
+}
+
+.cb-custom-header,
+.cb-archive-header {
+  margin-bottom: 1.75rem;
+}
+
+.cb-custom-header h3,
+.cb-archive-header h3 {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-bottom: 0.35rem;
+}
+
+.cb-custom-header p,
+.cb-archive-header p {
+  font-size: 0.92rem;
+  color: var(--cb-text-muted);
+}
+
+.cb-input-group {
+  display: flex;
+  align-items: center;
+  background: rgba(4, 8, 5, 0.9);
+  border: 1px solid var(--cb-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s var(--cb-ease), box-shadow 0.2s var(--cb-ease);
+}
+
+.cb-input-group:focus-within {
+  border-color: var(--cb-green-vivid);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.25);
+}
+
+.cb-input-prefix {
+  padding-left: 1.15rem;
+  font-size: 0.85rem;
+  color: var(--cb-text-faint);
+  user-select: none;
+}
+
+.cb-custom-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 0.95rem 1rem;
+  font-size: 0.95rem;
+  color: #ffffff;
+  outline: none;
+}
+
+.cb-custom-input::placeholder {
+  color: var(--cb-text-faint);
+}
+
+.cb-custom-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.35rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--cb-font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 102, 0.7);
+  background: linear-gradient(135deg, #00ff66 0%, #00e65c 40%, #10b981 100%);
+  color: #030604;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.9), 0 4px 15px rgba(0, 255, 102, 0.3);
+  transition: all 0.2s var(--cb-ease);
+}
+
+.cb-custom-submit-btn:hover {
+  background: linear-gradient(135deg, #2eff82 0%, #00ff66 40%, #12c98d 100%);
+  box-shadow: 0 6px 20px rgba(0, 255, 102, 0.5);
+  transform: translateY(-1px);
+}
+
+.cb-custom-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cb-error-banner {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--cb-red-dim);
+  border: 1px solid rgba(255, 51, 102, 0.3);
+  border-radius: 8px;
+  color: #fda4af;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cb-input-hints {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-top: 1.15rem;
+  font-size: 0.75rem;
+  color: var(--cb-text-faint);
+}
+
+.cb-input-hints code {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  color: var(--cb-green-vivid);
+}
+
+/* ==========================================================================
+   TAB 3: ARCHIVE RESULTS LIST
+   ========================================================================== */
+
+.cb-archive-results {
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--cb-border-subtle);
+}
+
+.cb-archive-results-title {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.cb-user-repo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cb-user-repo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: rgba(4, 8, 5, 0.85);
+  border: 1px solid var(--cb-border);
+  border-radius: 10px;
+  gap: 1rem;
+  transition: all 0.2s var(--cb-ease);
+}
+
+.cb-user-repo-item:hover {
+  border-color: var(--cb-border-hover);
+  background: rgba(8, 16, 11, 0.95);
+}
+
+.cb-user-repo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cb-user-repo-name {
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.cb-user-repo-desc {
+  font-size: 0.84rem;
+  color: var(--cb-text-muted);
+}
+
+.cb-user-repo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--cb-font-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 102, 0.3);
+  background: rgba(0, 255, 102, 0.08);
+  color: var(--cb-green-vivid);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s var(--cb-ease);
+}
+
+.cb-user-repo-btn:hover {
+  background: var(--cb-green-vivid);
+  color: #040805;
+  box-shadow: 0 2px 14px rgba(0, 255, 102, 0.4);
+}
+
+/* ==========================================================================
+   INVESTIGATOR TOKEN KEY
+   ========================================================================== */
+
+.cb-token-container {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cb-token-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--cb-font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cb-text-muted);
+  background: rgba(13, 23, 18, 0.5);
+  border: 1px solid var(--cb-border);
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--cb-radius-pill);
+  cursor: pointer;
+  transition: all 0.2s var(--cb-ease);
+}
+
+.cb-token-toggle-btn:hover {
+  color: #ffffff;
+  border-color: var(--cb-green-vivid);
+}
+
+.cb-token-icon {
+  color: var(--cb-green-vivid);
+}
+
+.cb-token-arrow {
+  font-size: 0.7rem;
+  color: var(--cb-text-faint);
+}
+
+.cb-token-drawer {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: rgba(13, 23, 18, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--cb-border);
+  border-radius: var(--cb-radius-md);
+  text-align: left;
+}
+
+.cb-token-desc {
+  font-size: 0.85rem;
+  color: var(--cb-text-muted);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.cb-token-form {
+  display: flex;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.cb-token-input {
+  flex: 1;
+  background: rgba(4, 8, 5, 0.85);
+  border: 1px solid var(--cb-border);
+  border-radius: 8px;
+  padding: 0.65rem 0.95rem;
+  font-size: 0.85rem;
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s var(--cb-ease);
+}
+
+.cb-token-input:focus {
+  border-color: var(--cb-green-vivid);
+}
+
+.cb-token-save-btn {
+  font-family: var(--cb-font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 102, 0.5);
+  background: var(--cb-green-vivid);
+  color: #040805;
+  cursor: pointer;
+  transition: all 0.2s var(--cb-ease);
+}
+
+.cb-token-save-btn:hover {
+  background: #2eff7e;
+  box-shadow: 0 0 14px rgba(0, 255, 102, 0.4);
+}
+
+.cb-token-security-note {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  color: var(--cb-text-faint);
+}
+
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .cb-intake-section {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+
+  .cb-intake-tabs {
+    flex-direction: column;
+    width: 100%;
+    border-radius: var(--cb-radius-md);
+  }
+
+  .cb-tab-btn {
+    width: 100%;
+    justify-content: center;
+    border-radius: 8px;
+  }
+
+  .cb-folder-body {
+    border-radius: 0 14px 14px 14px;
+    padding: 1.35rem 1.15rem;
+  }
+
+  .cb-custom-body,
+  .cb-archive-body {
+    padding: 1.5rem 1.15rem;
+  }
+
+  .cb-input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cb-input-prefix {
+    padding-top: 0.75rem;
+    padding-left: 0.85rem;
+  }
+
+  .cb-custom-submit-btn {
+    width: calc(100% - 0.7rem);
+    margin: 0.35rem;
+    justify-content: center;
+  }
+
+  .cb-user-repo-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cb-user-repo-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cb-token-form {
+    flex-direction: column;
+  }
+
+  .cb-token-save-btn {
+    width: 100%;
+  }
+}
