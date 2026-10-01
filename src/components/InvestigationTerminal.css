@@ -1,0 +1,205 @@
+/* Investigation terminal (Detective mode): matches the evidence terminal's look in DiffViewer.css. */
+
+.inv-terminal {
+  display: flex;
+  flex-direction: column;
+  background: #030704;
+  border: 1px solid rgba(0, 255, 102, 0.22);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 102, 0.05);
+  font-family: var(--cb-font-mono);
+  cursor: text;
+}
+
+.inv-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  background: #08100a;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+  font-size: 0.74rem;
+}
+
+.inv-lights {
+  display: flex;
+  gap: 6px;
+}
+
+.inv-light {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.inv-light-close { background: #ef4444; }
+.inv-light-min { background: #f59e0b; }
+.inv-light-expand { background: #10b981; }
+
+.inv-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #ededed;
+}
+
+.inv-count {
+  color: var(--cb-text-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.inv-brief {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  padding: 10px 14px;
+  border-bottom: 1px dashed rgba(0, 255, 102, 0.15);
+  color: var(--cb-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.inv-brief-tag {
+  color: var(--cb-green-vivid);
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+}
+
+.inv-suggest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.1);
+  cursor: default;
+}
+
+.inv-suggest-label {
+  color: var(--cb-text-faint);
+  font-size: 0.72rem;
+}
+
+.inv-chip {
+  max-width: 100%;
+  padding: 3px 9px;
+  background: rgba(0, 255, 102, 0.06);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  border-radius: 6px;
+  color: var(--cb-green-bright);
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.inv-chip:hover {
+  background: rgba(0, 255, 102, 0.12);
+  border-color: var(--cb-green-vivid);
+}
+
+.inv-chip:focus-visible,
+.inv-input:focus-visible {
+  outline: 2px solid var(--cb-green-vivid);
+  outline-offset: 2px;
+}
+
+.inv-chip-quiet {
+  color: var(--cb-text-muted);
+  border-color: var(--cb-border-subtle);
+  background: transparent;
+}
+
+.inv-output {
+  min-height: 220px;
+  max-height: 420px;
+  overflow: auto;
+  padding: 12px 14px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.inv-empty {
+  color: var(--cb-text-faint);
+  font-style: italic;
+}
+
+.inv-entry + .inv-entry {
+  margin-top: 12px;
+}
+
+.inv-cmd {
+  color: #ededed;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.inv-prompt {
+  color: var(--cb-green-vivid);
+  font-weight: 700;
+}
+
+.inv-result {
+  margin: 4px 0 0;
+  color: #c9d7cf;
+  font-family: inherit;
+  white-space: pre;
+}
+
+.inv-result-error {
+  color: #ff8fa8;
+  white-space: pre-wrap;
+}
+
+.inv-line-add { color: #4ade80; }
+.inv-line-del { color: #f87171; }
+.inv-line-hunk { color: #67e8f9; }
+.inv-line-meta { color: var(--cb-text-faint); }
+.inv-line-commit { color: #fbbf24; }
+
+.inv-busy {
+  margin-top: 8px;
+  color: var(--cb-text-faint);
+}
+
+.inv-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #08100a;
+  border-top: 1px solid rgba(0, 255, 102, 0.15);
+}
+
+.inv-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-family: var(--cb-font-mono);
+  font-size: 0.85rem;
+}
+
+.inv-input::placeholder {
+  color: var(--cb-text-faint);
+}
+
+@media (max-width: 560px) {
+  .inv-output {
+    max-height: 340px;
+    font-size: 0.74rem;
+  }
+}
