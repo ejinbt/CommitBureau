@@ -64,59 +64,68 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
   // Section 3 ScrollTrigger entrance animation (triggers when scrolling into Section 3)
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.cb-intake-header',
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '#case-intake',
-            start: 'top 80%',
-            toggleActions: 'play none none none'
+      const header = document.querySelector('.cb-intake-header');
+      if (header) {
+        gsap.fromTo(
+          header,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '#case-intake',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
           }
-        }
-      );
+        );
+      }
 
-      gsap.fromTo(
-        '.cb-intake-tabs',
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '#case-intake',
-            start: 'top 75%',
-            toggleActions: 'play none none none'
+      const tabs = document.querySelector('.cb-intake-tabs');
+      if (tabs) {
+        gsap.fromTo(
+          tabs,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '#case-intake',
+              start: 'top 75%',
+              toggleActions: 'play none none none'
+            }
           }
-        }
-      );
+        );
+      }
 
-      gsap.fromTo(
-        '.cb-folder-card',
-        { opacity: 0, y: 35, scale: 0.96 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.55,
-          stagger: 0.08,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '#case-intake',
-            start: 'top 70%',
-            toggleActions: 'play none none none'
+      const cards = document.querySelectorAll('.cb-folder-card');
+      if (cards.length > 0) {
+        gsap.fromTo(
+          cards,
+          { opacity: 0, y: 35, scale: 0.96 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.55,
+            stagger: 0.08,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: '#case-intake',
+              start: 'top 70%',
+              toggleActions: 'play none none none'
+            }
           }
-        }
-      );
+        );
+      }
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [activeTab]);
 
   const handleSaveToken = (e) => {
     e.preventDefault();
