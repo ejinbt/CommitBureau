@@ -4,7 +4,7 @@
 
 import { freshCommits, trimPatch } from '../diff.js'
 import { getCommit } from '../github.js'
-import { authorName, commitDate, firstLine, isBot, makeOptions, pickRandom, shortSha, shuffle, uniqueOthers } from '../utils.js'
+import { authorName, commitDate, firstLine, isBot, isMerge, makeOptions, pickRandom, shortSha, shuffle, uniqueOthers } from '../utils.js'
 
 // Wrong-answer messages. Easy: from anywhere in history. Medium: from the closest commits, which look more alike.
 function otherMessages(ctx, index, real, count) {
@@ -74,34 +74,47 @@ export async function whoDidIt(ctx) {
   }
 }
 
-// First or later? Show two commit messages, pick the older one.
-export async function firstOrLater(ctx) {
-  const candidates = shuffle(freshCommits(ctx))
-  for (let i = 0; i < candidates.length; i++) {
-    for (let j = i + 1; j < candidates.length; j++) {
-      const a = candidates[i].commit
-      const b = candidates[j].commit
-      const msgA = firstLine(a.commit.message)
-      const msgB = firstLine(b.commit.message)
-      const dateA = commitDate(a)
-      const dateB = commitDate(b)
-      if (msgA.toLowerCase() === msgB.toLowerCase() || dateA === dateB) continue
+const LOG_GAP = [2, 4] // how many commits apart the two suspects sit in the log excerpt
+const MAX_LOG_MESSAGE = 72
 
-      ctx.used.add(a.sha)
-      ctx.used.add(b.sha)
-      const [older, newer] = dateA < dateB ? [a, b] : [b, a]
-      const olderMsg = firstLine(older.commit.message)
-      const newerMsg = firstLine(newer.commit.message)
-      return {
-        level: 1,
-        type: 'first_or_later',
-        prompt: 'Two commits from this repo. Which one happened first?',
-        evidence: { diff: null, author: null, date: null, file: null },
-        ...makeOptions(olderMsg, [newerMsg]),
-        explanation: `"${olderMsg}" was committed on ${commitDate(older).slice(0, 10)}, before "${newerMsg}" on ${commitDate(newer).slice(0, 10)}.`,
-        hint: 'git log lists the newest commit at the top. Adding --reverse puts the oldest at the top.',
-        command: 'git log --reverse --format="%h %ad %s" --date=short',
-      }
+// First or later? Show a slice of `git log --oneline`, ask which of two commits in it came first.
+// The lesson: git log lists the newest commit at the top, so the lower one is older.
+export async function firstOrLater(ctx) {
+  // Sort by date ourselves, newest first, so the excerpt always matches what git log would show.
+  const byDate = ctx.commits
+    .filter((c) => !isMerge(c))
+    .sort((x, y) => (commitDate(y) > commitDate(x) ? 1 : commitDate(y) < commitDate(x) ? -1 : 0))
+
+  for (const top of shuffle([...byDate.keys()])) {
+    const gap = LOG_GAP[0] + Math.floor(Math.random() * (LOG_GAP[1] - LOG_GAP[0] + 1))
+    const newer = byDate[top]
+    const older = byDate[top + gap]
+    if (!older || ctx.used.has(newer.sha) || ctx.used.has(older.sha)) continue
+
+    const newerMsg = firstLine(newer.commit.message)
+    const olderMsg = firstLine(older.commit.message)
+    if (newerMsg.toLowerCase() === olderMsg.toLowerCase() || commitDate(newer) === commitDate(older)) continue
+
+    ctx.used.add(newer.sha)
+    ctx.used.add(older.sha)
+    // One commit of context above and below the pair, like a real slice of the log.
+    const excerpt = byDate.slice(Math.max(0, top - 1), top + gap + 2)
+    const log = excerpt
+      .map((c) => {
+        const msg = firstLine(c.commit.message)
+        return `${shortSha(c.sha)} ${msg.length > MAX_LOG_MESSAGE ? msg.slice(0, MAX_LOG_MESSAGE - 1) + '…' : msg}`
+      })
+      .join('\n')
+
+    return {
+      level: 1,
+      type: 'first_or_later',
+      prompt: "Here is part of this repo's git log. Which of these two commits happened first?",
+      evidence: { diff: log, author: null, date: null, file: null },
+      ...makeOptions(olderMsg, [newerMsg]),
+      explanation: `git log lists the newest commit at the top, so the lower one is older. "${olderMsg}" (${commitDate(older).slice(0, 10)}) came before "${newerMsg}" (${commitDate(newer).slice(0, 10)}).`,
+      hint: 'git log shows history newest first. Find both commits in the list.',
+      command: 'git log --oneline',
     }
   }
   return null
