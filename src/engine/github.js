@@ -2,6 +2,8 @@
 // Every response is cached in memory, so the same URL is never fetched twice in a session.
 // Without a token GitHub allows 60 requests per hour per IP, so caching matters.
 
+import { demoResponse } from '../data/demoRepo.js'
+
 const API = 'https://api.github.com'
 const cache = new Map()
 let token = ''
@@ -29,6 +31,10 @@ function storedToken() {
 }
 
 export function gh(path) {
+  // The built-in demo repo answers from local data: no network, no token, no rate limit.
+  const demo = demoResponse(path)
+  if (demo !== undefined) return Promise.resolve(demo)
+
   // Cache the promise, not the result, so two calls for the same URL at once share one request.
   if (!cache.has(path)) {
     const request = fetchJson(path).catch((err) => {
