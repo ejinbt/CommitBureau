@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Flame, Award, Loader2, GitBranch } from 'lucide-react';
+import { ArrowLeft, Flame, Award, Loader2, GitBranch, Key, X, Check, RotateCcw } from 'lucide-react';
 import Header from '../components/Header';
 import CaseCard from '../components/CaseCard';
 import logoImg from '../assets/logo.png';
-import { buildGame, scoreAnswer } from '../api';
+import { buildGame, scoreAnswer, setToken } from '../api';
 import './InvestigationPage.css';
 
 /**
  * InvestigationPage Component (Cockpit HUD)
  * - 3-Column Cockpit Header (Repo chip, Segmented Round Pips, Glowing CRT Score readout)
+ * - In-game GitHub token access for uninterrupted gameplay and rate limit recovery
  * - Case investigation flow
  */
 export default function InvestigationPage({
@@ -24,6 +25,17 @@ export default function InvestigationPage({
   const [rounds, setRounds] = useState([]);
   const [currentRoundIdx, setCurrentRoundIdx] = useState(0);
 
+  // In-game GitHub Token state
+  const [showTokenModal, setShowTokenModal] = useState(false);
+  const [tokenInput, setTokenInput] = useState(() => {
+    try {
+      return localStorage.getItem('cb_github_token') || '';
+    } catch {
+      return '';
+    }
+  });
+  const [tokenSavedMsg, setTokenSavedMsg] = useState(null);
+
   // Game state per docs/CONTRACT.md
   const [gameState, setGameState] = useState({
     score: 0,
@@ -38,7 +50,9 @@ export default function InvestigationPage({
   const [isCorrect, setIsCorrect] = useState(false);
   const [pointsAwarded, setPointsAwarded] = useState(0);
 
-  // Initialize game rounds
+  const [reloadSeq, setReloadSeq] = useState(0);
+
+  // Initialize and load game rounds
   useEffect(() => {
     let isMounted = true;
 
@@ -66,7 +80,33 @@ export default function InvestigationPage({
     return () => {
       isMounted = false;
     };
-  }, [targetRepo, level]);
+  }, [targetRepo, level, reloadSeq]);
+
+  const handleRetryCase = useCallback(() => {
+    setReloadSeq((prev) => prev + 1);
+  }, []);
+
+  // Token management handler
+  const handleSaveToken = (overrideVal) => {
+    const valueToSave = (overrideVal !== undefined ? overrideVal : tokenInput).trim();
+    try {
+      if (valueToSave) {
+        localStorage.setItem('cb_github_token', valueToSave);
+      } else {
+        localStorage.removeItem('cb_github_token');
+      }
+    } catch {
+      // Storage unavailable
+    }
+    setToken(valueToSave);
+    setTokenInput(valueToSave);
+    setTokenSavedMsg(valueToSave ? 'Token saved' : 'Token removed');
+    setTimeout(() => setTokenSavedMsg(null), 2500);
+
+    if (error) {
+      setReloadSeq((prev) => prev + 1);
+    }
+  };
 
   const currentRound = rounds[currentRoundIdx];
 
@@ -143,15 +183,55 @@ export default function InvestigationPage({
         {/* Error state */}
         {!loading && error && (
           <div className="investigation-error-block">
-            <span className="error-title">Initialization Error</span>
+            <span className="error-title">Investigation Error</span>
             <p className="error-desc">{error}</p>
-            <button
-              type="button"
-              className="error-return-btn"
-              onClick={onExitCase}
-            >
-              Return to Intake
-            </button>
+
+            <div className="investigation-token-box">
+              <div className="investigation-token-header">
+                <Key size={14} className="investigation-token-icon" />
+                <span>Add GitHub Token to Continue</span>
+              </div>
+              <p className="investigation-token-help">
+                Enter your GitHub token to bypass rate limits and continue this case immediately.
+              </p>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSaveToken();
+                }}
+                className="investigation-token-form"
+              >
+                <input
+                  type="password"
+                  value={tokenInput}
+                  onChange={(e) => setTokenInput(e.target.value)}
+                  placeholder="Paste GitHub Personal Access Token"
+                  className="investigation-token-input"
+                />
+                <button type="submit" className="investigation-token-submit-btn">
+                  Save & Continue
+                </button>
+              </form>
+              {tokenSavedMsg && <span className="investigation-token-success">{tokenSavedMsg}</span>}
+            </div>
+
+            <div className="error-actions-row">
+              <button
+                type="button"
+                className="error-retry-btn"
+                onClick={handleRetryCase}
+              >
+                <RotateCcw size={12} />
+                <span>Retry</span>
+              </button>
+              <button
+                type="button"
+                className="error-return-btn"
+                onClick={onExitCase}
+              >
+                Return to Intake
+              </button>
+            </div>
           </div>
         )}
 
@@ -160,7 +240,7 @@ export default function InvestigationPage({
           <div className="investigation-flow">
             {/* Cockpit HUD Bar */}
             <div className="investigation-cockpit-bar">
-              {/* Left Column: Repo & Branch Chip */}
+              {/* Left Column: Repo & Branch Chip + Token Button */}
               <div className="cockpit-left">
                 <button
                   type="button"
@@ -180,6 +260,17 @@ export default function InvestigationPage({
                   </span>
                   <span className="target-branch-badge">main</span>
                 </div>
+
+                <button
+                  type="button"
+                  className={`cockpit-token-trigger ${tokenInput ? 'active' : ''}`}
+                  onClick={() => setShowTokenModal(true)}
+                  title={tokenInput ? 'GitHub Token Active' : 'Add GitHub Token'}
+                >
+                  <Key size={12} />
+                  <span className="cockpit-token-label">{tokenInput ? 'TOKEN ACTIVE' : 'ADD TOKEN'}</span>
+                  {tokenInput && <span className="cockpit-token-pip" />}
+                </button>
               </div>
 
               {/* Center Column: Segmented Round Pips */}
@@ -239,6 +330,87 @@ export default function InvestigationPage({
           </div>
         )}
       </main>
+
+      {/* In-Game Token Modal */}
+      {showTokenModal && (
+        <div className="investigation-modal-backdrop" onClick={() => setShowTokenModal(false)}>
+          <div
+            className="investigation-token-modal"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="modal-header">
+              <div className="modal-title-row">
+                <Key size={15} className="modal-key-icon" />
+                <span className="modal-title">GitHub Token</span>
+                {tokenInput && <span className="modal-status-badge">ACTIVE</span>}
+              </div>
+              <button
+                type="button"
+                className="modal-close-btn"
+                onClick={() => setShowTokenModal(false)}
+                aria-label="Close modal"
+              >
+                <X size={15} />
+              </button>
+            </div>
+
+            <p className="modal-desc">
+              Add your personal token to prevent GitHub rate limits and continue playing uninterrupted.
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSaveToken();
+                setShowTokenModal(false);
+              }}
+              className="modal-form"
+            >
+              <div className="modal-input-wrap">
+                <input
+                  type="password"
+                  value={tokenInput}
+                  onChange={(e) => setTokenInput(e.target.value)}
+                  placeholder="Paste GitHub Personal Access Token"
+                  className="modal-token-input"
+                  autoFocus
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button type="submit" className="modal-save-btn">
+                  Save & Continue
+                </button>
+                {tokenInput && (
+                  <button
+                    type="button"
+                    className="modal-remove-btn"
+                    onClick={() => handleSaveToken('')}
+                  >
+                    Remove
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="modal-cancel-btn"
+                  onClick={() => setShowTokenModal(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </form>
+
+            {tokenSavedMsg && (
+              <div className="modal-feedback">
+                <Check size={13} />
+                <span>{tokenSavedMsg}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
