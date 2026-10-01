@@ -7,7 +7,7 @@ import './CaseCard.css';
 
 /**
  * CaseCard Component (Forensic Dossier Presentation)
- * - Crime case dossier banner
+ * - Forensic case dossier banner
  * - High-depth suspect hypothesis cards with role tags and scanline hover physics
  * - 150ms verification suspense state with shake on error
  * - Detective notebook clue reveal with HINT_PENALTY

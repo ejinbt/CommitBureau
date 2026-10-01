@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainPage from './pages/MainPage';
 import InvestigationPage from './pages/InvestigationPage';
 import DebriefPage from './pages/DebriefPage';
@@ -7,7 +7,7 @@ import { finalReport } from './api';
 /**
  * Root Application Component
  * Manages active screen state ('main' | 'investigation' | 'debrief')
- * and global detective clearance level.
+ * and global detective clearance level with browser history integration.
  */
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('main'); // 'main' | 'investigation' | 'debrief'
@@ -16,10 +16,30 @@ export default function App() {
   const [rank, setRank] = useState('Rookie');
   const [lastDebrief, setLastDebrief] = useState(null);
   const [lastLevelPlayed, setLastLevelPlayed] = useState(1);
+  const [intakeTab, setIntakeTab] = useState('featured');
+
+  // Handle browser back and forward button events
+  useEffect(() => {
+    // Replace initial state so we have a baseline screen recorded
+    window.history.replaceState({ screen: 'main' }, '', window.location.href);
+
+    const handlePopState = (e) => {
+      if (e.state && e.state.screen) {
+        setCurrentScreen(e.state.screen);
+      } else {
+        // Fallback to main screen if history state is undefined
+        setCurrentScreen('main');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const handleStartCase = (target) => {
     setTargetRepo(target);
     setCurrentScreen('investigation');
+    window.history.pushState({ screen: 'investigation' }, '', window.location.href);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -36,17 +56,41 @@ export default function App() {
     }
 
     setCurrentScreen('debrief');
+    window.history.pushState({ screen: 'debrief' }, '', window.location.href);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleExitCase = () => {
+  const handleExitCase = (preferredTab) => {
+    if (preferredTab) {
+      setIntakeTab(preferredTab);
+    }
     setCurrentScreen('main');
+    window.history.pushState({ screen: 'main' }, '', window.location.href);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handlePlayAgain = () => {
     setCurrentScreen('investigation');
+    window.history.pushState({ screen: 'investigation' }, '', window.location.href);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavigate = (section, tab) => {
+    if (tab) {
+      setIntakeTab(tab);
+    }
+    if (currentScreen !== 'main') {
+      setCurrentScreen('main');
+      window.history.pushState({ screen: 'main' }, '', window.location.href);
+    }
+    if (section === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setTimeout(() => {
+        const el = document.getElementById('case-intake');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+    }
   };
 
   return (
@@ -55,7 +99,9 @@ export default function App() {
         <MainPage 
           level={level} 
           rank={rank} 
-          onStartCase={handleStartCase} 
+          intakeTab={intakeTab}
+          onStartCase={handleStartCase}
+          onNavigate={handleNavigate} 
         />
       )}
 
@@ -66,6 +112,7 @@ export default function App() {
           rank={rank}
           onFinishCase={handleFinishCase}
           onExitCase={handleExitCase}
+          onNavigate={handleNavigate}
         />
       )}
 
@@ -76,6 +123,7 @@ export default function App() {
           level={lastLevelPlayed}
           onPlayAgain={handlePlayAgain}
           onReturnIntake={handleExitCase}
+          onNavigate={handleNavigate}
         />
       )}
     </>

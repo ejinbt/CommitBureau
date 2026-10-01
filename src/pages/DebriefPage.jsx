@@ -29,7 +29,8 @@ export default function DebriefPage({
   gameState,
   level = 1,
   onPlayAgain,
-  onReturnIntake
+  onReturnIntake,
+  onNavigate
 }) {
   const [copiedShare, setCopiedShare] = useState(false);
 
@@ -56,6 +57,7 @@ Inspect your commits: commitbureau.io`;
         level={level}
         rank={report.rank}
         onStartCaseClick={onReturnIntake}
+        onNavigate={onNavigate || ((sec, tab) => onReturnIntake(tab))}
       />
 
       <main className="debrief-viewport">
