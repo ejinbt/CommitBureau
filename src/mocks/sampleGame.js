@@ -298,26 +298,30 @@ export async function getUserRepos(username) {
   if (!username) return [];
 
   return [
+    // Same shape as the real engine (docs/CONTRACT.md): { owner, repo, description, language, pushedAt, fork }
     {
-      id: 1,
-      name: `${username}-portfolio`,
-      full_name: `${username}/${username}-portfolio`,
+      owner: username,
+      repo: `${username}-portfolio`,
       description: "Personal portfolio website built with React and Tailwind",
-      updated_at: "2024-02-10T12:00:00Z"
+      language: "JavaScript",
+      pushedAt: "2024-02-10T12:00:00Z",
+      fork: false
     },
     {
-      id: 2,
-      name: `mini-compiler`,
-      full_name: `${username}/mini-compiler`,
+      owner: username,
+      repo: `mini-compiler`,
       description: "A small toy compiler written in JavaScript",
-      updated_at: "2023-11-20T15:30:00Z"
+      language: "JavaScript",
+      pushedAt: "2023-11-20T15:30:00Z",
+      fork: false
     },
     {
-      id: 3,
-      name: `hackathon-notes`,
-      full_name: `${username}/hackathon-notes`,
+      owner: username,
+      repo: `hackathon-notes`,
       description: "Quick notes and scripts from weekend hacks",
-      updated_at: "2023-05-04T09:12:00Z"
+      language: null,
+      pushedAt: "2023-05-04T09:12:00Z",
+      fork: false
     }
   ];
 }

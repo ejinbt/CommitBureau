@@ -1,193 +1,27 @@
 /* ==========================================================================
-   DETECTIVE MAGNIFYING GLASS CURSOR
-   - Smooth optical lens follow physics
-   - Emerald metallic rim with HUD reticle
-   - Expands and zooms when hovering the high-tech navbar
+   REALISTIC MAGNIFYING GLASS HARDWARE CURSOR
+   Hardware-accelerated SVG cursor with crystal optical lens, metallic emerald rim,
+   specular reflection, and ergonomic dark handle.
    ========================================================================== */
 
-/* Hide native cursor only for desktop pointer devices */
 @media (pointer: fine) {
-  html, body, button, a, input, select, textarea, [role="button"] {
-    cursor: none !important;
+  /* Default page cursor: realistic magnifying glass */
+  html, body {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Cpath d='M19 19L27 27' stroke='rgba(0,0,0,0.45)' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='12' r='9' fill='rgba(0,0,0,0.15)'/%3E%3Cpath d='M18.5 18.5L27 27' stroke='%231e293b' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M18.5 18.5L26.5 26.5' stroke='%23475569' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M18.5 18.5L26.5 26.5' stroke='%2300ff66' stroke-width='0.8' stroke-linecap='round' opacity='0.7'/%3E%3Ccircle cx='18.5' cy='18.5' r='2' fill='%23cbd5e1' stroke='%230f172a' stroke-width='0.75'/%3E%3Ccircle cx='12' cy='12' r='9' stroke='%230f172a' stroke-width='1'/%3E%3Ccircle cx='12' cy='12' r='8.2' stroke='%2300ff66' stroke-width='2.2' fill='none'/%3E%3Cpath d='M5.5 8.5A8.2 8.2 0 0 1 15.5 4' stroke='%23ffffff' stroke-width='1' stroke-linecap='round' opacity='0.9'/%3E%3Ccircle cx='12' cy='12' r='7.1' fill='rgba(0, 255, 102, 0.08)'/%3E%3Cpath d='M7 10A5.5 5.5 0 0 1 12 6.5' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' opacity='0.95'/%3E%3Ccircle cx='6.5' cy='12.5' r='0.8' fill='%23ffffff' opacity='0.8'/%3E%3C/svg%3E") 12 12, auto;
   }
-}
 
-.cb-detective-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 99999;
-  margin-top: -12px;
-  margin-left: -12px;
-  will-change: transform;
-  transition: width 0.25s var(--cb-ease), height 0.25s var(--cb-ease);
-}
-
-.cb-lens-frame {
-  position: relative;
-  width: 28px;
-  height: 28px;
-  transition: transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* Glass Lens Circle */
-.cb-lens-glass {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid #00ff66;
-  background: radial-gradient(circle at 35% 35%, rgba(0, 255, 102, 0.18) 0%, rgba(0, 30, 12, 0.45) 80%);
-  box-shadow: 
-    0 0 10px rgba(0, 255, 102, 0.45),
-    inset 0 0 6px rgba(0, 255, 102, 0.3);
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
-  overflow: hidden;
-  transition: all 0.25s var(--cb-ease);
-}
-
-/* Glass Specular Reflection */
-.cb-lens-reflection {
-  position: absolute;
-  top: 2px;
-  left: 3px;
-  width: 9px;
-  height: 5px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 100%);
-  transform: rotate(-35deg);
-}
-
-/* HUD Reticle Crosshairs */
-.cb-lens-crosshair-x {
-  position: absolute;
-  top: 50%;
-  left: 3px;
-  right: 3px;
-  height: 1px;
-  background: rgba(0, 255, 102, 0.4);
-  transform: translateY(-50%);
-}
-
-.cb-lens-crosshair-y {
-  position: absolute;
-  left: 50%;
-  top: 3px;
-  bottom: 3px;
-  width: 1px;
-  background: rgba(0, 255, 102, 0.4);
-  transform: translateX(-50%);
-}
-
-.cb-lens-center-dot {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 3px;
-  height: 3px;
-  background: #ffffff;
-  border-radius: 50%;
-  box-shadow: 0 0 4px #00ff66;
-  transform: translate(-50%, -50%);
-}
-
-/* Metal Handle sticking out at bottom-right 45deg */
-.cb-lens-handle {
-  position: absolute;
-  bottom: -4px;
-  right: -4px;
-  width: 5px;
-  height: 11px;
-  background: linear-gradient(180deg, #1f3326 0%, #0d1712 100%);
-  border: 1px solid rgba(0, 255, 102, 0.5);
-  border-radius: 2px;
-  transform: rotate(-45deg);
-  transform-origin: top center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-}
-
-.cb-lens-handle-accent {
-  position: absolute;
-  bottom: 1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #00ff66;
-}
-
-/* Hovering interactive / clickable elements */
-.cb-detective-cursor.is-pointer .cb-lens-glass {
-  border-color: #52ff94;
-  box-shadow: 
-    0 0 16px rgba(0, 255, 102, 0.7),
-    inset 0 0 8px rgba(0, 255, 102, 0.5);
-  transform: scale(1.1);
-}
-
-/* ==========================================================================
-   ZOOM EFFECT ON NAVBAR
-   ========================================================================== */
-.cb-detective-cursor.zoomed-lens {
-  margin-top: -24px;
-  margin-left: -24px;
-}
-
-.cb-detective-cursor.zoomed-lens .cb-lens-frame {
-  width: 52px;
-  height: 52px;
-  transform: scale(1.35);
-}
-
-.cb-detective-cursor.zoomed-lens .cb-lens-glass {
-  width: 44px;
-  height: 44px;
-  border-width: 2.5px;
-  border-color: #00ff66;
-  background: radial-gradient(circle at 40% 40%, rgba(0, 255, 102, 0.28) 0%, rgba(0, 25, 10, 0.6) 80%);
-  box-shadow: 
-    0 0 24px rgba(0, 255, 102, 0.8),
-    0 0 45px rgba(0, 255, 102, 0.35),
-    inset 0 0 14px rgba(0, 255, 102, 0.55);
-  backdrop-filter: blur(0px);
-}
-
-.cb-detective-cursor.zoomed-lens .cb-lens-handle {
-  bottom: -6px;
-  right: -6px;
-  width: 6px;
-  height: 15px;
-}
-
-.cb-detective-cursor.zoomed-lens .cb-lens-reflection {
-  width: 14px;
-  height: 7px;
-  top: 4px;
-  left: 6px;
-}
-
-.cb-lens-zoom-badge {
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--cb-font-mono);
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: #00ff66;
-  background: rgba(4, 12, 6, 0.95);
-  border: 1px solid rgba(0, 255, 102, 0.6);
-  padding: 1px 4px;
-  border-radius: 4px;
-  letter-spacing: 0.05em;
-  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
-  animation: cbPulseGlow 1.5s infinite alternate;
-}
-
-@keyframes cbPulseGlow {
-  0% { opacity: 0.8; }
-  100% { opacity: 1; }
+  /* Interactive pointer on buttons, links, inputs, and tabs */
+  button, 
+  a, 
+  input, 
+  select, 
+  textarea, 
+  [role="button"], 
+  .cb-hud-tab, 
+  .cb-cyber-cta,
+  .cb-folder-card,
+  .cockpit-exit-btn,
+  .cockpit-token-trigger {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Cpath d='M19 19L27 27' stroke='rgba(0,0,0,0.55)' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='12' r='9' fill='rgba(0,255,102,0.12)'/%3E%3Cpath d='M18.5 18.5L27 27' stroke='%231e293b' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M18.5 18.5L26.5 26.5' stroke='%2300ff66' stroke-width='1.8' stroke-linecap='round'/%3E%3Ccircle cx='18.5' cy='18.5' r='2' fill='%2300ff66' stroke='%230f172a' stroke-width='0.75'/%3E%3Ccircle cx='12' cy='12' r='9' stroke='%2300ff66' stroke-width='1.4'/%3E%3Ccircle cx='12' cy='12' r='8.2' stroke='%23ffffff' stroke-width='2' fill='none'/%3E%3Ccircle cx='12' cy='12' r='7.1' fill='rgba(0, 255, 102, 0.18)'/%3E%3Cpath d='M7 10A5.5 5.5 0 0 1 12 6.5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='6.5' cy='12.5' r='1' fill='%23ffffff'/%3E%3C/svg%3E") 12 12, pointer !important;
+  }
 }
