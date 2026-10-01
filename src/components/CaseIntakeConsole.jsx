@@ -332,19 +332,24 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                       </h4>
 
                       <div className="cb-user-repo-list">
-                        {userRepos.map((repo) => (
-                          <div key={repo.id || repo.full_name} className="cb-user-repo-item">
+                        {/* The engine's getUserRepos returns { owner, repo, description, language, fork }
+                            (docs/CONTRACT.md), not GitHub's raw name / full_name. */}
+                        {userRepos.map((item) => (
+                          <div key={`${item.owner}/${item.repo}`} className="cb-user-repo-item">
                             <div className="cb-user-repo-info">
-                              <span className="cb-user-repo-name cb-heading">{repo.name}</span>
-                              <span className="cb-user-repo-desc">{repo.description || 'No description provided.'}</span>
+                              <span className="cb-user-repo-name cb-heading">
+                                {item.repo}
+                                {item.fork && <span className="cb-user-repo-fork"> (fork)</span>}
+                              </span>
+                              <span className="cb-user-repo-desc">
+                                {item.description || 'No description provided.'}
+                                {item.language && ` · ${item.language}`}
+                              </span>
                             </div>
                             <button
                               type="button"
                               className="cb-user-repo-btn"
-                              onClick={() => {
-                                const [o, r] = repo.full_name.split('/');
-                                onSelectRepo({ owner: o, repo: r });
-                              }}
+                              onClick={() => onSelectRepo({ owner: item.owner, repo: item.repo })}
                             >
                               <span>Solve Cases</span>
                               <span aria-hidden="true">→</span>
