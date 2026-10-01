@@ -12,6 +12,7 @@ import {
   isMerge,
   logLine,
   makeOptions,
+  newestFirst,
   shortSha,
   shuffle,
   uniqueOthers,
@@ -79,11 +80,6 @@ function countAuthors(history) {
 }
 
 // Who touched this file most? Pick the author with the most commits to one file.
-// Newest first, the order git log prints.
-function newestFirst(commits) {
-  return [...commits].sort((a, b) => (commitDate(b) > commitDate(a) ? 1 : commitDate(b) < commitDate(a) ? -1 : 0))
-}
-
 // Who touched this file most? Show the file's recent commits with authors, the player counts the names.
 export async function whoTouchedMost(ctx) {
   const found = await findFileHistory(ctx, 'who_touched_most', (history) => {
