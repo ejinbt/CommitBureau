@@ -370,33 +370,135 @@
    RESPONSIVE MEDIA QUERIES
    ========================================================================== */
 
+@media (max-width: 960px) {
+   .cb-hero-section {
+     padding-top: 2.75rem;
+     padding-bottom: 4rem;
+   }
+
+   .cb-hero-grid {
+     grid-template-columns: 1fr;
+     gap: 2.5rem;
+   }
+
+   .cb-terminal-window {
+     max-width: 100%;
+   }
+
+   .cb-ambient-glow {
+     width: 320px;
+     height: 320px;
+   }
+}
+
 @media (max-width: 640px) {
   .cb-hero-section {
-    padding-top: 2rem;
-    padding-bottom: 3.25rem;
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .cb-hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .cb-hero-title {
+    font-size: clamp(1.85rem, 8vw, 2.35rem);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .cb-hero-sub {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
   }
 
   .cb-hero-actions {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
   }
 
   .cb-cta-primary,
   .cb-cta-secondary {
     width: 100%;
+    justify-content: center;
+    padding: 0.8rem 1.4rem;
+    font-size: 0.88rem;
   }
 
   .cb-metrics-row {
-    flex-direction: column;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+    padding: 1rem;
   }
 
   .cb-metric-divider {
     display: none;
   }
 
+  .cb-metric-item {
+    gap: 0.2rem;
+  }
+
+  .cb-metric-val {
+    font-size: 1.3rem;
+  }
+
+  .cb-metric-k {
+    font-size: 0.65rem;
+  }
+
+  .cb-hero-visual {
+    perspective: none;
+    width: 100%;
+  }
+
+  .cb-terminal-window {
+    width: 100%;
+    transform: none !important;
+  }
+
+  .cb-terminal-body {
+    padding: 0.85rem;
+    overflow-x: auto;
+  }
+
   .cb-terminal-diff {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    line-height: 1.5;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  .cb-terminal-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem 0.85rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .cb-hero-title {
+    font-size: 1.7rem;
+  }
+
+  .cb-metrics-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .cb-terminal-header {
+    padding: 0.65rem 0.85rem;
+  }
+
+  .cb-command-box {
+    font-size: 0.7rem;
   }
 }
