@@ -3,6 +3,7 @@
 // Without a token GitHub allows 60 requests per hour per IP, so caching matters.
 
 import { demoResponse } from '../data/demoRepo.js'
+import { DEMO_PROXY_URL } from './config.js'
 
 const API = 'https://api.github.com'
 const cache = new Map()
@@ -23,8 +24,33 @@ export function setToken(value) {
 // saved token works straight away. localStorage can be missing (Node) or blocked (private mode).
 const TOKEN_KEY = 'cb_github_token'
 function storedToken() {
+  return readStorage(TOKEN_KEY).trim()
+}
+
+// Demo access: requests go through our proxy, which adds a token the browser never sees.
+// On by default whenever the proxy is configured and the player hasn't saved a token of their own.
+const DEMO_ACCESS_KEY = 'cb_demo_access'
+
+export function demoAccessAvailable() {
+  return Boolean(DEMO_PROXY_URL)
+}
+
+export function isDemoAccessOn() {
+  return demoAccessAvailable() && !(token || storedToken()) && readStorage(DEMO_ACCESS_KEY) !== 'off'
+}
+
+// Lets the UI switch demo access off (for example to test the 60-an-hour limit) and back on.
+export function setDemoAccess(on) {
   try {
-    return globalThis.localStorage?.getItem(TOKEN_KEY)?.trim() || ''
+    globalThis.localStorage?.setItem(DEMO_ACCESS_KEY, on ? 'on' : 'off')
+  } catch {
+    // Storage blocked: demo access stays at its default.
+  }
+}
+
+function readStorage(key) {
+  try {
+    return globalThis.localStorage?.getItem(key) || ''
   } catch {
     return ''
   }
@@ -47,10 +73,23 @@ export function gh(path) {
 }
 
 async function fetchJson(path) {
-  const headers = { Accept: 'application/vnd.github+json' }
+  const accept = { Accept: 'application/vnd.github+json' }
+  networkCalls++
+
+  // Demo access first. If the proxy is down or broken, fall back to calling GitHub directly.
+  if (isDemoAccessOn()) {
+    try {
+      const res = await fetch(DEMO_PROXY_URL + path, { headers: accept })
+      if (res.ok) return res.json()
+      if (res.status < 500) throw new Error(friendlyError(res, true))
+    } catch (err) {
+      if (err instanceof Error && !(err instanceof TypeError)) throw err // a real GitHub answer, like 404
+    }
+  }
+
+  const headers = { ...accept }
   const auth = token || storedToken()
   if (auth) headers.Authorization = `Bearer ${auth}`
-  networkCalls++
 
   let res
   try {
@@ -62,11 +101,12 @@ async function fetchJson(path) {
   return res.json()
 }
 
-function friendlyError(res) {
+function friendlyError(res, viaDemoAccess = false) {
   if (res.status === 401) return 'That GitHub token is not valid.'
   if ((res.status === 403 || res.status === 429) && res.headers.get('x-ratelimit-remaining') === '0') {
     const reset = Number(res.headers.get('x-ratelimit-reset')) * 1000
     const minutes = Math.max(1, Math.ceil((reset - Date.now()) / 60000))
+    if (viaDemoAccess) return `Demo access is out of requests. Add your own token or try again in about ${minutes} min.`
     return `GitHub rate limit hit. Add a token or try again in about ${minutes} min.`
   }
   if (res.status === 404) return 'Repo not found. It may be private or misspelled.'
