@@ -1,0 +1,259 @@
+/* ==========================================================================
+   COMMITBUREAU CYBER-FORENSIC FOOTER
+   Deep obsidian container with electric emerald accents and terminal telemetry
+   ========================================================================== */
+
+.cb-footer {
+  width: 100%;
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(0, 255, 102, 0.08) 0%, transparent 60%),
+    rgba(3, 7, 4, 0.98);
+  border-top: 1px solid rgba(0, 255, 102, 0.2);
+  padding: clamp(3.5rem, 6vh, 5rem) 0 clamp(1.5rem, 3vh, 2.5rem);
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.8);
+}
+
+.cb-footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: clamp(2.5rem, 4vh, 3.5rem);
+}
+
+@media (min-width: 640px) {
+  .cb-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cb-footer-grid {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+  }
+}
+
+/* Brand Column */
+.cb-footer-brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cb-footer-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.cb-footer-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 102, 0.7));
+}
+
+.cb-footer-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.cb-footer-brand-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.cb-footer-brand-sub {
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  color: var(--cb-green-vivid);
+  font-weight: 700;
+}
+
+.cb-footer-desc {
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--cb-text-muted);
+  max-width: 380px;
+}
+
+.cb-footer-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(10, 18, 13, 0.85);
+  border: 1px solid rgba(0, 255, 102, 0.28);
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  width: fit-content;
+}
+
+.cb-footer-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cb-green-vivid);
+  box-shadow: 0 0 8px #00ff66;
+  animation: footerPulse 2s infinite ease-in-out;
+}
+
+@keyframes footerPulse {
+  0%, 100% { opacity: 0.6; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 12px #00ff66; }
+}
+
+.cb-footer-status-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #d1fae5;
+}
+
+/* Links Columns */
+.cb-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.cb-footer-col-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #ffffff;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cb-footer-col-ico {
+  color: var(--cb-green-vivid);
+}
+
+.cb-footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0;
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--cb-text-muted);
+}
+
+.cb-footer-links li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cb-footer-links a {
+  color: var(--cb-text-muted);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cb-footer-links a:hover {
+  color: var(--cb-green-vivid);
+  transform: translateX(3px);
+}
+
+.cb-footer-rank-tag {
+  color: var(--cb-green-vivid);
+  background: rgba(0, 255, 102, 0.1);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.cb-footer-ext-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cb-ext-ico {
+  color: var(--cb-text-faint);
+  transition: color 0.2s ease;
+}
+
+.cb-footer-ext-link:hover .cb-ext-ico {
+  color: var(--cb-green-vivid);
+}
+
+/* Bottom Bar */
+.cb-footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.cb-footer-copy {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.72rem;
+  color: var(--cb-text-faint);
+  flex-wrap: wrap;
+}
+
+.cb-footer-sep {
+  opacity: 0.4;
+}
+
+.cb-footer-tagline {
+  color: var(--cb-green-vivid);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* Return to Top Button */
+.cb-footer-top-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(10, 18, 13, 0.85);
+  border: 1px solid rgba(0, 255, 102, 0.35);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 0.45rem 0.95rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.cb-footer-top-btn:hover {
+  background: rgba(0, 32, 16, 0.95);
+  border-color: #00ff66;
+  color: #00ff66;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 102, 0.25);
+}
+
+.cb-top-chevron {
+  color: var(--cb-green-vivid);
+  transition: transform 0.25s ease;
+}
+
+.cb-footer-top-btn:hover .cb-top-chevron {
+  transform: translateY(-2px);
+}

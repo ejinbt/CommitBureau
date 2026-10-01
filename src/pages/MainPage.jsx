@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import BureauBriefing from '../components/BureauBriefing';
 import DailyCommitle from '../components/DailyCommitle';
 import CaseIntakeConsole from '../components/CaseIntakeConsole';
+import Footer from '../components/Footer';
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -14,6 +15,7 @@ gsap.registerPlugin(ScrollToPlugin);
  * - Section 1: Bureau Briefing (Hero & Mission with down arrow)
  * - Section 2: COMMITLE (The Daily Git Forensics Wordle with down arrow)
  * - Section 3: Case Intake Console (Target selection)
+ * - Footer: System telemetry, clearance matrix & protocol links
  * - Butter-smooth GSAP ScrollToPlugin navigation physics
  */
 export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, mode, onSelectMode }) {
@@ -99,6 +101,9 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
           />
         </div>
       </main>
+
+      {/* Forensic Intelligence Footer */}
+      <Footer onNavigate={handleNav} />
     </div>
   );
 }

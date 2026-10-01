@@ -5,14 +5,15 @@
 
 .cb-hero-section {
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 540px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-sizing: border-box;
-  padding-top: clamp(4.25rem, 8vh, 5.5rem);
-  padding-bottom: clamp(1.25rem, 2.5vh, 2rem);
+  padding-top: clamp(3.2rem, 5.5vh, 4.2rem);
+  padding-bottom: clamp(1rem, 2vh, 1.5rem);
   border-bottom: 1px solid var(--cb-border);
   position: relative;
 }
@@ -65,10 +66,10 @@
 }
 
 .cb-hero-title {
-  font-size: clamp(2.1rem, 3.6vw, 3.4rem);
-  line-height: 1.08;
+  font-size: clamp(1.95rem, 3.3vw, 3.1rem);
+  line-height: 1.1;
   color: #ffffff;
-  margin-bottom: clamp(0.7rem, 1.5vh, 1.15rem);
+  margin-bottom: clamp(0.5rem, 1.2vh, 0.85rem);
   letter-spacing: -0.03em;
 }
 
@@ -79,11 +80,11 @@
 }
 
 .cb-hero-sub {
-  font-size: clamp(0.92rem, 1.15vw, 1.08rem);
-  line-height: 1.55;
+  font-size: clamp(0.88rem, 1.1vw, 1rem);
+  line-height: 1.5;
   color: var(--cb-text-muted);
   max-width: 520px;
-  margin-bottom: clamp(1rem, 1.8vh, 1.6rem);
+  margin-bottom: clamp(0.8rem, 1.5vh, 1.3rem);
 }
 
 /* Actions Row */
@@ -92,7 +93,7 @@
   align-items: center;
   gap: 1.15rem;
   flex-wrap: wrap;
-  margin-bottom: clamp(1.2rem, 2.2vh, 2rem);
+  margin-bottom: clamp(0.8rem, 1.5vh, 1.35rem);
 }
 
 /* Primary High-Impact Button */
