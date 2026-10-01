@@ -13,11 +13,18 @@ The UI imports game functions only from `src/api.js`. Change this contract only 
 ## Functions
 
 ```js
-buildGame({ owner, repo }, level)                // -> Promise<Round[]>  (5 rounds)
-scoreAnswer(state, round, pickedIndex, usedHint) // -> new game state
-finalReport(state)                               // -> { score, percent, rank, unlocked, skills }
-getUserRepos(username)                           // -> Promise<Repo[]>
+parseRepo(input)                                 // "https://github.com/a/b" or "a/b" -> { owner, repo }
+setToken(token)                                  // optional GitHub token, kept in memory only
+buildGame({ owner, repo }, level, { difficulty }) // -> Promise<Round[]>  (5 rounds), difficulty "easy" | "medium"
+newGame(level)                                   // -> fresh game state
+scoreAnswer(state, round, pickedIndex, usedHint) // -> new game state; state.last = { correct, points }
+finalReport(state)                               // -> { score, correctCount, total, percent, rank, unlocked, bestStreak, skills, suggestion }
+getUserRepos(username)                           // -> Promise<{ owner, repo, description, language, pushedAt, fork }[]>
 ```
+
+`skills` looks like `{ real_or_fake: { label: "Reading commit messages", correct: 2, total: 3 }, ... }`.
+
+Game state is a plain object. Keep it in React state and replace it with whatever `scoreAnswer` returns. Don't mutate it.
 
 Errors are thrown as `Error` with a friendly `.message` (invalid URL, repo not found or private, empty repo, rate limit). The UI shows `.message` as-is.
 
