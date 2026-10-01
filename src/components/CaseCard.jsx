@@ -4,6 +4,7 @@ import DiffViewer from './DiffViewer';
 import InvestigationTerminal from './InvestigationTerminal';
 import VerdictCard from './VerdictCard';
 import { HINT_PENALTY } from '../api';
+import { playClickSound } from '../utils/audio';
 import './CaseCard.css';
 
 /**
@@ -35,6 +36,7 @@ export default function CaseCard({
   const [verifyingIdx, setVerifyingIdx] = useState(null);
 
   const toggleHint = () => {
+    playClickSound();
     if (!hintOpen && !hintUsed && !isAnswered) {
       setHintUsed(true);
     }
@@ -43,6 +45,7 @@ export default function CaseCard({
 
   const handleSelectOption = (idx) => {
     if (isAnswered || verifyingIdx !== null) return;
+    playClickSound();
     setVerifyingIdx(idx);
 
     // 180ms suspense verification delay for high-tactile game feel

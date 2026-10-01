@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import CaseCard from '../components/CaseCard';
 import logoImg from '../assets/logo.png';
 import { buildGame, scoreAnswer, setToken } from '../api';
+import { playClickSound, playCorrectSound, playWrongSound } from '../utils/audio';
 import './InvestigationPage.css';
 
 /**
@@ -124,12 +125,19 @@ export default function InvestigationPage({
       setIsCorrect(lastAnswer.isCorrect);
       setPointsAwarded(lastAnswer.points);
       setIsAnswered(true);
+
+      if (lastAnswer.isCorrect) {
+        playCorrectSound();
+      } else {
+        playWrongSound();
+      }
     },
     [isAnswered, currentRound, gameState]
   );
 
   // Advance to next round or finish
   const handleNextRound = useCallback(() => {
+    playClickSound();
     if (currentRoundIdx + 1 < rounds.length) {
       setCurrentRoundIdx((prev) => prev + 1);
       setIsAnswered(false);

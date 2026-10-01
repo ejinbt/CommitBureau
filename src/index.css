@@ -65,6 +65,8 @@ html {
   scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 body {
@@ -74,6 +76,20 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
   width: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Hide scrollbars everywhere while keeping smooth scrolling */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 /* Master Shell with Atmospheric Green Aura Glow */
