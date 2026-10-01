@@ -13,11 +13,21 @@ The UI imports game functions only from `src/api.js`. Change this contract only 
 ## Functions
 
 ```js
-buildGame({ owner, repo }, level)                // -> Promise<Round[]>  (5 rounds)
-scoreAnswer(state, round, pickedIndex, usedHint) // -> new game state
-finalReport(state)                               // -> { score, percent, rank, unlocked, skills }
-getUserRepos(username)                           // -> Promise<Repo[]>
+parseRepo(input)                                 // "https://github.com/a/b" or "a/b" -> { owner, repo }
+setToken(token)                                  // optional; the engine also reads localStorage "cb_github_token"
+FEATURED_REPOS                                   // [{ owner, repo, title, description, tag }]
+buildGame({ owner, repo }, level, { difficulty }) // -> Promise<Round[]>  (up to 5 rounds), difficulty "easy" | "medium"; level 5 accepts null instead of a repo
+newGame(level)                                   // -> fresh game state
+scoreAnswer(state, round, pickedIndex, usedHint) // -> new state; answers[i] = { roundId, type, isCorrect, pickedIndex, usedHint, points }
+finalReport(state, level)                        // -> { score, correctCount, totalCount, percent, rank, unlocked, maxStreak, skills, suggestion }
+getUserRepos(username)                           // -> Promise<{ owner, repo, description, language, pushedAt, fork }[]>
 ```
+
+Game state is `{ score, streak, maxStreak, answers }`.
+
+`skills` is an array: `[{ type: "real_or_fake", label: "Reading commit messages", correct: 2, total: 3, ratio: "2/3", percentage: 67 }, ...]`.
+
+Game state is a plain object. Keep it in React state and replace it with whatever `scoreAnswer` returns. Don't mutate it.
 
 Errors are thrown as `Error` with a friendly `.message` (invalid URL, repo not found or private, empty repo, rate limit). The UI shows `.message` as-is.
 
@@ -37,6 +47,10 @@ Errors are thrown as `Error` with a friendly `.message` (invalid URL, repo not f
   command: "git show 3f2a1c9"
 }
 ```
+
+Level 5 rounds also have `optionNotes`: one string per option, same order, saying what that command would have done. Show the note for the option the player picked when they get it wrong.
+
+A game can have fewer than 5 rounds (small repo, or API budget used up). Use `rounds.length`, not 5.
 
 ## Game rules
 
