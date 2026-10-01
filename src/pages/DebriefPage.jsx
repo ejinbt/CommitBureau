@@ -110,7 +110,11 @@ Inspect your commits: commitbureau.io`;
             <div className="clearance-unlock-banner banner-promoted">
               <Sparkles size={18} className="unlock-ico" />
               <div className="unlock-content">
-                <span className="unlock-title">PROMOTION AUTHORIZED // CLEARANCE LEVEL {level + 1} UNLOCKED</span>
+                <span className="unlock-title">
+                  {level < 5
+                    ? `PROMOTION AUTHORIZED // CLEARANCE LEVEL ${level + 1} UNLOCKED`
+                    : 'TOP CLEARANCE // CHIEF OF THE BUREAU'}
+                </span>
                 <span className="unlock-desc">
                   Excellent forensic analysis. Your clearance allows access to multi-commit rebases, patch splices, and advanced blame forensics.
                 </span>
@@ -211,7 +215,8 @@ Inspect your commits: commitbureau.io`;
                 onClick={onPlayAgain}
               >
                 <RotateCcw size={14} />
-                <span>RE-EXAMINE REPO</span>
+                {/* After a promotion, App has already moved to the next level, so say so. */}
+                <span>{report.unlocked && level < 5 ? `START LEVEL ${level + 1}` : 'RE-EXAMINE REPO'}</span>
               </button>
 
               <button
