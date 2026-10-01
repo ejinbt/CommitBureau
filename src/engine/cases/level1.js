@@ -3,15 +3,17 @@
 // (for example "who did it" needs at least two different authors).
 
 import { freshCommits, trimPatch } from '../diff.js'
-import { getCommit } from '../github.js'
+import { getCommit, getFileHistory } from '../github.js'
 import {
   authorName,
+  clipMessage,
   commitDate,
   firstLine,
   isBot,
   isMerge,
   logLine,
   makeOptions,
+  newestFirst,
   pickRandom,
   shortSha,
   shuffle,
@@ -61,12 +63,12 @@ export async function realOrFake(ctx) {
   }
 }
 
-const SUSPECT_COMMITS = 2 // other commits shown per suspect
+const SUSPECT_COMMITS = 2 // other commits shown per suspect, in the fallback version
+const TRAIL_TRIES = 2 // case commits to try for a file trail; each try costs up to two API calls
+const TRAIL_LINES = 6 // lines of the file's history shown as evidence
 
-// Who did it? Show a commit message and each suspect's other recent commits, pick its author.
-// People tend to work on the same parts of a project, so their other commits are the clue.
-export async function whoDidIt(ctx) {
-  // Each human author's commits in the list, newest first.
+// Each human author's commits in the list, newest first.
+function commitsByAuthor(ctx) {
   const byAuthor = new Map()
   for (const c of ctx.commits) {
     const name = authorName(c)
@@ -74,8 +76,70 @@ export async function whoDidIt(ctx) {
     if (!byAuthor.has(name)) byAuthor.set(name, [])
     byAuthor.get(name).push(c)
   }
-  if (byAuthor.size < 2) return null
+  return byAuthor
+}
 
+// Who did it? Prefer the file trail, which the evidence proves. Fall back to work habits when no file
+// in the tried commits has a usable trail.
+export async function whoDidIt(ctx) {
+  const byAuthor = commitsByAuthor(ctx)
+  if (byAuthor.size < 2) return null
+  return (await whoDidItByFileTrail(ctx, byAuthor)) || whoDidItByHabits(ctx, byAuthor)
+}
+
+// The file trail: the case commit changed a file, and the evidence is that file's history.
+// Suspects are chosen so exactly one of them appears in it, so the answer follows from the evidence.
+async function whoDidItByFileTrail(ctx, byAuthor) {
+  const candidates = shuffle(freshCommits(ctx)).filter(({ commit }) => !isBot(authorName(commit)))
+  for (const { commit } of candidates.slice(0, TRAIL_TRIES)) {
+    const real = authorName(commit)
+    const detail = await getCommit(ctx.owner, ctx.repo, commit.sha)
+    // A file this commit created has no earlier history to follow.
+    const file = shuffle((detail.files || []).filter((f) => f.status !== 'added' && f.status !== 'removed'))[0]
+    if (!file) continue
+
+    const history = (await getFileHistory(ctx.owner, ctx.repo, file.filename)).filter((c) => !isMerge(c))
+    const onFile = new Set(history.map(authorName))
+    const trail = newestFirst(history.filter((c) => c.sha !== commit.sha && !isBot(authorName(c))))
+    // The real author must have worked on this file before...
+    if (!trail.some((c) => authorName(c) === real)) continue
+    // ...and the other suspects never, so only one suspect shows up in the trail.
+    const wrong = uniqueOthers(shuffle([...byAuthor.keys()].filter((name) => !onFile.has(name))), real, 3)
+    if (wrong.length < 2) continue
+
+    // Show the latest lines of the trail, making sure the real author's latest commit is among them.
+    let shown = trail.slice(0, TRAIL_LINES)
+    if (!shown.some((c) => authorName(c) === real)) {
+      shown = [...shown.slice(0, TRAIL_LINES - 1), trail.find((c) => authorName(c) === real)]
+    }
+    const width = Math.min(Math.max(...shown.map((c) => authorName(c).length)), 22)
+    const lines = shown.map((c) => `${shortSha(c.sha)}  ${authorName(c).padEnd(width)}  ${clipMessage(c, 50)}`)
+
+    ctx.used.add(commit.sha)
+    const sha = shortSha(commit.sha)
+    const path = file.filename
+    return {
+      level: 1,
+      type: 'who_did_it',
+      prompt: `Who wrote commit ${sha}? It changed ${path}. Check who else works on that file.`,
+      evidence: {
+        diff: [[logLine(commit), 'Author: ???'].join('\n'), `Other commits to ${path}:`, lines.join('\n')].join('\n\n'),
+        author: null,
+        date: commitDate(commit).slice(0, 10),
+        file: path,
+      },
+      ...makeOptions(real, wrong),
+      explanation: `${real} wrote ${sha}. Of the suspects, only ${real} appears in the history of ${path}. git log -- <file> shows who has worked on a file.`,
+      hint: "Look at the names in the file's history. Which suspect works on this file?",
+      command: `git log --format="%h %an %s" -- ${path}`,
+    }
+  }
+  return null
+}
+
+// Work habits (fallback): show each suspect's other recent commits. People tend to work on the same
+// parts of a project, so whose other commits look like this one is the clue. Weaker than the file trail.
+function whoDidItByHabits(ctx, byAuthor) {
   // The real author needs at least one other commit, or there is nothing to go on.
   const candidates = freshCommits(ctx).filter(({ commit }) => (byAuthor.get(authorName(commit))?.length || 0) >= 2)
   if (!candidates.length) return null
