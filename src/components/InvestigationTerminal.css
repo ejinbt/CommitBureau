@@ -325,3 +325,53 @@
     cursor: pointer !important;
   }
 }
+
+/* Vim-style block caret. The input's own caret is hidden and a block is drawn over it at the same
+   spot: the text before the cursor is laid out invisibly to push the block into place. */
+.inv-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.inv-terminal .inv-input {
+  caret-color: transparent;
+  padding: 0;
+  margin: 0;
+  letter-spacing: normal;
+}
+
+.inv-caret-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  white-space: pre;
+  font-family: var(--cb-font-mono);
+  font-size: 0.85rem;
+  letter-spacing: normal;
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+}
+
+.inv-caret-before {
+  visibility: hidden;
+}
+
+.inv-caret {
+  background: var(--cb-green-vivid);
+  color: #030704;
+  border-radius: 1px;
+}
+
+.inv-caret-idle {
+  background: transparent;
+  color: transparent;
+  outline: 1px solid var(--cb-green-vivid);
+  outline-offset: -1px;
+}

@@ -18,6 +18,24 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
   const [busy, setBusy] = useState(false);
   const outputRef = useRef(null);
   const inputRef = useRef(null);
+  const [focused, setFocused] = useState(false);
+  const [caret, setCaret] = useState({ pos: 0, scroll: 0, show: true });
+
+  // Where the block caret goes: the input's cursor position and how far its text has scrolled.
+  // Hidden while text is selected, so the browser's own selection highlight shows instead.
+  const syncCaret = () => {
+    requestAnimationFrame(() => {
+      const el = inputRef.current;
+      if (!el) return;
+      const pos = el.selectionStart ?? el.value.length;
+      setCaret({ pos, scroll: el.scrollLeft, show: el.selectionStart === el.selectionEnd });
+    });
+  };
+
+  // Moving through history or filling a suggestion puts the cursor at the end.
+  useEffect(() => {
+    syncCaret();
+  }, [input]);
 
   // Keep the newest output in view.
   useEffect(() => {
@@ -136,20 +154,40 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
 
       <label className="inv-input-row">
         <span className="inv-prompt">$</span>
-        <input
-          ref={inputRef}
-          type="text"
-          className="inv-input"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="git log --oneline"
-          spellCheck={false}
-          autoComplete="off"
-          autoCapitalize="off"
-          aria-label="Git command"
-          disabled={busy}
-        />
+        <span className="inv-input-wrap">
+          <input
+            ref={inputRef}
+            type="text"
+            className="inv-input"
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value);
+              syncCaret();
+            }}
+            onKeyDown={handleKeyDown}
+            onKeyUp={syncCaret}
+            onSelect={syncCaret}
+            onClick={syncCaret}
+            onFocus={() => {
+              setFocused(true);
+              syncCaret();
+            }}
+            onBlur={() => setFocused(false)}
+            placeholder="git log --oneline"
+            spellCheck={false}
+            autoComplete="off"
+            autoCapitalize="off"
+            aria-label="Git command"
+            disabled={busy}
+          />
+          {/* Vim-style block caret, drawn over the input (the browser's own caret is hidden). */}
+          {caret.show && (
+            <span className="inv-caret-layer" aria-hidden="true" style={{ transform: `translateX(${-caret.scroll}px)` }}>
+              <span className="inv-caret-before">{input.slice(0, caret.pos)}</span>
+              <span className={`inv-caret ${focused ? '' : 'inv-caret-idle'}`}>{input[caret.pos] || ' '}</span>
+            </span>
+          )}
+        </span>
       </label>
     </div>
   );
