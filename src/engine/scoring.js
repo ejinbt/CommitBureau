@@ -13,6 +13,9 @@ export const SKILL_LABELS = {
   real_or_fake: 'Reading commit messages',
   who_did_it: 'Finding the author',
   first_or_later: 'Commit order',
+  lines_changed: 'Counting changes',
+  which_file: 'Matching a diff to its file',
+  spot_deleted_line: 'Reading + and - lines',
 }
 
 export function newGame(level = 1) {

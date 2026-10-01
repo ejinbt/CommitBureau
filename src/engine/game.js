@@ -1,14 +1,16 @@
 // Builds one game: 5 rounds from the player's current level, using real commits.
 
 import { level1 } from './cases/level1.js'
+import { level2 } from './cases/level2.js'
 import { getCommits } from './github.js'
 import { shuffle } from './utils.js'
 
 export const ROUNDS_PER_GAME = 5
 
-// Levels 2-5 get added here as they're built.
+// Levels 3-5 get added here as they're built.
 const LEVELS = {
   1: level1,
+  2: level2,
 }
 
 export async function buildGame({ owner, repo }, level = 1, { difficulty = 'easy' } = {}) {
