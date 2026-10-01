@@ -9,8 +9,10 @@
    ========================================================================== */
 
 .cb-nav-wrapper {
-  position: sticky;
+  position: fixed;
   top: 1.25rem;
+  left: 0;
+  right: 0;
   z-index: 60;
   width: 100%;
   display: flex;
