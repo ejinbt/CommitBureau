@@ -3,7 +3,18 @@ import MainPage from './pages/MainPage';
 import InvestigationPage from './pages/InvestigationPage';
 import DebriefPage from './pages/DebriefPage';
 import DetectiveCursor from './components/DetectiveCursor';
-import { finalReport } from './api';
+import { finalReport, RANKS } from './api';
+
+// The chosen level survives a reload. Storage can be blocked (private mode), so fall back to level 1.
+const LEVEL_KEY = 'cb_level';
+function loadLevel() {
+  try {
+    const saved = Number(localStorage.getItem(LEVEL_KEY));
+    return saved >= 1 && saved <= 5 ? saved : 1;
+  } catch {
+    return 1;
+  }
+}
 
 /**
  * Root Application Component
@@ -13,11 +24,26 @@ import { finalReport } from './api';
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('main'); // 'main' | 'investigation' | 'debrief'
   const [targetRepo, setTargetRepo] = useState(null);
-  const [level, setLevel] = useState(1);
-  const [rank, setRank] = useState('Rookie');
+  const [level, setLevel] = useState(loadLevel);
+  const [rank, setRank] = useState(() => RANKS[loadLevel() - 1]);
   const [lastDebrief, setLastDebrief] = useState(null);
   const [lastLevelPlayed, setLastLevelPlayed] = useState(1);
   const [intakeTab, setIntakeTab] = useState('featured');
+
+  // Remember the level for the next visit.
+  useEffect(() => {
+    try {
+      localStorage.setItem(LEVEL_KEY, String(level));
+    } catch {
+      // Storage blocked: the level just won't survive a reload.
+    }
+  }, [level]);
+
+  // The level picker on the home screen: jump straight to any level.
+  const handleSelectLevel = (nextLevel) => {
+    setLevel(nextLevel);
+    setRank(RANKS[nextLevel - 1]);
+  };
 
   // Handle browser back and forward button events
   useEffect(() => {
@@ -103,7 +129,8 @@ export default function App() {
           rank={rank} 
           intakeTab={intakeTab}
           onStartCase={handleStartCase}
-          onNavigate={handleNavigate} 
+          onNavigate={handleNavigate}
+          onSelectLevel={handleSelectLevel}
         />
       )}
 
