@@ -69,7 +69,7 @@ export async function realOrFake(ctx) {
 }
 
 const SUSPECT_COMMITS = 2 // other commits shown per suspect, in the fallback version
-const TRAIL_TRIES = 2 // case commits to try for a file trail; each try costs up to two API calls
+const TRAIL_TRIES = 6 // case commits to try for a file trail; each try costs up to two API calls (cached, and capped by the game budget)
 const TRAIL_LINES = 6 // lines of the file's history shown as evidence
 
 // Each human author's commits in the list, newest first.
@@ -188,7 +188,7 @@ function whoDidItByHabits(ctx, byAuthor) {
     hint: 'People tend to work on the same parts of a project. Whose other commits look most like this one?',
     command: `git log --author="${real}" --oneline`,
     investigate: {
-      brief: `Commit ${sha}'s author line was scrubbed. Compare it with what each suspect usually works on.`,
+      brief: `Commit ${sha}'s author line was scrubbed, so it won't show up under anyone's name. Whose other commits look most like this one?`,
       suggest: [`git show ${sha} --stat`, `git log --author="${options[(answer + 1) % options.length]}" --oneline`],
       mask: { sha: commit.sha, hide: 'author' },
     },
