@@ -4,6 +4,6 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // GitHub Pages serves the site at https://ejinbt.github.io/CommitBureau/
-  base: '/CommitBureau/',
+  // Vercel serves the site from the root of its address.
+  base: '/',
 })

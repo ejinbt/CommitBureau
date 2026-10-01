@@ -4,7 +4,19 @@
 
 import { freshCommits, trimPatch } from '../diff.js'
 import { getCommit } from '../github.js'
-import { authorName, commitDate, firstLine, isBot, isMerge, makeOptions, pickRandom, shortSha, shuffle, uniqueOthers } from '../utils.js'
+import {
+  authorName,
+  commitDate,
+  firstLine,
+  isBot,
+  isMerge,
+  logLine,
+  makeOptions,
+  pickRandom,
+  shortSha,
+  shuffle,
+  uniqueOthers,
+} from '../utils.js'
 
 // Wrong-answer messages. Easy: from anywhere in history. Medium: from the closest commits, which look more alike.
 function otherMessages(ctx, index, real, count) {
@@ -49,14 +61,6 @@ export async function realOrFake(ctx) {
   }
 }
 
-const MAX_LOG_MESSAGE = 72
-
-// One line of `git log --oneline`: short sha + summary, clipped to fit.
-function logLine(commit) {
-  const msg = firstLine(commit.commit.message)
-  return `${shortSha(commit.sha)} ${msg.length > MAX_LOG_MESSAGE ? msg.slice(0, MAX_LOG_MESSAGE - 1) + '…' : msg}`
-}
-
 const SUSPECT_COMMITS = 2 // other commits shown per suspect
 
 // Who did it? Show a commit message and each suspect's other recent commits, pick its author.
@@ -81,8 +85,11 @@ export async function whoDidIt(ctx) {
   const real = authorName(commit)
   const { options, answer } = makeOptions(real, uniqueOthers(shuffle([...byAuthor.keys()]), real, 3))
 
-  // Evidence: what each suspect committed apart from this one, like `git log --author=<name> --oneline`.
-  const files = options.map((name) => {
+  // Evidence: the case commit itself with its author hidden, then what each suspect committed apart from it,
+  // like `git log --author=<name> --oneline`. The case commit is left out of the suspects' lists, or it would
+  // sit under the real author and give the answer away.
+  const caseEntry = [logLine(commit), 'Author: ???'].join('\n')
+  const suspects = options.map((name) => {
     const theirs = byAuthor.get(name).filter((c) => c.sha !== commit.sha).slice(0, SUSPECT_COMMITS)
     return [`${name}:`, ...theirs.map((c) => `  ${logLine(c)}`)].join('\n')
   })
@@ -91,8 +98,13 @@ export async function whoDidIt(ctx) {
   return {
     level: 1,
     type: 'who_did_it',
-    prompt: `Someone committed "${firstLine(commit.commit.message)}". Each suspect's other recent commits are below. Who wrote it?`,
-    evidence: { diff: files.join('\n\n'), author: null, date: commitDate(commit).slice(0, 10), file: null },
+    prompt: `Who wrote commit ${sha}? Compare it with each suspect's other recent commits.`,
+    evidence: {
+      diff: [caseEntry, "Suspects' other commits:", ...suspects].join('\n\n'),
+      author: null,
+      date: commitDate(commit).slice(0, 10),
+      file: null,
+    },
     options,
     answer,
     explanation: `${real} is recorded as the author of ${sha}. git log --author shows everything one person committed, which is how you spot who works on what.`,
@@ -121,10 +133,16 @@ export async function firstOrLater(ctx) {
     const olderMsg = firstLine(older.commit.message)
     if (newerMsg.toLowerCase() === olderMsg.toLowerCase() || commitDate(newer) === commitDate(older)) continue
 
+    // One commit of context above and below the pair, like a real slice of the log.
+    // A second round of this type in the same game must show a different stretch of history,
+    // otherwise the two log windows overlap and it looks like the same question twice.
+    const excerpt = byDate.slice(Math.max(0, top - 1), top + gap + 2)
+    ctx.shownInLog ??= new Set()
+    if (excerpt.some((c) => ctx.shownInLog.has(c.sha))) continue
+    excerpt.forEach((c) => ctx.shownInLog.add(c.sha))
+
     ctx.used.add(newer.sha)
     ctx.used.add(older.sha)
-    // One commit of context above and below the pair, like a real slice of the log.
-    const excerpt = byDate.slice(Math.max(0, top - 1), top + gap + 2)
     const log = excerpt.map(logLine).join('\n')
 
     return {
