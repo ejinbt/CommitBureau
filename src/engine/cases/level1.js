@@ -2,27 +2,9 @@
 // Each generator takes the game context and returns one round, or null if this repo can't support it
 // (for example "who did it" needs at least two different authors).
 
+import { freshCommits, trimPatch } from '../diff.js'
 import { getCommit } from '../github.js'
-import {
-  authorName,
-  commitDate,
-  firstLine,
-  isMerge,
-  makeOptions,
-  pickRandom,
-  shortSha,
-  shuffle,
-  uniqueOthers,
-} from '../utils.js'
-
-const MAX_DIFF_LINES = 30
-
-// Commits we can ask about: not merges, not already used in this game.
-function freshCommits(ctx) {
-  return ctx.commits
-    .map((commit, index) => ({ commit, index }))
-    .filter(({ commit }) => !isMerge(commit) && !ctx.used.has(commit.sha))
-}
+import { authorName, commitDate, firstLine, makeOptions, pickRandom, shortSha, shuffle, uniqueOthers } from '../utils.js'
 
 // Wrong-answer messages. Easy: from anywhere in history. Medium: from the closest commits, which look more alike.
 function otherMessages(ctx, index, real, count) {
@@ -37,12 +19,6 @@ function pickDiffFile(files = []) {
   if (!withPatch.length) return null
   const readable = withPatch.filter((f) => f.changes > 0 && f.changes <= 60)
   return pickRandom(readable.length ? readable : withPatch)
-}
-
-function trimPatch(patch) {
-  const lines = patch.split('\n')
-  if (lines.length <= MAX_DIFF_LINES) return patch
-  return [...lines.slice(0, MAX_DIFF_LINES), `... (${lines.length - MAX_DIFF_LINES} more lines)`].join('\n')
 }
 
 // Real or fake? Show a diff, pick the commit message that was really written for it.
