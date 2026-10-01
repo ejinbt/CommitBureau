@@ -12,7 +12,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import Header from '../components/Header';
-import { finalReport } from '../api';
+import { finalReport, HINT_PENALTY } from '../api';
 import './DebriefPage.css';
 
 /**
@@ -34,7 +34,7 @@ export default function DebriefPage({
   const [copiedShare, setCopiedShare] = useState(false);
 
   // Compute official report per engine contract
-  const report = finalReport(gameState);
+  const report = finalReport(gameState, level);
   const repoName = targetRepo ? `${targetRepo.owner}/${targetRepo.repo}` : 'torvalds/linux';
 
   const shareText = `CommitBureau Forensics Report
@@ -177,7 +177,7 @@ Inspect your commits: commitbureau.io`;
                       </span>
                       <span className="log-round-sub">
                         {ans.isCorrect ? 'HYPOTHESIS CONFIRMED' : 'EVIDENCE MISMATCH'}
-                        {ans.usedHint && ' // HINT PENALTY (-30)'}
+                        {ans.usedHint && ` // HINT PENALTY (-${HINT_PENALTY})`}
                       </span>
                     </div>
                     <div className="log-points-col">

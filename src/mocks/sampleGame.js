@@ -188,6 +188,8 @@ export async function buildGame({ owner, repo }, level = 1) {
   }));
 }
 
+export const HINT_PENALTY = 50;
+
 /**
  * Scores a round answer and updates game state.
  * Contract: scoreAnswer(state, round, pickedIndex, usedHint) -> new game state
@@ -198,10 +200,10 @@ export function scoreAnswer(state, round, pickedIndex, usedHint = false) {
   const maxStreak = Math.max(currentStreak, state?.maxStreak || 0);
 
   // Scoring logic:
-  // Correct answer: 100 base + (streak * 20) bonus - (hint penalty: 30)
+  // Correct answer: 100 base + (streak * 20) bonus - (hint penalty: 50)
   let roundPoints = 0;
   if (isCorrect) {
-    roundPoints = 100 + (currentStreak - 1) * 20 - (usedHint ? 30 : 0);
+    roundPoints = 100 + (currentStreak - 1) * 20 - (usedHint ? HINT_PENALTY : 0);
     if (roundPoints < 20) roundPoints = 20; // minimum floor
   }
 
@@ -229,23 +231,17 @@ export function scoreAnswer(state, round, pickedIndex, usedHint = false) {
 
 /**
  * Generates final debrief report.
- * Contract: finalReport(state) -> { score, percent, rank, unlocked, skills }
+ * Contract: finalReport(state, level) -> { score, percent, rank, unlocked, skills }
  */
-export function finalReport(state) {
+export function finalReport(state, level = state?.level || 1) {
   const answers = state?.answers || [];
   const total = answers.length || 5;
   const correctCount = answers.filter((a) => a.isCorrect).length;
-  const percent = Math.round((correctCount / total) * 100);
-
-  // Rank determination
-  // Rookie < Officer < Detective < Inspector < Chief
-  let rank = "Rookie";
-  if (percent >= 95) rank = "Chief";
-  else if (percent >= 80) rank = "Inspector";
-  else if (percent >= 60) rank = "Detective";
-  else if (percent >= 40) rank = "Officer";
+  const percent = total ? Math.round((correctCount / total) * 100) : 0;
 
   const unlocked = percent >= 80;
+  const RANKS = ['Rookie', 'Officer', 'Detective', 'Inspector', 'Chief'];
+  const rank = RANKS[Math.min(unlocked ? level : level - 1, RANKS.length - 1)];
 
   // Skills aggregation
   const skillMap = {};
