@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 import logoImg from '../assets/logo.png';
+import { playClickSound } from '../utils/audio';
 import './BureauBriefing.css';
 
 /**
@@ -210,16 +211,19 @@ export default function BureauBriefing({ onScrollToIntake }) {
         </div>
       </div>
 
-      {/* Bottom Arrow Navigation Button to Next Section */}
+      {/* Bottom Right Arrow Navigation Button to Next Section */}
       <div className="cb-hero-scroll-wrapper">
         <button
           type="button"
           className="cb-hero-scroll-btn"
-          onClick={onScrollToIntake}
+          onClick={(e) => {
+            playClickSound();
+            onScrollToIntake?.(e);
+          }}
           aria-label="Scroll to Case Intake"
         >
-          <span className="cb-scroll-label">SOLVE CASES</span>
-          <ChevronDown size={22} className="cb-scroll-chevron" />
+          <span className="cb-scroll-label">CASES</span>
+          <ChevronDown size={18} className="cb-scroll-chevron" />
         </button>
       </div>
     </section>

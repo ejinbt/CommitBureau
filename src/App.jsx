@@ -4,6 +4,7 @@ import InvestigationPage from './pages/InvestigationPage';
 import DebriefPage from './pages/DebriefPage';
 import DetectiveCursor from './components/DetectiveCursor';
 import { finalReport, RANKS } from './api';
+import { attachTactileAudioListener } from './utils/audio';
 
 // The chosen level survives a reload. Storage can be blocked (private mode), so fall back to level 1.
 const LEVEL_KEY = 'cb_level';
@@ -63,6 +64,11 @@ export default function App() {
     setLevel(nextLevel);
     setRank(RANKS[nextLevel - 1]);
   };
+
+  // Mount global tactile button audio listener
+  useEffect(() => {
+    return attachTactileAudioListener();
+  }, []);
 
   // Handle browser back and forward button events
   useEffect(() => {

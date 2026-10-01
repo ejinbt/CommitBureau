@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Terminal } from 'lucide-react';
 import { createInvestigation } from '../api';
+import { playClickSound } from '../utils/audio';
 import './InvestigationTerminal.css';
 
 /**
@@ -60,6 +61,7 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      playClickSound();
       run(input);
     } else if (e.key === 'ArrowUp' && history.length) {
       e.preventDefault();

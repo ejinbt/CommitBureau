@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Check, X, Terminal, Copy, ArrowRight, CornerDownLeft } from 'lucide-react';
+import { playClickSound } from '../utils/audio';
 import './VerdictCard.css';
 
 /**
@@ -22,6 +23,7 @@ export default function VerdictCard({
       // Enter in the investigation terminal runs a command; it must not skip to the next round.
       if (e.target instanceof Element && e.target.closest('input, textarea')) return;
       if (e.key === 'Enter') {
+        playClickSound();
         onNextRound();
       }
     };
@@ -31,6 +33,7 @@ export default function VerdictCard({
 
   const handleCopyCommand = () => {
     if (!command) return;
+    playClickSound();
     navigator.clipboard.writeText(command);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);

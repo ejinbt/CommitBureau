@@ -12,7 +12,7 @@
   justify-content: center;
   box-sizing: border-box;
   padding-top: 5rem;
-  padding-bottom: 3.5rem;
+  padding-bottom: 2.5rem;
   border-bottom: 1px solid var(--cb-border);
   position: relative;
 }
@@ -525,64 +525,80 @@
 }
 
 /* ==========================================================================
-   HERO BOTTOM SCROLL BUTTON
+   HERO BOTTOM RIGHT SCROLL BUTTON
+   Positioned absolute in the bottom right corner of the screen so it has zero
+   impact on hero layout flow and vertical alignment.
    ========================================================================== */
 .cb-hero-scroll-wrapper {
+  position: absolute;
+  bottom: 24px;
+  right: 28px;
+  z-index: 30;
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-top: auto;
-  padding-top: 1.5rem;
-  position: relative;
-  z-index: 10;
+  margin: 0;
+  padding: 0;
 }
 
 .cb-hero-scroll-btn {
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
-  background: transparent;
-  border: none;
+  gap: 0.45rem;
+  background: rgba(10, 15, 12, 0.7);
+  border: 1px solid rgba(0, 255, 102, 0.28);
   color: var(--cb-text-muted);
   font-family: var(--cb-font-mono);
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   cursor: pointer;
-  padding: 0.4rem 1rem;
+  padding: 0.45rem 0.85rem;
   border-radius: 9999px;
-  transition: all 0.25s var(--cb-ease);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 255, 102, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cb-hero-scroll-btn:hover {
-  color: #00ff66;
-  transform: translateY(2px);
+  color: #ffffff;
+  border-color: rgba(0, 255, 102, 0.8);
+  background: rgba(0, 32, 16, 0.85);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.3), inset 0 0 12px rgba(0, 255, 102, 0.15);
+  transform: translateY(-2px);
 }
 
 .cb-scroll-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  opacity: 0.75;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  color: var(--cb-text-muted);
+  transition: color 0.2s ease;
 }
 
 .cb-hero-scroll-btn:hover .cb-scroll-label {
-  opacity: 1;
+  color: #00ff66;
 }
 
 .cb-scroll-chevron {
   color: #00ff66;
-  filter: drop-shadow(0 0 6px rgba(0, 255, 102, 0.7));
+  filter: drop-shadow(0 0 5px rgba(0, 255, 102, 0.7));
   animation: bounceDown 1.8s ease-in-out infinite;
 }
 
 @keyframes bounceDown {
   0%, 100% {
     transform: translateY(0);
-    opacity: 0.8;
+    opacity: 0.85;
   }
   50% {
-    transform: translateY(6px);
+    transform: translateY(4px);
     opacity: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .cb-hero-scroll-wrapper {
+    bottom: 16px;
+    right: 16px;
   }
 }

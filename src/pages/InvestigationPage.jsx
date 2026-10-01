@@ -159,10 +159,10 @@ export default function InvestigationPage({
       // Typing in the investigation terminal (e.g. "-n 3") must not pick an answer.
       if (e.target instanceof Element && e.target.closest('input, textarea')) return;
 
-      if (e.key === '1') handleAnswer(0);
-      else if (e.key === '2') handleAnswer(1);
-      else if (e.key === '3') handleAnswer(2);
-      else if (e.key === '4') handleAnswer(3);
+      if (['1', '2', '3', '4'].includes(e.key)) {
+        playClickSound();
+        handleAnswer(parseInt(e.key, 10) - 1);
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
