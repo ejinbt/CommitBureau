@@ -18,22 +18,54 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
   const [busy, setBusy] = useState(false);
   const outputRef = useRef(null);
   const inputRef = useRef(null);
+  const typingRef = useRef(null);
+
+  const reducedMotion = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
+    []
+  );
+
+  // Typewriter: the newest output prints line by line, fast enough that even a long diff
+  // finishes in well under a second.
+  const last = entries[entries.length - 1];
+  const lastTotal = last ? last.output.split('\n').length : 0;
+  useEffect(() => {
+    if (!last || last.shown >= lastTotal) return undefined;
+    const step = Math.max(1, Math.ceil(lastTotal / 30));
+    const timer = setTimeout(() => {
+      setEntries((list) =>
+        list.map((entry, i) => (i === list.length - 1 ? { ...entry, shown: Math.min(lastTotal, entry.shown + step) } : entry))
+      );
+    }, 18);
+    return () => clearTimeout(timer);
+  }, [last, lastTotal]);
 
   // Keep the newest output in view.
   useEffect(() => {
     if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
   }, [entries, busy]);
 
+  // Stop any suggestion that is still being typed into the prompt.
+  const stopTyping = () => {
+    clearInterval(typingRef.current);
+    typingRef.current = null;
+  };
+  useEffect(() => stopTyping, []);
+
   const run = async (raw) => {
     const cmd = raw.trim();
     if (!cmd || busy) return;
+    stopTyping();
     setBusy(true);
     setHistory((h) => [...h, cmd]);
     setHistoryIdx(-1);
     setInput('');
     const result = await investigation.run(cmd);
     if (result.clear) setEntries([]);
-    else setEntries((e) => [...e, { cmd, output: result.output, error: result.error }]);
+    else {
+      const lineCount = result.output.split('\n').length;
+      setEntries((e) => [...e, { cmd, output: result.output, error: result.error, shown: reducedMotion ? lineCount : 1 }]);
+    }
     if (!result.clear && onCommandRun) onCommandRun(cmd);
     setBusy(false);
     inputRef.current?.focus();
@@ -61,9 +93,22 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
     }
   };
 
+  // Clicking a suggestion types it into the prompt, letter by letter. The player still presses Enter.
   const fillSuggestion = (cmd) => {
-    setInput(cmd);
+    stopTyping();
     inputRef.current?.focus();
+    if (reducedMotion) {
+      setInput(cmd);
+      return;
+    }
+    let typed = 0;
+    const perTick = Math.max(1, Math.ceil(cmd.length / 25));
+    setInput('');
+    typingRef.current = setInterval(() => {
+      typed = Math.min(cmd.length, typed + perTick);
+      setInput(cmd.slice(0, typed));
+      if (typed >= cmd.length) stopTyping();
+    }, 22);
   };
 
   const repoName = targetRepo ? `${targetRepo.owner}/${targetRepo.repo}` : 'repo';
@@ -105,22 +150,42 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
         {entries.length === 0 && (
           <div className="inv-empty">Type a git command and press Enter. Pick a suggestion above to get started.</div>
         )}
-        {entries.map((entry, i) => (
+        {entries.map((entry, i) => {
+          const allLines = entry.output.split('\n');
+          const visible = allLines.slice(0, entry.shown ?? allLines.length).join('\n');
+          const printing = (entry.shown ?? allLines.length) < allLines.length;
+          return (
           <div key={i} className="inv-entry">
             <div className="inv-cmd">
               <span className="inv-prompt">$</span> {entry.cmd}
             </div>
-            <pre className={`inv-result ${entry.error ? 'inv-result-error' : ''}`}>
-              {entry.output.split('\n').map((line, j) => (
-                <span key={j} className={lineClass(line, entry.error)}>
-                  {line}
-                  {'\n'}
-                </span>
-              ))}
-            </pre>
+            {entry.error ? (
+              <pre className="inv-result inv-result-error">{visible}</pre>
+            ) : (
+              splitDiffs(visible).map((part, j) =>
+                part.kind === 'diff' ? (
+                  <DiffBlock key={j} file={part.file} lines={part.lines} />
+                ) : (
+                  <pre key={j} className="inv-result">
+                    {part.lines.map((line, k) => (
+                      <span key={k} className={lineClass(line)}>
+                        {line}
+                        {'\n'}
+                      </span>
+                    ))}
+                  </pre>
+                )
+              )
+            )}
+            {printing && <span className="inv-cursor" aria-hidden="true" />}
           </div>
-        ))}
-        {busy && <div className="inv-busy">running...</div>}
+          );
+        })}
+        {busy && (
+          <div className="inv-busy">
+            <span className="inv-cursor" aria-hidden="true" />
+          </div>
+        )}
       </div>
 
       <label className="inv-input-row">
@@ -144,13 +209,73 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
   );
 }
 
-// Colour diff lines the way a terminal does.
-function lineClass(line, isError) {
-  if (isError) return '';
-  if (line.startsWith('+++') || line.startsWith('---') || line.startsWith('diff --git')) return 'inv-line-meta';
-  if (line.startsWith('+')) return 'inv-line-add';
-  if (line.startsWith('-')) return 'inv-line-del';
-  if (line.startsWith('@@')) return 'inv-line-hunk';
-  if (line.startsWith('commit ')) return 'inv-line-commit';
-  return '';
+// Plain output lines: only the commit line gets a colour.
+function lineClass(line) {
+  return line.startsWith('commit ') ? 'inv-line-commit' : '';
+}
+
+// Cut command output into plain text and per-file diffs. A diff starts at "diff --git a/<file> b/<file>".
+function splitDiffs(output) {
+  const parts = [];
+  for (const line of output.split('\n')) {
+    const start = line.match(/^diff --git a\/(.+) b\/.+$/);
+    if (start) parts.push({ kind: 'diff', file: start[1], lines: [] });
+    else if (parts.length && parts[parts.length - 1].kind === 'diff') parts[parts.length - 1].lines.push(line);
+    else if (parts.length && parts[parts.length - 1].kind === 'text') parts[parts.length - 1].lines.push(line);
+    else parts.push({ kind: 'text', lines: [line] });
+  }
+  // Drop the blank line git leaves between the commit message and the diff.
+  return parts.filter((p) => p.kind === 'diff' || p.lines.some((l) => l.trim()));
+}
+
+// Turn patch lines into GitHub-style rows with old and new line numbers.
+function diffRows(lines) {
+  const rows = [];
+  let oldNo = 0;
+  let newNo = 0;
+  for (const line of lines) {
+    if (line.startsWith('--- ') || line.startsWith('+++ ')) continue; // the file name is in the block header
+    const hunk = line.match(/^@@ -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@(.*)$/);
+    if (hunk) {
+      oldNo = Number(hunk[1]);
+      newNo = Number(hunk[2]);
+      rows.push({ type: 'hunk', text: line });
+    } else if (line.startsWith('+')) {
+      rows.push({ type: 'add', newNo: newNo++, sign: '+', text: line.slice(1) });
+    } else if (line.startsWith('-')) {
+      rows.push({ type: 'del', oldNo: oldNo++, sign: '-', text: line.slice(1) });
+    } else if (line.startsWith('\\') || line.startsWith('... ') || line.startsWith('(')) {
+      rows.push({ type: 'note', text: line });
+    } else if (line !== '' || rows.length) {
+      rows.push({ type: 'context', oldNo: oldNo++, newNo: newNo++, sign: ' ', text: line.slice(1) });
+    }
+  }
+  // A trailing empty line is just the end of the output, not part of the file.
+  while (rows.length && rows[rows.length - 1].type === 'context' && rows[rows.length - 1].text === '') rows.pop();
+  return rows;
+}
+
+function DiffBlock({ file, lines }) {
+  const rows = diffRows(lines);
+  return (
+    <div className="inv-diff">
+      <div className="inv-diff-file">{file}</div>
+      <div className="inv-diff-rows">
+        {rows.map((row, i) =>
+          row.type === 'hunk' || row.type === 'note' ? (
+            <div key={i} className={`inv-diff-row inv-diff-${row.type}`}>
+              <span className="inv-diff-wide">{row.text}</span>
+            </div>
+          ) : (
+            <div key={i} className={`inv-diff-row inv-diff-${row.type}`}>
+              <span className="inv-diff-num">{row.oldNo ?? ''}</span>
+              <span className="inv-diff-num">{row.newNo ?? ''}</span>
+              <span className="inv-diff-sign">{row.sign}</span>
+              <code className="inv-diff-code">{row.text}</code>
+            </div>
+          )
+        )}
+      </div>
+    </div>
+  );
 }
