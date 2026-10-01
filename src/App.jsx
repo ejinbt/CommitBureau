@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import MainPage from './pages/MainPage';
 import InvestigationPage from './pages/InvestigationPage';
 import DebriefPage from './pages/DebriefPage';
 import DetectiveCursor from './components/DetectiveCursor';
 import { finalReport, RANKS } from './api';
 import { attachTactileAudioListener } from './utils/audio';
+
+gsap.registerPlugin(ScrollToPlugin);
 
 // The chosen level survives a reload. Storage can be blocked (private mode), so fall back to level 1.
 const LEVEL_KEY = 'cb_level';
@@ -88,11 +92,30 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  const smoothScrollToTop = () => {
+    gsap.to(window, {
+      duration: 0.8,
+      scrollTo: { y: 0, autoKill: false },
+      ease: 'power3.inOut'
+    });
+  };
+
+  const smoothScrollToEl = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      gsap.to(window, {
+        duration: 0.95,
+        scrollTo: { y: el, autoKill: false },
+        ease: 'power3.inOut'
+      });
+    }
+  };
+
   const handleStartCase = (target) => {
     setTargetRepo(target);
     setCurrentScreen('investigation');
     window.history.pushState({ screen: 'investigation' }, '', window.location.href);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollToTop();
   };
 
   const handleFinishCase = (finalState) => {
@@ -109,7 +132,7 @@ export default function App() {
 
     setCurrentScreen('debrief');
     window.history.pushState({ screen: 'debrief' }, '', window.location.href);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollToTop();
   };
 
   const handleExitCase = (preferredTab) => {
@@ -118,13 +141,13 @@ export default function App() {
     }
     setCurrentScreen('main');
     window.history.pushState({ screen: 'main' }, '', window.location.href);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollToTop();
   };
 
   const handlePlayAgain = () => {
     setCurrentScreen('investigation');
     window.history.pushState({ screen: 'investigation' }, '', window.location.href);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollToTop();
   };
 
   const handleNavigate = (section, tab) => {
@@ -136,58 +159,71 @@ export default function App() {
       window.history.pushState({ screen: 'main' }, '', window.location.href);
     }
     if (section === 'home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      smoothScrollToTop();
     } else if (section === 'commitle' || section === 'daily') {
       setTimeout(() => {
-        const el = document.getElementById('daily-commitle');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        smoothScrollToEl('daily-commitle');
       }, 50);
     } else {
       setTimeout(() => {
-        const el = document.getElementById('case-intake');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        smoothScrollToEl('case-intake');
       }, 50);
     }
   };
 
+  const screenContainerRef = useRef(null);
+
+  // Butter-smooth GSAP transition between screens
+  useEffect(() => {
+    if (screenContainerRef.current) {
+      gsap.fromTo(
+        screenContainerRef.current,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.38, ease: 'power2.out' }
+      );
+    }
+  }, [currentScreen]);
+
   return (
     <>
       <DetectiveCursor />
-      {currentScreen === 'main' && (
-        <MainPage 
-          level={level} 
-          rank={rank} 
-          intakeTab={intakeTab}
-          onStartCase={handleStartCase}
-          onNavigate={handleNavigate}
-          onSelectLevel={handleSelectLevel}
-          mode={mode}
-          onSelectMode={setMode}
-        />
-      )}
+      <div ref={screenContainerRef} className="cb-screen-viewport">
+        {currentScreen === 'main' && (
+          <MainPage 
+            level={level} 
+            rank={rank} 
+            intakeTab={intakeTab}
+            onStartCase={handleStartCase}
+            onNavigate={handleNavigate}
+            onSelectLevel={handleSelectLevel}
+            mode={mode}
+            onSelectMode={setMode}
+          />
+        )}
 
-      {currentScreen === 'investigation' && (
-        <InvestigationPage
-          targetRepo={targetRepo}
-          level={level}
-          mode={mode}
-          rank={rank}
-          onFinishCase={handleFinishCase}
-          onExitCase={handleExitCase}
-          onNavigate={handleNavigate}
-        />
-      )}
+        {currentScreen === 'investigation' && (
+          <InvestigationPage
+            targetRepo={targetRepo}
+            level={level}
+            mode={mode}
+            rank={rank}
+            onFinishCase={handleFinishCase}
+            onExitCase={handleExitCase}
+            onNavigate={handleNavigate}
+          />
+        )}
 
-      {currentScreen === 'debrief' && (
-        <DebriefPage
-          targetRepo={targetRepo}
-          gameState={lastDebrief}
-          level={lastLevelPlayed}
-          onPlayAgain={handlePlayAgain}
-          onReturnIntake={handleExitCase}
-          onNavigate={handleNavigate}
-        />
-      )}
+        {currentScreen === 'debrief' && (
+          <DebriefPage
+            targetRepo={targetRepo}
+            gameState={lastDebrief}
+            level={lastLevelPlayed}
+            onPlayAgain={handlePlayAgain}
+            onReturnIntake={handleExitCase}
+            onNavigate={handleNavigate}
+          />
+        )}
+      </div>
     </>
   );
 }

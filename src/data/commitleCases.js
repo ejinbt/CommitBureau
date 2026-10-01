@@ -12,7 +12,13 @@ export const COMMITLE_TARGETS = [
     brief: 'A rogue author pushed unfinished commits to HEAD. What 5-letter Git command rewinds the commit tree while preserving working files?',
     command: 'git reset --soft HEAD~1',
     hint: 'Opposite of advance; rewinds the current HEAD branch pointer.',
-    explanation: 'git reset moves the current branch HEAD to a specified state, letting you undo commits cleanly.'
+    explanation: 'git reset moves the current branch HEAD to a specified state, letting you undo commits cleanly.',
+    diffSnippet: {
+      file: 'kernel/sched/core.c',
+      oldCode: '- // Unstable rogue commit 8f92b71 committed directly to HEAD',
+      prefix: '$ git ',
+      suffix: ' --soft HEAD~1'
+    }
   },
   {
     dayNumber: 2,
@@ -21,7 +27,13 @@ export const COMMITLE_TARGETS = [
     brief: 'A memory leak was introduced in fiber reconciliation. What 5-letter Git command reveals which author modified each line?',
     command: 'git blame -L 42,60 src/ReactFiber.js',
     hint: 'Point fingers; shows author, commit hash, and timestamp for each line.',
-    explanation: 'git blame annotates each line in a file with the commit and author who last changed it.'
+    explanation: 'git blame annotates each line in a file with the commit and author who last changed it.',
+    diffSnippet: {
+      file: 'src/ReactFiber.js',
+      oldCode: '- // Anomaly introduced at line 42 in reconciliation tree',
+      prefix: '$ git ',
+      suffix: ' -L 42,60 ReactFiber.js'
+    }
   },
   {
     dayNumber: 3,
@@ -30,7 +42,13 @@ export const COMMITLE_TARGETS = [
     brief: 'Two engineers completed feature branches simultaneously. What 5-letter Git command joins both branches into the current branch?',
     command: 'git merge feature/copilot-bridge',
     hint: 'Combines two separate branch histories into one commit.',
-    explanation: 'git merge integrates changes from the named branch into the current checked-out branch.'
+    explanation: 'git merge integrates changes from the named branch into the current checked-out branch.',
+    diffSnippet: {
+      file: 'src/vs/workbench/api/mainThread.ts',
+      oldCode: '- // Diverged branches: origin/main and feature/copilot-bridge',
+      prefix: '$ git ',
+      suffix: ' feature/copilot-bridge'
+    }
   },
   {
     dayNumber: 4,
@@ -39,7 +57,13 @@ export const COMMITLE_TARGETS = [
     brief: 'An investigator needs a fresh local copy of an entire upstream repository. What 5-letter Git command downloads it?',
     command: 'git clone https://github.com/nodejs/node.git',
     hint: 'Makes a complete replica of a remote repo on your local machine.',
-    explanation: 'git clone copies a repository along with its commit history, branches, and tags.'
+    explanation: 'git clone copies a repository along with its commit history, branches, and tags.',
+    diffSnippet: {
+      file: 'lib/internal/process/execution.js',
+      oldCode: '- // Remote repository mirror needed locally on disk',
+      prefix: '$ git ',
+      suffix: ' https://github.com/nodejs/node.git'
+    }
   },
   {
     dayNumber: 5,
@@ -48,7 +72,13 @@ export const COMMITLE_TARGETS = [
     brief: 'Urgent hotfix required, but your working directory has uncommitted modifications. What 5-letter Git command shelves them temporarily?',
     command: 'git stash save "wip-controller"',
     hint: 'Hides dirty working state away so you can work on a clean tree.',
-    explanation: 'git stash temporarily shelves changes so you can switch branches without committing unfinished work.'
+    explanation: 'git stash temporarily shelves changes so you can switch branches without committing unfinished work.',
+    diffSnippet: {
+      file: 'pkg/controller/daemon/daemon_controller.go',
+      oldCode: '- // Dirty uncommitted changes prevent switching to hotfix branch',
+      prefix: '$ git ',
+      suffix: ' save "wip-controller"'
+    }
   },
   {
     dayNumber: 6,
@@ -57,7 +87,13 @@ export const COMMITLE_TARGETS = [
     brief: 'A vulnerability fix was mailed as a unified diff file. What 5-letter Git command applies this delta directly to the tree?',
     command: 'git apply security-fix.patch',
     hint: 'A compact file describing differences that can be applied to code.',
-    explanation: 'git patch / git apply takes a recorded diff format and applies code changes to working files.'
+    explanation: 'git patch / git apply takes a recorded diff format and applies code changes to working files.',
+    diffSnippet: {
+      file: 'compat/mingw.c',
+      oldCode: '- // Urgent CVE security delta received via mail as text file',
+      prefix: '$ git apply security-fix.',
+      suffix: ''
+    }
   },
   {
     dayNumber: 7,
@@ -66,7 +102,13 @@ export const COMMITLE_TARGETS = [
     brief: 'Before creating a commit snapshot, modified files must be added to index. What 5-letter Git verb describes this operation?',
     command: 'git add -p compiler/rustc_middle',
     hint: 'Prepares modified files in the index before commit snapshot.',
-    explanation: 'Staging files moves modified files into the Git index preparing them for snapshot.'
+    explanation: 'Staging files moves modified files into the Git index preparing them for snapshot.',
+    diffSnippet: {
+      file: 'compiler/rustc_middle/src/ty/mod.rs',
+      oldCode: '- // 12 modified files sitting unstaged in working directory',
+      prefix: '$ git add .  // ',
+      suffix: ' changes into index'
+    }
   },
   {
     dayNumber: 8,
@@ -75,7 +117,13 @@ export const COMMITLE_TARGETS = [
     brief: 'You want to inspect remote branches without touching or modifying your working directory. What 5-letter Git command is used?',
     command: 'git fetch origin main',
     hint: 'Retrieves remote objects and refs without auto-merging.',
-    explanation: 'git fetch downloads commits, files, and refs from a remote repository without merging them.'
+    explanation: 'git fetch downloads commits, files, and refs from a remote repository without merging them.',
+    diffSnippet: {
+      file: 'Python/ceval.c',
+      oldCode: '- // Need remote commits without disturbing working branch tree',
+      prefix: '$ git ',
+      suffix: ' origin main'
+    }
   },
   {
     dayNumber: 9,
@@ -84,7 +132,13 @@ export const COMMITLE_TARGETS = [
     brief: 'Build artifacts and untracked binaries are cluttering the workspace. What 5-letter Git command removes untracked debris?',
     command: 'git clean -fd',
     hint: 'Removes untracked files from the working tree.',
-    explanation: 'git clean sweeps away untracked files and directories from your working directory.'
+    explanation: 'git clean sweeps away untracked files and directories from your working directory.',
+    diffSnippet: {
+      file: 'src/cmd/compile/internal/syntax/scanner.go',
+      oldCode: '- // 48 untracked compiled binary artifacts in working directory',
+      prefix: '$ git ',
+      suffix: ' -fd'
+    }
   },
   {
     dayNumber: 10,
@@ -93,7 +147,13 @@ export const COMMITLE_TARGETS = [
     brief: 'A three-way merge resulted in messy conflicts. What 5-letter Git flag cancels the merge and restores the pre-merge branch state?',
     command: 'git merge --abort',
     hint: 'Stops the merge and returns to the exact state before merging started.',
-    explanation: 'The --abort flag safely halts a conflicted merge or rebase, restoring the baseline commit.'
+    explanation: 'The --abort flag safely halts a conflicted merge or rebase, restoring the baseline commit.',
+    diffSnippet: {
+      file: 'packages/runtime-core/src/renderer.ts',
+      oldCode: '- // Merge conflict in renderer.ts. Want to cancel safely',
+      prefix: '$ git merge --',
+      suffix: ''
+    }
   },
   {
     dayNumber: 11,
@@ -102,7 +162,13 @@ export const COMMITLE_TARGETS = [
     brief: 'An auditor wants to inspect textual line deltas between two releases. What 5-letter Git plural noun describes these deltas?',
     command: 'git diff v4.2.0..v5.0.0',
     hint: 'Displays changes between commits, commit and working tree, etc.',
-    explanation: 'Git diffs show line-by-line additions and deletions between branches or commit points.'
+    explanation: 'Git diffs show line-by-line additions and deletions between branches or commit points.',
+    diffSnippet: {
+      file: 'django/core/handlers/base.py',
+      oldCode: '- // Need line-by-line inspection between v4.2 and v5.0',
+      prefix: '$ git ',
+      suffix: ' v4.2.0..v5.0.0'
+    }
   },
   {
     dayNumber: 12,
@@ -111,7 +177,13 @@ export const COMMITLE_TARGETS = [
     brief: 'You branched off main and want upstream pull notifications. What 5-letter verb sets up remote branch linkage?',
     command: 'git branch --set-upstream-to=origin/main',
     hint: 'Links a local branch to an upstream counterpart.',
-    explanation: 'Tracking branches maintain an explicit relationship between local branch and remote branch.'
+    explanation: 'Tracking branches maintain an explicit relationship between local branch and remote branch.',
+    diffSnippet: {
+      file: 'src/nvim/main.c',
+      oldCode: '- // Local branch has no upstream upstream association set',
+      prefix: '$ git branch --',
+      suffix: ' origin/main'
+    }
   },
   {
     dayNumber: 13,
@@ -120,7 +192,13 @@ export const COMMITLE_TARGETS = [
     brief: 'Security wants pre-commit linter checks to run automatically. What 5-letter Git feature folder handles lifecycle triggers?',
     command: 'cat .git/hooks/pre-commit',
     hint: 'Custom executable scripts Git executes before or after actions.',
-    explanation: 'Git hooks are event-driven scripts that run automatically during commit, push, and receive operations.'
+    explanation: 'Git hooks are event-driven scripts that run automatically during commit, push, and receive operations.',
+    diffSnippet: {
+      file: 'cli/tools/lint.rs',
+      oldCode: '- // Need automatic pre-commit linter verification',
+      prefix: '$ cat .git/',
+      suffix: '/pre-commit'
+    }
   },
   {
     dayNumber: 14,
@@ -129,7 +207,13 @@ export const COMMITLE_TARGETS = [
     brief: 'A corrupted commit was amended locally. What 5-letter flag forces the remote to accept the rewritten history with lease check?',
     command: 'git push --force-with-lease',
     hint: 'Overrides remote branch ref, disabling fast-forward safety check.',
-    explanation: 'git push --force allows rewriting remote history, recommended with --force-with-lease for safety.'
+    explanation: 'git push --force allows rewriting remote history, recommended with --force-with-lease for safety.',
+    diffSnippet: {
+      file: 'src/bun.js/bindings/webcrypto/CryptoKey.cpp',
+      oldCode: '- // Amended local history rejected by remote fast-forward rule',
+      prefix: '$ git push --',
+      suffix: '-with-lease origin main'
+    }
   }
 ];
 
