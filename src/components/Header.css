@@ -1,0 +1,162 @@
+/* ==========================================================================
+   FLOATING CAPSULE NAVBAR WITH MECHANICAL KEYCAP & GLIDER PHYSICS
+   ========================================================================== */
+
+.cb-nav-wrapper {
+  position: sticky;
+  top: 1.25rem;
+  z-index: 60;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
+  pointer-events: none;
+}
+
+.cb-capsule-nav {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  background: rgba(14, 20, 16, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--cb-radius-pill);
+  padding: 0.35rem 0.45rem 0.35rem 0.5rem;
+  box-shadow: 
+    0 12px 35px -8px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(0, 255, 102, 0.08);
+  max-width: 680px;
+  width: 100%;
+  transition: border-color 0.25s var(--cb-ease);
+}
+
+.cb-capsule-nav:hover {
+  border-color: rgba(0, 255, 102, 0.25);
+}
+
+/* Left: Magnetic Circular Logo */
+.cb-nav-logo-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #040805;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  user-select: none;
+}
+
+.cb-nav-logo-text {
+  font-family: var(--cb-font-heading);
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: -0.04em;
+  color: #040805;
+}
+
+/* Center: Nav Links with Liquid Elastic Glider */
+.cb-nav-links {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.2rem;
+}
+
+.cb-nav-glider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(0, 255, 102, 0.1);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  border-radius: var(--cb-radius-sm);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 0;
+  box-shadow: 0 0 15px rgba(0, 255, 102, 0.15);
+}
+
+.cb-nav-link {
+  position: relative;
+  z-index: 1;
+  font-family: var(--cb-font-sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #9eb3a5;
+  text-decoration: none;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--cb-radius-sm);
+  transition: color 0.2s var(--cb-ease);
+}
+
+.cb-nav-link:hover {
+  color: #ffffff;
+}
+
+/* Right: Sleek Modern Magnetic CTA */
+.cb-nav-pill-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--cb-font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 0.6rem 1.35rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 102, 0.7);
+  background: linear-gradient(135deg, #00ff66 0%, #00e65c 40%, #10b981 100%);
+  color: #030604;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.9),
+    0 4px 18px rgba(0, 255, 102, 0.35);
+  transition: all 0.25s var(--cb-ease);
+}
+
+.cb-nav-pill-cta:hover {
+  background: linear-gradient(135deg, #2eff82 0%, #00ff66 40%, #12c98d 100%);
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 1),
+    0 6px 25px rgba(0, 255, 102, 0.55);
+  transform: translateY(-1px);
+}
+
+.cb-nav-pill-cta:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.cb-nav-arrow {
+  font-size: 0.9rem;
+  transition: transform 0.2s var(--cb-ease);
+}
+
+.cb-nav-pill-cta:hover .cb-nav-arrow {
+  transform: translateX(2px);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .cb-capsule-nav {
+    gap: 0.75rem;
+    padding: 0.35rem 0.45rem;
+  }
+
+  .cb-nav-links {
+    display: none;
+  }
+
+  .cb-keycap-face {
+    padding: 0.5rem 1rem;
+    font-size: 0.82rem;
+  }
+}

@@ -1,0 +1,279 @@
+.investigation-screen-container {
+  min-height: 100vh;
+  background-color: #030704;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(0, 255, 102, 0.09) 0%, transparent 60%),
+    linear-gradient(rgba(0, 255, 102, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 102, 0.035) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+  color: #ffffff;
+  padding-bottom: 80px;
+}
+
+.investigation-viewport {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 100px 20px 0 20px;
+}
+
+/* Loading Card */
+.investigation-state-card {
+  background: #050a06;
+  border: 1px solid rgba(0, 255, 102, 0.22);
+  border-radius: 12px;
+  padding: 80px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+}
+
+.spin-indicator {
+  color: #00ff66;
+  animation: spinSlow 1s linear infinite;
+}
+
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.state-text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.state-headline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #00ff66;
+  letter-spacing: 0.04em;
+}
+
+.state-sub {
+  font-size: 0.82rem;
+  color: #6ee7b7;
+}
+
+/* Error Card */
+.investigation-error-block {
+  background: #0c0606;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 12px;
+  padding: 50px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.error-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ef4444;
+}
+
+.error-desc {
+  color: #fca5a5;
+  font-size: 0.88rem;
+  max-width: 440px;
+}
+
+.error-return-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.error-return-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+/* Investigation Flow */
+.investigation-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 3-Column Cockpit Bar */
+.investigation-cockpit-bar {
+  background: #050a06;
+  border: 1px solid rgba(0, 255, 102, 0.22);
+  border-radius: 10px;
+  padding: 10px 18px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(0, 255, 102, 0.12);
+}
+
+/* Left: Target Repo */
+.cockpit-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cockpit-exit-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cockpit-exit-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ffffff;
+}
+
+.cockpit-target-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #08110a;
+  border: 1px solid rgba(0, 255, 102, 0.18);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+}
+
+.branch-ico {
+  color: #00ff66;
+}
+
+.target-repo-name {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.target-branch-badge {
+  background: rgba(0, 255, 102, 0.12);
+  color: #00ff66;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* Center: Segmented Pips */
+.cockpit-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.pips-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
+  color: #4b6354;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.pips-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.round-pip {
+  width: 18px;
+  height: 6px;
+  border-radius: 2px;
+  background: #0b180e;
+  border: 1px solid rgba(0, 255, 102, 0.15);
+  transition: all 0.3s ease;
+}
+
+.round-pip.active {
+  background: #00ff66;
+  border-color: #00ff66;
+  box-shadow: 0 0 10px #00ff66;
+}
+
+.round-pip.passed {
+  background: rgba(0, 255, 102, 0.4);
+  border-color: #00ff66;
+}
+
+/* Right: Phosphor Digital Score */
+.cockpit-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+}
+
+.cockpit-stat-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.stat-label-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.62rem;
+  color: #4b6354;
+  letter-spacing: 0.06em;
+}
+
+.stat-icon {
+  color: #00ff66;
+}
+
+.stat-phosphor-val {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #00ff66;
+  text-shadow: 0 0 10px rgba(0, 255, 102, 0.45);
+  letter-spacing: 0.06em;
+}
+
+.streak-fire {
+  color: #f59e0b;
+}
+
+.streak-glow {
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.45);
+}
+
+@media (max-width: 860px) {
+  .investigation-cockpit-bar {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .cockpit-right {
+    justify-content: space-between;
+  }
+}
