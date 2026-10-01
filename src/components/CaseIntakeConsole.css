@@ -5,8 +5,14 @@
 
 .cb-intake-section {
   width: 100%;
-  padding-top: 4.5rem;
-  padding-bottom: 6rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
   position: relative;
 }
 
@@ -619,8 +625,10 @@
 
 @media (max-width: 640px) {
   .cb-intake-section {
-    padding-top: 2.75rem;
+    min-height: 100dvh;
+    padding-top: 4.5rem;
     padding-bottom: 3.5rem;
+    justify-content: flex-start;
   }
 
   .cb-intake-tabs {

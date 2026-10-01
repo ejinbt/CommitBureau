@@ -31,7 +31,7 @@
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(0, 255, 102, 0.28);
   border-radius: 9999px;
-  padding: 0.4rem 0.55rem 0.4rem 0.75rem;
+  padding: 0.42rem 0.65rem 0.42rem 0.85rem;
   box-shadow: 
     0 16px 40px -10px rgba(0, 0, 0, 0.9),
     0 0 20px rgba(0, 255, 102, 0.12),
@@ -39,15 +39,16 @@
     inset 0 -1px 1px rgba(0, 0, 0, 0.8);
   max-width: 1140px;
   width: 100%;
-  transition: all 0.3s var(--cb-ease);
+  transform-origin: center center;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.35s ease;
 }
 
 .cb-capsule-nav:hover {
-  border-color: rgba(0, 255, 102, 0.48);
+  border-color: rgba(0, 255, 102, 0.45);
   box-shadow: 
     0 20px 48px -10px rgba(0, 0, 0, 0.95),
-    0 0 30px rgba(0, 255, 102, 0.2),
-    inset 0 1px 1px rgba(0, 255, 102, 0.5);
+    0 0 25px rgba(0, 255, 102, 0.18),
+    inset 0 1px 1px rgba(0, 255, 102, 0.4);
 }
 
 /* ==========================================================================
@@ -61,12 +62,14 @@
   user-select: none;
   padding: 0.15rem 0.4rem;
   border-radius: 9999px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform-origin: center center;
+  transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
 }
 
 .cb-nav-brand-container:hover {
-  opacity: 0.92;
-  transform: scale(1.04);
+  opacity: 1;
+  transform: scale(1.15);
+  z-index: 5;
 }
 
 .cb-nav-logo-standalone {
@@ -79,7 +82,7 @@
 }
 
 .cb-nav-brand-container:hover .cb-nav-logo-standalone {
-  filter: drop-shadow(0 0 16px rgba(0, 255, 102, 0.75));
+  filter: drop-shadow(0 0 18px rgba(0, 255, 102, 0.85));
 }
 
 /* ==========================================================================
@@ -104,16 +107,25 @@
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.05em;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
-  transition: all 0.22s var(--cb-ease);
+  transform-origin: center center;
+  transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
 }
 
+/* Optical magnifying zoom when cursor hovers any navbar tab */
 .cb-hud-tab:hover {
   color: #ffffff;
-  background: rgba(0, 255, 102, 0.06);
-  border-color: rgba(0, 255, 102, 0.2);
+  background: rgba(0, 255, 102, 0.12);
+  border-color: rgba(0, 255, 102, 0.45);
+  transform: scale(1.18);
+  z-index: 5;
+  box-shadow: 0 4px 20px rgba(0, 255, 102, 0.25);
+}
+
+.cb-hud-tab:active {
+  transform: scale(1.05);
 }
 
 .cb-hud-tab.cb-hud-link {
@@ -169,10 +181,11 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 /* ==========================================================================
-   CHAMFERED TACTICAL ACTION BUTTON ("+ NEW INVESTIGATION ->")
+   ROUNDED TACTICAL ACTION BUTTON ("+ NEW INVESTIGATION ->")
    ========================================================================== */
 .cb-cyber-cta {
   position: relative;
@@ -182,7 +195,41 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  transform-origin: center center;
+  overflow: hidden;
+  transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Zoom and animation on hover */
+.cb-cyber-cta:hover {
+  transform: scale(1.1);
+  z-index: 5;
+}
+
+/* Shimmer scanner beam traversing button on hover */
+.cb-cyber-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+  z-index: 5;
+  border-radius: 9999px;
+}
+
+.cb-cyber-cta:hover::before {
+  animation: ctaShimmer 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes ctaShimmer {
+  0% { left: -120%; }
+  100% { left: 220%; }
 }
 
 .cb-cyber-cta-inner {
@@ -193,10 +240,10 @@
   gap: 0.5rem;
   background: linear-gradient(135deg, #00ff66 0%, #00e65c 45%, #05a84e 100%);
   color: #020603;
-  padding: 0.55rem 1.05rem;
-  border-radius: 7px;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
   font-family: var(--cb-font-mono);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -210,8 +257,17 @@
   background: linear-gradient(135deg, #2bff7e 0%, #00ff66 50%, #10ba60 100%);
   box-shadow: 
     inset 0 1px 2px rgba(255, 255, 255, 1),
-    0 6px 26px rgba(0, 255, 102, 0.65);
-  transform: translateY(-1px);
+    0 8px 30px rgba(0, 255, 102, 0.85);
+  animation: ctaGlowPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes ctaGlowPulse {
+  0%, 100% {
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 1), 0 6px 22px rgba(0, 255, 102, 0.7);
+  }
+  50% {
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 1), 0 10px 34px rgba(0, 255, 102, 0.95);
+  }
 }
 
 .cb-cyber-cta:active .cb-cyber-cta-inner {
@@ -221,6 +277,16 @@
 .cb-cta-plus {
   color: #020603;
   filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.cb-cyber-cta:hover .cb-cta-plus {
+  animation: plusPulse 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes plusPulse {
+  0% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1.35) rotate(90deg); color: #000000; }
 }
 
 .cb-cta-title {
@@ -233,16 +299,17 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  border-radius: 4px;
+  border-radius: 9999px;
   background: rgba(0, 0, 0, 0.22);
   color: #020603;
   margin-left: 0.25rem;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .cb-cyber-cta:hover .cb-cta-arrow-box {
-  transform: translateX(2px);
-  background: rgba(0, 0, 0, 0.35);
+  transform: translateX(3px);
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
 }
 
 /* ==========================================================================
