@@ -47,6 +47,10 @@ export async function linesChanged(ctx) {
     explanation: `${a} line(s) start with + (added) and ${d} start with - (removed). Lines starting with a space are unchanged context and don't count.`,
     hint: 'Count only lines starting with + or -. Skip the @@ line and lines starting with a space.',
     command: `git show --numstat ${sha}`,
+    investigate: {
+      brief: `Commit ${sha} changed ${file.filename}. Count what it added and removed there.`,
+      suggest: [`git show ${sha} -- ${file.filename}`, `git show ${sha} --numstat`],
+    },
   }
 }
 
@@ -87,6 +91,10 @@ export async function whichFile(ctx) {
       ' The other files exist in this repo but this commit did not touch them.',
     hint: 'Look at what is inside the diff: the language, the names, the kind of text. Which file would hold it?',
     command: `git show --name-only ${sha}`,
+    investigate: {
+      brief: `Commit ${sha} changed one of the files in the options. Find out which.`,
+      suggest: [`git show ${sha} --name-only`],
+    },
   }
 }
 
@@ -121,6 +129,10 @@ export async function spotDeletedLine(ctx) {
     explanation: `"${real}" starts with - in the diff, so it was deleted. Lines starting with + were added, and lines starting with a space did not change.`,
     hint: 'In a diff, - means the line was removed and + means it was added.',
     command: `git diff ${sha}^ ${sha} -- ${file.filename}`,
+    investigate: {
+      brief: `Commit ${sha} changed ${file.filename}. Find the line it deleted.`,
+      suggest: [`git diff ${sha}^ ${sha} -- ${file.filename}`],
+    },
   }
 }
 

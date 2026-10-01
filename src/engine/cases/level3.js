@@ -88,6 +88,9 @@ export async function whoTouchedMost(ctx) {
     const ranking = countAuthors(shown)
     // Needs a clear winner: at least 2 people and no tie for first place.
     if (shown.length < 3 || ranking.length < 2 || ranking[0][1] === ranking[1][1]) return null
+    // The terminal's `git shortlog` counts the whole history, so it must crown the same winner.
+    const full = countAuthors(history)
+    if (full[0][0] !== ranking[0][0] || (full[1] && full[0][1] === full[1][1])) return null
     return { shown, ranking }
   })
   if (!found) return null
@@ -113,6 +116,10 @@ export async function whoTouchedMost(ctx) {
     explanation: `Of these ${shown.length} commits to ${path}, ${top} made ${topCount}. ${second} is next with ${secondCount}.`,
     hint: 'git log -- <file> lists only the commits that touched that file. Count the names.',
     command: `git shortlog -sn -- ${path}`,
+    investigate: {
+      brief: `Who has made the most commits to ${path}?`,
+      suggest: [`git log --format="%h %an %s" -- ${path}`, `git shortlog -sn -- ${path}`],
+    },
   }
 }
 
@@ -148,6 +155,10 @@ export async function whichCommitCreated(ctx) {
     explanation: `git log lists the newest commit first, so the bottom line is where ${path} began: "${real}" (${sha}, ${commitDate(oldest).slice(0, 10)}). The other commits changed it later.`,
     hint: 'The first commit for a file is at the bottom of git log -- <file>. --diff-filter=A shows only commits that Added it.',
     command: `git log --diff-filter=A -- ${path}`,
+    investigate: {
+      brief: `${path} didn't always exist. Find the commit that created it.`,
+      suggest: [`git log --oneline -- ${path}`],
+    },
   }
 }
 
