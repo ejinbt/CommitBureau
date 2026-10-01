@@ -87,20 +87,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 255, 102, 0.15) 0%, rgba(0, 0, 0, 0.7) 80%);
-  border: 1.5px solid rgba(0, 255, 102, 0.5);
-  box-shadow: 0 0 16px rgba(0, 255, 102, 0.35);
   flex-shrink: 0;
 }
 
 .debrief-logo-img {
-  width: 38px;
-  height: auto;
+  height: 44px;
+  width: auto;
+  max-width: 160px;
   object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(0, 255, 102, 0.8));
+  filter: drop-shadow(0 0 10px rgba(0, 255, 102, 0.75));
 }
 
 .rank-title-group {

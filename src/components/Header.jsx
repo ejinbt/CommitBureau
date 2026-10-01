@@ -13,10 +13,9 @@ import './Header.css';
  */
 export default function Header({ onStartCaseClick, onNavigate }) {
   const logoRef = useRef(null);
-  const ctaRef = useRef(null);
 
-  // Magnetic spring pull on logo and CTA
-  const setupMagnetic = (elementRef, strength = 0.25) => {
+  // Magnetic spring pull on logo
+  const setupMagnetic = (elementRef, strength = 0.15) => {
     const el = elementRef.current;
     if (!el) return;
 
@@ -54,12 +53,10 @@ export default function Header({ onStartCaseClick, onNavigate }) {
   };
 
   useEffect(() => {
-    const cleanupLogo = setupMagnetic(logoRef, 0.2);
-    const cleanupCta = setupMagnetic(ctaRef, 0.2);
+    const cleanupLogo = setupMagnetic(logoRef, 0.15);
 
     return () => {
       if (cleanupLogo) cleanupLogo();
-      if (cleanupCta) cleanupCta();
     };
   }, []);
 
@@ -143,9 +140,8 @@ export default function Header({ onStartCaseClick, onNavigate }) {
 
         {/* Right Section: Tactical Action CTA */}
         <div className="cb-nav-right-cluster">
-          {/* Chamfered Beveled Neon Action Button */}
+          {/* Rounded Beveled Neon Action Button */}
           <button 
-            ref={ctaRef}
             type="button" 
             className="cb-cyber-cta"
             onClick={handleNavClick('intake', 'featured')}
