@@ -222,7 +222,8 @@
   position: absolute;
   top: 50%;
   left: 55%;
-  transform: translate(-50%, -50%);
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
   width: 440px;
   height: 440px;
   background: radial-gradient(circle, rgba(0, 255, 102, 0.22) 0%, rgba(9, 72, 40, 0.07) 50%, transparent 70%);

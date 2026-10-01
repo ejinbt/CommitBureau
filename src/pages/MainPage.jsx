@@ -26,15 +26,24 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
   const [activeSection, setActiveSection] = useState('hero'); // 'hero' | 'commitle' | 'intake'
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const vh = window.innerHeight;
-      if (scrollY < vh * 0.6) {
-        setActiveSection('hero');
-      } else if (scrollY < vh * 1.6) {
-        setActiveSection('commitle');
-      } else {
-        setActiveSection('intake');
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const vh = window.innerHeight;
+          let next = 'hero';
+          if (scrollY < vh * 0.5) {
+            next = 'hero';
+          } else if (scrollY < vh * 1.5) {
+            next = 'commitle';
+          } else {
+            next = 'intake';
+          }
+          setActiveSection((prev) => (prev !== next ? next : prev));
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -128,6 +137,9 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
 
   return (
     <div className="cb-app-shell">
+      {/* High-Performance Fixed GPU Layer for Ambient Lighting */}
+      <div className="cb-bg-ambient" aria-hidden="true" />
+
       {/* Floating Capsule Header */}
       <Header 
         level={level} 
