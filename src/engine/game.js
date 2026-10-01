@@ -4,6 +4,7 @@ import { level1 } from './cases/level1.js'
 import { level2 } from './cases/level2.js'
 import { level3 } from './cases/level3.js'
 import { level4 } from './cases/level4.js'
+import { level5 } from './cases/level5.js'
 import { apiCallsMade, getCommits } from './github.js'
 import { shuffle } from './utils.js'
 
@@ -11,25 +12,34 @@ export const ROUNDS_PER_GAME = 5
 const MIN_ROUNDS = 3 // fewest rounds worth playing if we run out of API budget
 const MAX_API_CALLS_PER_GAME = 25
 
-// Level 5 gets added here as they're built.
 const LEVELS = {
   1: level1,
   2: level2,
   3: level3,
   4: level4,
+  5: level5,
 }
 
-export async function buildGame({ owner, repo }, level = 1, { difficulty = 'easy' } = {}) {
+// Levels whose questions come from hardcoded data, so no repo or API calls are needed.
+const REPO_FREE_LEVELS = new Set([5])
+
+// repoRef can be null for levels that don't need a repo (level 5).
+export async function buildGame(repoRef, level = 1, { difficulty = 'easy' } = {}) {
+  const { owner, repo } = repoRef || {}
   const generators = LEVELS[level]
   if (!generators) throw new Error(`Level ${level} isn't open yet. Try level 1.`)
 
-  const commits = await getCommits(owner, repo)
-  if (!Array.isArray(commits) || commits.length < 3) {
-    throw new Error('This repo has too few commits to build a case. Try a bigger one.')
+  let commits = []
+  if (!REPO_FREE_LEVELS.has(level)) {
+    if (!owner || !repo) throw new Error('Pick a repo to investigate first.')
+    commits = await getCommits(owner, repo)
+    if (!Array.isArray(commits) || commits.length < 3) {
+      throw new Error('This repo has too few commits to build a case. Try a bigger one.')
+    }
   }
 
-  // Shared by every generator so no commit or file is asked about twice in one game.
-  const ctx = { owner, repo, commits, difficulty, used: new Set(), usedFiles: new Set() }
+  // Shared by every generator so no commit, file or scenario is asked about twice in one game.
+  const ctx = { owner, repo, commits, difficulty, used: new Set(), usedFiles: new Set(), usedScenarios: new Set() }
   const rounds = []
 
   // Cycle through the question types in a random order for variety.

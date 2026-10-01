@@ -21,6 +21,14 @@ export const SKILL_LABELS = {
   merge_or_normal: 'Spotting merge commits',
   who_merged: 'Who merged a pull request',
   merged_branch_parent: 'Reading merge parents',
+  undo: 'Undoing changes',
+  wrong_branch: 'Fixing the wrong branch',
+  bisect: 'Hunting bugs with bisect',
+  revert: 'Undoing shared commits',
+  stash: 'Stashing work',
+  cherry_pick: 'Cherry-picking',
+  recover: 'Recovering lost commits',
+  inspect: 'Inspecting changes',
 }
 
 export function newGame(level = 1) {
