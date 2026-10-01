@@ -234,7 +234,7 @@ export default function BureauBriefing({ onScrollToIntake }) {
           }}
           aria-label="Scroll to Case Intake"
         >
-          <span className="cb-scroll-label">CASES</span>
+          <span className="cb-scroll-label">COMMITLE</span>
           <ChevronDown size={18} className="cb-scroll-chevron" />
         </button>
       </div>

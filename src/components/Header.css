@@ -366,3 +366,21 @@
     padding: 0.5rem 0.65rem;
   }
 }
+
+/* Commitle Daily Tab Pill */
+.hud-daily-pill {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  background: var(--cb-green-vivid);
+  color: #030604;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  margin-left: 0.2rem;
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.45);
+}
+
+.icon-glow-gold {
+  color: var(--cb-green-vivid);
+}
+

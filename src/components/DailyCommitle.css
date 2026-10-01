@@ -1,0 +1,496 @@
+/* ==========================================================================
+   COMMITLE / SECTION 2: THE DAILY GIT FORENSICS WORDLE
+   100vh Viewport-fit interactive matrix, tactical cyber HUD
+   ========================================================================== */
+
+.commitle-section {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: clamp(4.5rem, 8vh, 5.5rem) 1.25rem clamp(1.5rem, 3vh, 2.5rem);
+  border-bottom: 1px solid var(--cb-border);
+  position: relative;
+  background: 
+    radial-gradient(ellipse at 50% 20%, rgba(0, 255, 102, 0.07) 0%, transparent 60%),
+    radial-gradient(circle at 85% 75%, rgba(0, 230, 92, 0.05) 0%, transparent 40%),
+    transparent;
+}
+
+.commitle-viewport-container {
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+/* Header HUD */
+.commitle-hud-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: clamp(0.6rem, 1.4vh, 1rem);
+  gap: 0.75rem;
+}
+
+.commitle-hud-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.commitle-badge {
+  font-family: var(--cb-font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #030604;
+  background: var(--cb-green-vivid);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  box-shadow: 0 0 14px rgba(0, 255, 102, 0.45);
+}
+
+.commitle-day-tag {
+  font-family: var(--cb-font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--cb-text-muted);
+  letter-spacing: 0.08em;
+}
+
+.commitle-target-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(0, 255, 102, 0.08);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  color: var(--cb-text);
+}
+
+.commitle-target-chip .chip-ico {
+  color: var(--cb-green-vivid);
+}
+
+.commitle-hint-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--cb-border);
+  color: var(--cb-text-muted);
+  font-family: var(--cb-font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.commitle-hint-btn:hover,
+.commitle-hint-btn.active {
+  color: #00ff66;
+  border-color: rgba(0, 255, 102, 0.5);
+  background: rgba(0, 255, 102, 0.1);
+  box-shadow: 0 0 12px rgba(0, 255, 102, 0.2);
+}
+
+/* Incident Brief Card */
+.commitle-brief-card {
+  width: 100%;
+  background: rgba(8, 14, 10, 0.82);
+  border: 1px solid rgba(0, 255, 102, 0.2);
+  border-radius: 12px;
+  padding: clamp(0.65rem, 1.3vh, 0.95rem) clamp(0.85rem, 1.8vw, 1.15rem);
+  margin-bottom: clamp(0.65rem, 1.4vh, 1.1rem);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.brief-lead-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+  font-family: var(--cb-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+.brief-tag {
+  color: var(--cb-green-vivid);
+  font-weight: 800;
+}
+
+.brief-instruction {
+  color: var(--cb-text-faint);
+}
+
+.brief-text {
+  font-size: clamp(0.82rem, 1vw, 0.88rem);
+  line-height: 1.45;
+  color: #e5e7eb;
+  margin: 0;
+}
+
+.commitle-clue-popover {
+  margin-top: 0.5rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed rgba(0, 255, 102, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  color: #38bdf8;
+}
+
+.clue-sparkle {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+/* Toast Message */
+.commitle-toast-banner {
+  background: #00ff66;
+  color: #020603;
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  box-shadow: 0 0 16px rgba(0, 255, 102, 0.6);
+  margin-bottom: 0.5rem;
+  animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Guess Matrix Grid */
+.commitle-grid-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.7vh, 7px);
+  margin-bottom: clamp(0.65rem, 1.4vh, 1.15rem);
+}
+
+.commitle-grid-row {
+  display: flex;
+  gap: clamp(4px, 0.8vw, 7px);
+}
+
+.commitle-grid-row.shake {
+  animation: rowShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes rowShake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}
+
+.commitle-tile {
+  width: clamp(42px, 7.5vw, 54px);
+  height: clamp(42px, 7.5vw, 54px);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: rgba(10, 16, 12, 0.65);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--cb-font-heading);
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 800;
+  color: #ffffff;
+  box-sizing: border-box;
+  user-select: none;
+  transition: border-color 0.15s ease;
+}
+
+.commitle-tile.pop {
+  animation: popTile 0.12s ease-in-out;
+  border-color: rgba(0, 255, 102, 0.6);
+}
+
+@keyframes popTile {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* Wordle Tile Flip Colors */
+.commitle-tile.correct {
+  background: #008736;
+  border-color: #00ff66;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 255, 102, 0.35);
+  animation: flipTile 0.5s ease forwards;
+}
+
+.commitle-tile.present {
+  background: #926d00;
+  border-color: #fbbf24;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
+  animation: flipTile 0.5s ease forwards;
+}
+
+.commitle-tile.absent {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--cb-text-muted);
+  animation: flipTile 0.5s ease forwards;
+}
+
+@keyframes flipTile {
+  0% { transform: rotateX(0); }
+  50% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0); }
+}
+
+/* Tactical Keyboard */
+.commitle-keyboard {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  user-select: none;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.keyboard-key {
+  height: clamp(38px, 6.2vh, 46px);
+  min-width: clamp(24px, 4.2vw, 36px);
+  flex: 1;
+  max-width: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(20, 26, 22, 0.7);
+  border-radius: 6px;
+  color: #e5e7eb;
+  font-family: var(--cb-font-mono);
+  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.keyboard-key.special-key {
+  flex: 1.5;
+  max-width: 58px;
+  font-size: 0.68rem;
+  background: rgba(30, 38, 32, 0.85);
+}
+
+.keyboard-key:hover {
+  background: rgba(0, 255, 102, 0.15);
+  border-color: rgba(0, 255, 102, 0.4);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.keyboard-key:active {
+  transform: translateY(1px);
+}
+
+.keyboard-key.correct {
+  background: #008736 !important;
+  border-color: #00ff66 !important;
+  color: #ffffff !important;
+}
+
+.keyboard-key.present {
+  background: #926d00 !important;
+  border-color: #fbbf24 !important;
+  color: #ffffff !important;
+}
+
+.keyboard-key.absent {
+  background: rgba(12, 16, 14, 0.8) !important;
+  border-color: transparent !important;
+  color: #4b5563 !important;
+  opacity: 0.55;
+}
+
+/* Verdict / Solved Banner */
+.commitle-verdict-drawer {
+  width: 100%;
+  background: rgba(6, 14, 8, 0.95);
+  border: 1px solid rgba(0, 255, 102, 0.4);
+  border-radius: 12px;
+  padding: clamp(0.75rem, 1.6vh, 1.15rem);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75), 0 0 20px rgba(0, 255, 102, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  animation: popIn 0.3s ease-out;
+}
+
+.verdict-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.verdict-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--cb-font-heading);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.verdict-badge.won {
+  color: var(--cb-green-vivid);
+}
+
+.verdict-badge.lost {
+  color: #ef4444;
+}
+
+.verdict-stats-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--cb-text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.verdict-explanation {
+  font-family: var(--cb-font-mono);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: #d1d5db;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  border-left: 2px solid var(--cb-green-vivid);
+  margin: 0;
+}
+
+.verdict-explanation strong {
+  color: var(--cb-green-vivid);
+}
+
+.verdict-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.commitle-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #00ff66 0%, #00e65c 40%, #10b981 100%);
+  color: #030604;
+  font-family: var(--cb-font-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 255, 102, 0.35);
+  transition: all 0.2s ease;
+}
+
+.commitle-share-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 255, 102, 0.5);
+}
+
+.commitle-countdown-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--cb-text-muted);
+}
+
+/* Bottom Nav Arrow into Section 3 */
+.commitle-bottom-nav {
+  margin-top: clamp(0.75rem, 1.8vh, 1.5rem);
+}
+
+.commitle-scroll-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(6, 14, 8, 0.7);
+  border: 1px solid rgba(0, 255, 102, 0.28);
+  color: var(--cb-text-muted);
+  font-family: var(--cb-font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+}
+
+.commitle-scroll-btn:hover {
+  color: #ffffff;
+  border-color: #00ff66;
+  background: rgba(0, 32, 16, 0.9);
+  box-shadow: 0 0 16px rgba(0, 255, 102, 0.3);
+  transform: translateY(-2px);
+}
+
+.commitle-scroll-btn:hover .scroll-hint-label {
+  color: #00ff66;
+}
+
+.scroll-hint-ico {
+  color: #00ff66;
+  animation: bounceDown 1.8s ease-in-out infinite;
+}

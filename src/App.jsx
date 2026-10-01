@@ -137,6 +137,11 @@ export default function App() {
     }
     if (section === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (section === 'commitle' || section === 'daily') {
+      setTimeout(() => {
+        const el = document.getElementById('daily-commitle');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
     } else {
       setTimeout(() => {
         const el = document.getElementById('case-intake');

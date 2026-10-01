@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Folder, Database, FileText, Plus, ArrowRight } from 'lucide-react';
+import { Folder, Database, FileText, Plus, ArrowRight, Sparkles } from 'lucide-react';
 import gsap from 'gsap';
 import logoImg from '../assets/logo.png';
 import './Header.css';
@@ -7,7 +7,7 @@ import './Header.css';
 /**
  * Cyber-Forensic Capsule Navbar modeled after user's reference:
  * - Left: Official Brand Logo with green neon underglow & high-contrast brand lettering
- * - Center: Bracketed active tab "Cases", Archive, How it works, GitHub
+ * - Center: Bracketed active tab "Cases", Commitle (Daily), Archive, How it works, GitHub
  * - Status Pill: Pulsing green "SYSTEM ONLINE / REPO FORENSICS READY"
  * - Right: Beveled Neon "+ NEW INVESTIGATION ->" Tactical Action Button
  */
@@ -96,6 +96,17 @@ export default function Header({ onStartCaseClick, onNavigate }) {
             <span className="hud-tab-label">CASES</span>
             <span className="hud-corner-bl" />
             <span className="hud-corner-br" />
+          </button>
+
+          {/* Daily Commitle Wordle Tab */}
+          <button 
+            type="button" 
+            className="cb-hud-tab cb-commitle-tab"
+            onClick={handleNavClick('commitle', 'daily')}
+          >
+            <Sparkles size={13} className="hud-tab-icon icon-glow-gold" />
+            <span className="hud-tab-label">COMMITLE</span>
+            <span className="hud-daily-pill">DAILY</span>
           </button>
 
           {/* Archive Tab */}
