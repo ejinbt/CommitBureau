@@ -123,7 +123,10 @@ async function whoDidItByFileTrail(ctx, byAuthor) {
       type: 'who_did_it',
       prompt: `Who wrote commit ${sha}? It changed ${path}. Check who else works on that file.`,
       evidence: {
-        diff: [[logLine(commit), 'Author: ???'].join('\n'), `Other commits to ${path}:`, lines.join('\n')].join('\n\n'),
+        diff: [
+          [logLine(commit), 'Author: ???'].join('\n'),
+          [`$ git log --format="%h %an %s" -- ${path}`, ...lines].join('\n'),
+        ].join('\n\n'),
         author: null,
         date: commitDate(commit).slice(0, 10),
         file: path,
@@ -207,7 +210,7 @@ export async function firstOrLater(ctx) {
 
     ctx.used.add(newer.sha)
     ctx.used.add(older.sha)
-    const log = excerpt.map(logLine).join('\n')
+    const log = ['$ git log --oneline', ...excerpt.map(logLine)].join('\n')
 
     return {
       level: 1,
