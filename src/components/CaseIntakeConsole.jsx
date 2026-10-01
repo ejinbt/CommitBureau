@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FEATURED_REPOS, getUserRepos } from '../api';
 import LevelPicker from './LevelPicker';
 import './CaseIntakeConsole.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Section 2: Case Intake Console
@@ -57,6 +60,63 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
       }
     }
   }, [activeTab]);
+
+  // Section 3 ScrollTrigger entrance animation (triggers when scrolling into Section 3)
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.cb-intake-header',
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '#case-intake',
+            start: 'top 80%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      gsap.fromTo(
+        '.cb-intake-tabs',
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '#case-intake',
+            start: 'top 75%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      gsap.fromTo(
+        '.cb-folder-card',
+        { opacity: 0, y: 35, scale: 0.96 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.55,
+          stagger: 0.08,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '#case-intake',
+            start: 'top 70%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   const handleSaveToken = (e) => {
     e.preventDefault();

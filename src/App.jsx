@@ -178,8 +178,8 @@ export default function App() {
     if (screenContainerRef.current) {
       gsap.fromTo(
         screenContainerRef.current,
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.38, ease: 'power2.out' }
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, clearProps: 'all', ease: 'power2.out' }
       );
     }
   }, [currentScreen]);

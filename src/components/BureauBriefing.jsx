@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 import logoImg from '../assets/logo.png';
+import { playClickSound } from '../utils/audio';
 import './BureauBriefing.css';
 
 /**
@@ -246,6 +248,22 @@ export default function BureauBriefing({ onScrollToIntake }) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Bottom-Right Viewport Scroll Arrow to Section 2 (Commitle) */}
+      <div className="cb-section-scroll-arrow">
+        <button
+          type="button"
+          className="cb-hero-scroll-btn"
+          onClick={() => {
+            playClickSound();
+            onScrollToIntake();
+          }}
+          aria-label="Scroll to Commitle"
+        >
+          <span className="cb-scroll-label">COMMITLE</span>
+          <ChevronDown size={18} className="cb-scroll-chevron" />
+        </button>
       </div>
     </section>
   );

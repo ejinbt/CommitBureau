@@ -234,3 +234,74 @@ body {
   border-color: var(--cb-border-hover);
   box-shadow: 0 24px 50px -10px rgba(0, 255, 102, 0.1);
 }
+
+/* ==========================================================================
+   GLOBAL SECTION VIEWPORT SCROLL ARROWS (SECTION 1 & SECTION 2)
+   Fixed in bottom-right corner of each viewport screen
+   ========================================================================== */
+.cb-section-scroll-arrow {
+  position: absolute;
+  bottom: clamp(16px, 2.8vh, 28px);
+  right: clamp(18px, 2.5vw, 36px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+}
+
+.cb-hero-scroll-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(6, 14, 8, 0.92);
+  border: 1px solid rgba(0, 255, 102, 0.45);
+  color: #ffffff;
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  padding: 0.55rem 0.95rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    0 0 16px rgba(0, 255, 102, 0.22),
+    inset 0 0 10px rgba(0, 255, 102, 0.08);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cb-hero-scroll-btn:hover {
+  color: #ffffff;
+  border-color: #00ff66;
+  background: rgba(0, 32, 16, 0.95);
+  box-shadow: 
+    0 8px 30px rgba(0, 0, 0, 0.75),
+    0 0 25px rgba(0, 255, 102, 0.45),
+    inset 0 0 14px rgba(0, 255, 102, 0.18);
+  transform: translateY(-2px);
+}
+
+.cb-scroll-label {
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  color: var(--cb-green-vivid);
+  font-weight: 700;
+}
+
+.cb-scroll-chevron {
+  color: #00ff66;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 102, 0.9));
+  animation: bounceDown 1.8s ease-in-out infinite;
+}
+
+@keyframes bounceDown {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+}

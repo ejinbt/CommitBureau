@@ -14,9 +14,11 @@ import {
   AlertTriangle,
   FileCode,
   Lock,
-  Unlock
+  Unlock,
+  ChevronDown
 } from 'lucide-react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
   getDailyCommitleCase, 
   evaluateCommitleGuess, 
@@ -24,6 +26,8 @@ import {
 } from '../data/commitleCases';
 import { playClickSound, playCorrectSound, playWrongSound } from '../utils/audio';
 import './DailyCommitle.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const KEYBOARD_ROWS = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -39,9 +43,9 @@ const WORD_LENGTH = 5;
  * - Authentic 6-guess Wordle evaluation with Git forensic terminology
  * - Split cockpit: Crime Scene & Live Redacted Diff (Left) + Decryption Matrix (Right)
  * - Reactive Diff De-redaction: Green letters dynamically decode in the code terminal
- * - 100vh Viewport-fit layout with GSAP animations
+ * - 100vh Viewport-fit layout with GSAP ScrollTrigger entrance animation
  */
-export default function DailyCommitle() {
+export default function DailyCommitle({ onScrollToCases }) {
   const dailyCase = useMemo(() => getDailyCommitleCase(), []);
   const storageKey = `cb_commitle_${dailyCase.dateString}`;
   const statsKey = 'cb_commitle_stats';
@@ -51,31 +55,40 @@ export default function DailyCommitle() {
   const leftColRef = useRef(null);
   const rightColRef = useRef(null);
 
-  // GSAP Entrance Timeline for Commitle Console
+  // GSAP ScrollTrigger Entrance for Commitle Console (Fires when scrolling into Section 2)
   useEffect(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#daily-commitle',
+          start: 'top 75%',
+          toggleActions: 'play none none none'
+        },
+        defaults: { ease: 'power3.out' }
+      });
 
-    tl.fromTo('.commitle-console-topbar', 
-      { opacity: 0, y: -16 }, 
-      { opacity: 1, y: 0, duration: 0.55 }
-    )
-    .fromTo(leftColRef.current, 
-      { opacity: 0, x: -25 }, 
-      { opacity: 1, x: 0, duration: 0.65 }, 
-      '-=0.35'
-    )
-    .fromTo(rightColRef.current, 
-      { opacity: 0, x: 25 }, 
-      { opacity: 1, x: 0, duration: 0.65 }, 
-      '-=0.55'
-    )
-    .fromTo('.commitle-tile', 
-      { scale: 0.92, opacity: 0 }, 
-      { scale: 1, opacity: 1, duration: 0.35, stagger: 0.015, ease: 'back.out(1.5)' }, 
-      '-=0.4'
-    );
+      tl.fromTo('.commitle-console-topbar', 
+        { opacity: 0, y: -20 }, 
+        { opacity: 1, y: 0, duration: 0.55 }
+      )
+      .fromTo(leftColRef.current, 
+        { opacity: 0, x: -35, scale: 0.98 }, 
+        { opacity: 1, x: 0, scale: 1, duration: 0.7 }, 
+        '-=0.35'
+      )
+      .fromTo(rightColRef.current, 
+        { opacity: 0, x: 35, scale: 0.98 }, 
+        { opacity: 1, x: 0, scale: 1, duration: 0.7 }, 
+        '-=0.55'
+      )
+      .fromTo('.commitle-tile', 
+        { scale: 0.8, opacity: 0 }, 
+        { scale: 1, opacity: 1, duration: 0.35, stagger: 0.015, ease: 'back.out(1.5)' }, 
+        '-=0.4'
+      );
+    });
 
-    return () => tl.kill();
+    return () => ctx.revert();
   }, []);
 
   // Load saved state for today's game
@@ -608,6 +621,22 @@ export default function DailyCommitle() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Bottom-Right Viewport Scroll Arrow to Section 3 (Cases) */}
+      <div className="cb-section-scroll-arrow">
+        <button
+          type="button"
+          className="cb-hero-scroll-btn"
+          onClick={() => {
+            playClickSound();
+            if (onScrollToCases) onScrollToCases();
+          }}
+          aria-label="Scroll to Cases"
+        >
+          <span className="cb-scroll-label">CASES</span>
+          <ChevronDown size={18} className="cb-scroll-chevron" />
+        </button>
       </div>
     </section>
   );
