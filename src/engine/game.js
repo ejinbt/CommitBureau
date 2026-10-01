@@ -3,6 +3,7 @@
 import { level1 } from './cases/level1.js'
 import { level2 } from './cases/level2.js'
 import { level3 } from './cases/level3.js'
+import { level4 } from './cases/level4.js'
 import { apiCallsMade, getCommits } from './github.js'
 import { shuffle } from './utils.js'
 
@@ -10,11 +11,12 @@ export const ROUNDS_PER_GAME = 5
 const MIN_ROUNDS = 3 // fewest rounds worth playing if we run out of API budget
 const MAX_API_CALLS_PER_GAME = 25
 
-// Levels 4-5 get added here as they're built.
+// Level 5 gets added here as they're built.
 const LEVELS = {
   1: level1,
   2: level2,
   3: level3,
+  4: level4,
 }
 
 export async function buildGame({ owner, repo }, level = 1, { difficulty = 'easy' } = {}) {

@@ -18,6 +18,9 @@ export const SKILL_LABELS = {
   spot_deleted_line: 'Reading + and - lines',
   who_touched_most: 'Who owns a file',
   which_commit_created: 'Where a file began',
+  merge_or_normal: 'Spotting merge commits',
+  who_merged: 'Who merged a pull request',
+  merged_branch_parent: 'Reading merge parents',
 }
 
 export function newGame(level = 1) {
