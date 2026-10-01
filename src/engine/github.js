@@ -3,7 +3,7 @@
 // Without a token GitHub allows 60 requests per hour per IP, so caching matters.
 
 import { demoResponse } from '../data/demoRepo.js'
-import { DEMO_PROXY_URL } from './config.js'
+import { DEMO_PROXY_URL, PROXY_HEADER } from './config.js'
 
 const API = 'https://api.github.com'
 const cache = new Map()
@@ -78,12 +78,16 @@ async function fetchJson(path) {
 
   // Demo access first. If the proxy is down or broken, fall back to calling GitHub directly.
   if (isDemoAccessOn()) {
+    let proxied = null
     try {
-      const res = await fetch(DEMO_PROXY_URL + path, { headers: accept })
-      if (res.ok) return res.json()
-      if (res.status < 500) throw new Error(friendlyError(res, true))
-    } catch (err) {
-      if (err instanceof Error && !(err instanceof TypeError)) throw err // a real GitHub answer, like 404
+      proxied = await fetch(`${DEMO_PROXY_URL}?p=${encodeURIComponent(path)}`, { headers: accept })
+    } catch {
+      // Proxy unreachable: fall through to GitHub.
+    }
+    // Only trust answers the proxy marked as its own; anything else means it isn't deployed here.
+    if (proxied?.headers.get(PROXY_HEADER)) {
+      if (proxied.ok) return proxied.json()
+      if (proxied.status < 500) throw new Error(friendlyError(proxied, true)) // a real GitHub answer, like 404
     }
   }
 
