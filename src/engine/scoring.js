@@ -5,7 +5,7 @@ export const RANKS = ['Rookie', 'Officer', 'Detective', 'Inspector', 'Chief']
 export const PASS_PERCENT = 80
 
 const POINTS_CORRECT = 100
-const HINT_PENALTY = 50
+export const HINT_PENALTY = 50
 const STREAK_BONUS = 25 // per answer in a row after the first
 const MAX_STREAK_BONUS = 100
 
