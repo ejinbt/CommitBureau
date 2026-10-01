@@ -75,7 +75,7 @@ export default function Header({ onStartCaseClick, onNavigate }) {
   return (
     <div className="cb-nav-wrapper">
       <header className="cb-capsule-nav">
-        {/* Left: CommitBureau Brand with Official Logo */}
+        {/* Left: CommitBureau Brand Official Logo Only */}
         <div 
           ref={logoRef} 
           className="cb-nav-brand-container" 
@@ -84,12 +84,7 @@ export default function Header({ onStartCaseClick, onNavigate }) {
           role="button"
           tabIndex={0}
         >
-          <div className="cb-nav-logo-wrap">
-            <img src={logoImg} alt="CommitBureau Logo" className="cb-nav-logo-img" />
-          </div>
-          <span className="cb-nav-brand-text">
-            Commit<span className="brand-accent">Bureau</span>
-          </span>
+          <img src={logoImg} alt="CommitBureau Logo" className="cb-nav-logo-standalone" />
         </div>
 
         {/* Center: HUD Nav Tabs */}
@@ -146,17 +141,8 @@ export default function Header({ onStartCaseClick, onNavigate }) {
           </a>
         </nav>
 
-        {/* Right Section: System Status + Action CTA */}
+        {/* Right Section: Tactical Action CTA */}
         <div className="cb-nav-right-cluster">
-          {/* Status Indicator Pill */}
-          <div className="cb-system-status">
-            <span className="status-blip-dot" />
-            <div className="status-text-stack">
-              <span className="status-online-title">SYSTEM ONLINE</span>
-              <span className="status-online-sub">REPO FORENSICS READY</span>
-            </div>
-          </div>
-
           {/* Chamfered Beveled Neon Action Button */}
           <button 
             ref={ctaRef}
