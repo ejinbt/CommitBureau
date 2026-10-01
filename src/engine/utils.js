@@ -55,3 +55,8 @@ export function uniqueOthers(values, correct, count) {
   }
   return out
 }
+
+// Bots like dependabot[bot] would give "who" questions away, so only humans count.
+export function isBot(name) {
+  return name.endsWith('[bot]')
+}

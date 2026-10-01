@@ -4,7 +4,7 @@
 
 import { freshCommits, trimPatch } from '../diff.js'
 import { getCommit } from '../github.js'
-import { authorName, commitDate, firstLine, makeOptions, pickRandom, shortSha, shuffle, uniqueOthers } from '../utils.js'
+import { authorName, commitDate, firstLine, isBot, makeOptions, pickRandom, shortSha, shuffle, uniqueOthers } from '../utils.js'
 
 // Wrong-answer messages. Easy: from anywhere in history. Medium: from the closest commits, which look more alike.
 function otherMessages(ctx, index, real, count) {
@@ -51,8 +51,6 @@ export async function realOrFake(ctx) {
 
 // Who did it? Show a commit message, pick its author.
 export async function whoDidIt(ctx) {
-  // Bots like dependabot[bot] would give the answer away, so only humans count.
-  const isBot = (name) => name.endsWith('[bot]')
   const authors = [...new Set(ctx.commits.map(authorName))].filter((name) => !isBot(name))
   if (authors.length < 2) return null
 

@@ -5,6 +5,12 @@
 const API = 'https://api.github.com'
 const cache = new Map()
 let token = ''
+let networkCalls = 0
+
+// How many real requests have gone to GitHub (cache hits don't count). buildGame uses this as a budget.
+export function apiCallsMade() {
+  return networkCalls
+}
 
 // The player's optional token. It stays in this browser tab and is sent only to api.github.com.
 export function setToken(value) {
@@ -26,6 +32,7 @@ export function gh(path) {
 async function fetchJson(path) {
   const headers = { Accept: 'application/vnd.github+json' }
   if (token) headers.Authorization = `Bearer ${token}`
+  networkCalls++
 
   let res
   try {
@@ -62,4 +69,9 @@ export function getCommit(owner, repo, sha) {
 // Public repos for a user, most recently pushed first.
 export function fetchUserRepos(username) {
   return gh(`/users/${username}/repos?per_page=100&sort=pushed`)
+}
+
+// The latest 100 commits that touched one file, newest first (what `git log -- <file>` shows).
+export function getFileHistory(owner, repo, path) {
+  return gh(`/repos/${owner}/${repo}/commits?path=${encodeURIComponent(path)}&per_page=100`)
 }
