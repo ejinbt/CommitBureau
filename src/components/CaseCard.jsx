@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { BookOpen, Check, X, ShieldAlert, Cpu, Sparkles } from 'lucide-react';
+import { BookOpen, Check, X, ShieldAlert, Cpu, Sparkles, Terminal } from 'lucide-react';
 import DiffViewer from './DiffViewer';
 import VerdictCard from './VerdictCard';
+import { HINT_PENALTY } from '../api';
 import './CaseCard.css';
 
 /**
@@ -9,7 +10,9 @@ import './CaseCard.css';
  * - Crime case dossier banner
  * - High-depth suspect hypothesis cards with role tags and scanline hover physics
  * - 150ms verification suspense state with shake on error
- * - Detective notebook clue reveal
+ * - Detective notebook clue reveal with HINT_PENALTY
+ * - Shows optionNotes when answered (explaining wrong/right commands)
+ * - Conditionally renders DiffViewer only when diff exists
  */
 export default function CaseCard({
   round,
@@ -68,7 +71,7 @@ export default function CaseCard({
           >
             <BookOpen size={13} />
             <span>{hintOpen ? 'Close Note' : 'Field Clue'}</span>
-            {!hintUsed && !isAnswered && <span className="hint-fee-pill">-30 PTS</span>}
+            {!hintUsed && !isAnswered && <span className="hint-fee-pill">-{HINT_PENALTY} PTS</span>}
           </button>
         </div>
       </div>
@@ -79,7 +82,7 @@ export default function CaseCard({
           <div className="clue-drawer-header">
             <ShieldAlert size={14} className="clue-warn-icon" />
             <span className="clue-tag">// CONFIDENTIAL INVESTIGATOR NOTE:</span>
-            {hintUsed && <span className="clue-fee-tag">30 POINT PENALTY APPLIED</span>}
+            {hintUsed && <span className="clue-fee-tag">{HINT_PENALTY} POINT PENALTY APPLIED</span>}
           </div>
           <p className="clue-body-text">{round.hint || 'Check the commit timestamp against major milestone releases.'}</p>
         </div>
@@ -94,16 +97,18 @@ export default function CaseCard({
         <h2 className="inquiry-statement">{round.prompt}</h2>
       </div>
 
-      {/* Evidence Terminal Diff Viewer */}
-      <div className="case-evidence-envelope">
-        <DiffViewer
-          diff={round.evidence?.diff}
-          file={round.evidence?.file}
-          author={round.evidence?.author}
-          date={round.evidence?.date}
-          roundType={round.type}
-        />
-      </div>
+      {/* Evidence Terminal Diff Viewer (Only when diff exists) */}
+      {round.evidence?.diff && (
+        <div className="case-evidence-envelope">
+          <DiffViewer
+            diff={round.evidence.diff}
+            file={round.evidence?.file}
+            author={round.evidence?.author}
+            date={round.evidence?.date}
+            roundType={round.type}
+          />
+        </div>
+      )}
 
       {/* Suspect / Hypothesis Matrices */}
       <div className="hypotheses-investigation-section">
@@ -166,6 +171,12 @@ export default function CaseCard({
                 {/* Option Content Body */}
                 <div className="card-content-body">
                   <span className="suspect-headline">{opt}</span>
+                  {isAnswered && round.optionNotes?.[idx] && (
+                    <div className="option-forensic-note">
+                      <Terminal size={11} className="note-terminal-ico" />
+                      <span className="note-text">{round.optionNotes[idx]}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Subtle bottom scanline bar */}

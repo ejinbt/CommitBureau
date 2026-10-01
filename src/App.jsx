@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import MainPage from './pages/MainPage';
 import InvestigationPage from './pages/InvestigationPage';
 import DebriefPage from './pages/DebriefPage';
+import { finalReport } from './api';
 
 /**
  * Root Application Component
@@ -14,6 +15,7 @@ export default function App() {
   const [level, setLevel] = useState(1);
   const [rank, setRank] = useState('Rookie');
   const [lastDebrief, setLastDebrief] = useState(null);
+  const [lastLevelPlayed, setLastLevelPlayed] = useState(1);
 
   const handleStartCase = (target) => {
     setTargetRepo(target);
@@ -23,12 +25,16 @@ export default function App() {
 
   const handleFinishCase = (finalState) => {
     setLastDebrief(finalState);
-    if (finalState?.score >= 320) {
-      setLevel((prev) => Math.min(prev + 1, 3));
-      setRank('Inspector');
-    } else if (finalState?.score >= 200) {
-      setRank('Detective');
+    const levelPlayed = level;
+    setLastLevelPlayed(levelPlayed);
+
+    const report = finalReport(finalState, levelPlayed);
+    setRank(report.rank);
+
+    if (report.unlocked) {
+      setLevel((prev) => Math.min(prev + 1, 5));
     }
+
     setCurrentScreen('debrief');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -67,7 +73,7 @@ export default function App() {
         <DebriefPage
           targetRepo={targetRepo}
           gameState={lastDebrief}
-          level={level}
+          level={lastLevelPlayed}
           onPlayAgain={handlePlayAgain}
           onReturnIntake={handleExitCase}
         />
