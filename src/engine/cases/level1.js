@@ -81,8 +81,11 @@ export async function whoDidIt(ctx) {
   const real = authorName(commit)
   const { options, answer } = makeOptions(real, uniqueOthers(shuffle([...byAuthor.keys()]), real, 3))
 
-  // Evidence: what each suspect committed apart from this one, like `git log --author=<name> --oneline`.
-  const files = options.map((name) => {
+  // Evidence: the case commit itself with its author hidden, then what each suspect committed apart from it,
+  // like `git log --author=<name> --oneline`. The case commit is left out of the suspects' lists, or it would
+  // sit under the real author and give the answer away.
+  const caseEntry = [logLine(commit), 'Author: ???'].join('\n')
+  const suspects = options.map((name) => {
     const theirs = byAuthor.get(name).filter((c) => c.sha !== commit.sha).slice(0, SUSPECT_COMMITS)
     return [`${name}:`, ...theirs.map((c) => `  ${logLine(c)}`)].join('\n')
   })
@@ -91,8 +94,13 @@ export async function whoDidIt(ctx) {
   return {
     level: 1,
     type: 'who_did_it',
-    prompt: `Someone committed "${firstLine(commit.commit.message)}". Each suspect's other recent commits are below. Who wrote it?`,
-    evidence: { diff: files.join('\n\n'), author: null, date: commitDate(commit).slice(0, 10), file: null },
+    prompt: `Who wrote commit ${sha}? Compare it with each suspect's other recent commits.`,
+    evidence: {
+      diff: [caseEntry, "Suspects' other commits:", ...suspects].join('\n\n'),
+      author: null,
+      date: commitDate(commit).slice(0, 10),
+      file: null,
+    },
     options,
     answer,
     explanation: `${real} is recorded as the author of ${sha}. git log --author shows everything one person committed, which is how you spot who works on what.`,
