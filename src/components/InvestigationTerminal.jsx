@@ -18,54 +18,22 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
   const [busy, setBusy] = useState(false);
   const outputRef = useRef(null);
   const inputRef = useRef(null);
-  const typingRef = useRef(null);
-
-  const reducedMotion = useMemo(
-    () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
-    []
-  );
-
-  // Typewriter: the newest output prints line by line, fast enough that even a long diff
-  // finishes in well under a second.
-  const last = entries[entries.length - 1];
-  const lastTotal = last ? last.output.split('\n').length : 0;
-  useEffect(() => {
-    if (!last || last.shown >= lastTotal) return undefined;
-    const step = Math.max(1, Math.ceil(lastTotal / 30));
-    const timer = setTimeout(() => {
-      setEntries((list) =>
-        list.map((entry, i) => (i === list.length - 1 ? { ...entry, shown: Math.min(lastTotal, entry.shown + step) } : entry))
-      );
-    }, 18);
-    return () => clearTimeout(timer);
-  }, [last, lastTotal]);
 
   // Keep the newest output in view.
   useEffect(() => {
     if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
   }, [entries, busy]);
 
-  // Stop any suggestion that is still being typed into the prompt.
-  const stopTyping = () => {
-    clearInterval(typingRef.current);
-    typingRef.current = null;
-  };
-  useEffect(() => stopTyping, []);
-
   const run = async (raw) => {
     const cmd = raw.trim();
     if (!cmd || busy) return;
-    stopTyping();
     setBusy(true);
     setHistory((h) => [...h, cmd]);
     setHistoryIdx(-1);
     setInput('');
     const result = await investigation.run(cmd);
     if (result.clear) setEntries([]);
-    else {
-      const lineCount = result.output.split('\n').length;
-      setEntries((e) => [...e, { cmd, output: result.output, error: result.error, shown: reducedMotion ? lineCount : 1 }]);
-    }
+    else setEntries((e) => [...e, { cmd, output: result.output, error: result.error }]);
     if (!result.clear && onCommandRun) onCommandRun(cmd);
     setBusy(false);
     inputRef.current?.focus();
@@ -93,22 +61,10 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
     }
   };
 
-  // Clicking a suggestion types it into the prompt, letter by letter. The player still presses Enter.
+  // Clicking a suggestion puts it in the prompt. The player still presses Enter.
   const fillSuggestion = (cmd) => {
-    stopTyping();
+    setInput(cmd);
     inputRef.current?.focus();
-    if (reducedMotion) {
-      setInput(cmd);
-      return;
-    }
-    let typed = 0;
-    const perTick = Math.max(1, Math.ceil(cmd.length / 25));
-    setInput('');
-    typingRef.current = setInterval(() => {
-      typed = Math.min(cmd.length, typed + perTick);
-      setInput(cmd.slice(0, typed));
-      if (typed >= cmd.length) stopTyping();
-    }, 22);
   };
 
   const repoName = targetRepo ? `${targetRepo.owner}/${targetRepo.repo}` : 'repo';
@@ -150,19 +106,15 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
         {entries.length === 0 && (
           <div className="inv-empty">Type a git command and press Enter. Pick a suggestion above to get started.</div>
         )}
-        {entries.map((entry, i) => {
-          const allLines = entry.output.split('\n');
-          const visible = allLines.slice(0, entry.shown ?? allLines.length).join('\n');
-          const printing = (entry.shown ?? allLines.length) < allLines.length;
-          return (
+        {entries.map((entry, i) => (
           <div key={i} className="inv-entry">
             <div className="inv-cmd">
               <span className="inv-prompt">$</span> {entry.cmd}
             </div>
             {entry.error ? (
-              <pre className="inv-result inv-result-error">{visible}</pre>
+              <pre className="inv-result inv-result-error">{entry.output}</pre>
             ) : (
-              splitDiffs(visible).map((part, j) =>
+              splitDiffs(entry.output).map((part, j) =>
                 part.kind === 'diff' ? (
                   <DiffBlock key={j} file={part.file} lines={part.lines} />
                 ) : (
@@ -177,15 +129,9 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
                 )
               )
             )}
-            {printing && <span className="inv-cursor" aria-hidden="true" />}
           </div>
-          );
-        })}
-        {busy && (
-          <div className="inv-busy">
-            <span className="inv-cursor" aria-hidden="true" />
-          </div>
-        )}
+        ))}
+        {busy && <div className="inv-busy">running...</div>}
       </div>
 
       <label className="inv-input-row">

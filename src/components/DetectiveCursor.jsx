@@ -12,6 +12,7 @@ export default function DetectiveCursor() {
   const [isHoveringNav, setIsHoveringNav] = useState(false);
   const [isPointer, setIsPointer] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isOverTerminal, setIsOverTerminal] = useState(false);
 
   useEffect(() => {
     // Only enable custom cursor if device has fine pointer (mouse/trackpad)
@@ -31,6 +32,9 @@ export default function DetectiveCursor() {
       // Check if hovering clickable element
       const clickable = target?.closest?.('button, a, input, select, textarea, [role="button"]');
       setIsPointer(Boolean(clickable));
+
+      // Inside the investigation terminal the normal text cursor is used instead of the lens.
+      setIsOverTerminal(Boolean(target?.closest?.('.inv-terminal')));
     };
 
     const onMouseLeave = () => {
@@ -52,7 +56,7 @@ export default function DetectiveCursor() {
     };
   }, [isVisible]);
 
-  if (!isVisible) return null;
+  if (!isVisible || isOverTerminal) return null;
 
   return (
     <div

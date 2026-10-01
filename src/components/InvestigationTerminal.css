@@ -225,20 +225,6 @@
   }
 }
 
-/* Typewriter cursor: a blinking block at the end of output that is still printing. */
-.inv-cursor {
-  display: inline-block;
-  width: 0.55em;
-  height: 1.05em;
-  margin-top: 2px;
-  vertical-align: text-bottom;
-  background: var(--cb-green-vivid);
-  animation: inv-blink 0.9s steps(1) infinite;
-}
-
-@keyframes inv-blink {
-  50% { opacity: 0; }
-}
 
 /* GitHub-style diff block: file header, old and new line numbers, sign column, tinted rows. */
 .inv-diff {
@@ -323,6 +309,19 @@
   font-style: italic;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .inv-cursor { animation: none; }
+
+/* The site swaps the mouse pointer for a magnifying glass (DetectiveCursor). Inside the terminal the
+   normal pointer comes back: a text cursor over text, a hand over buttons. These selectors beat the
+   site-wide "cursor: none !important" because they are more specific. */
+@media (pointer: fine) {
+  .inv-terminal,
+  .inv-terminal *,
+  .inv-terminal input {
+    cursor: text !important;
+  }
+
+  .inv-terminal button,
+  .inv-terminal .inv-chip {
+    cursor: pointer !important;
+  }
 }
