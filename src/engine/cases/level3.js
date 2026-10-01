@@ -22,25 +22,40 @@ const MAX_NAME_WIDTH = 22 // author column width in that list
 const MAX_CREATED_HISTORY = 15 // "which commit created" only uses files whose whole history fits on screen
 const POOL_COMMITS = 3 // commits to collect file names from, once per game
 
-// File names from a few recent commits, collected once per game and shared by both question types.
-async function filePool(ctx) {
+// File names from recent commits, shared by both question types for the whole game.
+// Starts from a few commits and pulls in a few more whenever the files found so far run out.
+async function growFilePool(ctx) {
   if (!ctx.filePool) {
-    const names = new Set()
-    for (const { commit } of shuffle(freshCommits(ctx)).slice(0, POOL_COMMITS)) {
-      const detail = await getCommit(ctx.owner, ctx.repo, commit.sha)
-      for (const f of detail.files || []) if (f.status !== 'removed') names.add(f.filename)
-    }
-    ctx.filePool = shuffle([...names])
+    ctx.filePool = []
+    ctx.poolSource = shuffle(freshCommits(ctx)) // commits not yet mined for file names
     ctx.rejected = new Set() // "type:path" pairs that didn't fit a question type
   }
-  return ctx.filePool
+  const known = new Set(ctx.filePool)
+  const added = []
+  for (const { commit } of ctx.poolSource.splice(0, POOL_COMMITS)) {
+    const detail = await getCommit(ctx.owner, ctx.repo, commit.sha)
+    for (const f of detail.files || []) {
+      if (f.status !== 'removed' && !known.has(f.filename)) {
+        known.add(f.filename)
+        added.push(f.filename)
+      }
+    }
+  }
+  ctx.filePool.push(...shuffle(added))
+}
+
+function poolCandidates(ctx, type) {
+  return (ctx.filePool || []).filter((p) => !ctx.usedFiles.has(p) && !ctx.rejected.has(`${type}:${p}`))
 }
 
 // Find a file whose history passes `historyOk`. Each new file costs one API call, and histories are
 // cached, so a file that didn't fit one question type can still be tried for the other at no cost.
 async function findFileHistory(ctx, type, historyOk, tries = 3) {
-  const pool = await filePool(ctx)
-  const candidates = pool.filter((p) => !ctx.usedFiles.has(p) && !ctx.rejected.has(`${type}:${p}`))
+  let candidates = poolCandidates(ctx, type)
+  while (!candidates.length && (!ctx.poolSource || ctx.poolSource.length)) {
+    await growFilePool(ctx)
+    candidates = poolCandidates(ctx, type)
+  }
   for (const path of candidates.slice(0, tries)) {
     const history = (await getFileHistory(ctx.owner, ctx.repo, path)).filter((c) => !isMerge(c))
     const result = historyOk(history, path)
