@@ -9,7 +9,7 @@ import './CaseIntakeConsole.css';
  * Features tactile Forensic Folder Dossier cards,
  * smooth tab transition physics, and staggered entrance animations.
  */
-export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured', level = 1, onSelectLevel }) {
+export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured', level = 1, onSelectLevel, mode, onSelectMode }) {
   const [activeTab, setActiveTab] = useState(initialTab); // 'featured' | 'custom' | 'archive'
   const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
 
@@ -146,7 +146,9 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
         </div>
 
         {/* Level Picker: jump to any clearance level */}
-        {onSelectLevel && <LevelPicker level={level} onSelectLevel={onSelectLevel} />}
+        {onSelectLevel && (
+          <LevelPicker level={level} onSelectLevel={onSelectLevel} mode={mode} onSelectMode={onSelectMode} />
+        )}
 
         {/* Tab Switcher */}
         <div className="cb-tabs-wrapper">

@@ -16,6 +16,16 @@ function loadLevel() {
   }
 }
 
+// Detective mode (type git commands) or Classic (evidence shown). Detective unless chosen otherwise.
+const MODE_KEY = 'cb_mode';
+function loadMode() {
+  try {
+    return localStorage.getItem(MODE_KEY) === 'classic' ? 'classic' : 'detective';
+  } catch {
+    return 'detective';
+  }
+}
+
 /**
  * Root Application Component
  * Manages active screen state ('main' | 'investigation' | 'debrief')
@@ -26,6 +36,7 @@ export default function App() {
   const [targetRepo, setTargetRepo] = useState(null);
   const [level, setLevel] = useState(loadLevel);
   const [rank, setRank] = useState(() => RANKS[loadLevel() - 1]);
+  const [mode, setMode] = useState(loadMode);
   const [lastDebrief, setLastDebrief] = useState(null);
   const [lastLevelPlayed, setLastLevelPlayed] = useState(1);
   const [intakeTab, setIntakeTab] = useState('featured');
@@ -38,6 +49,14 @@ export default function App() {
       // Storage blocked: the level just won't survive a reload.
     }
   }, [level]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(MODE_KEY, mode);
+    } catch {
+      // Storage blocked: the mode just won't survive a reload.
+    }
+  }, [mode]);
 
   // The level picker on the home screen: jump straight to any level.
   const handleSelectLevel = (nextLevel) => {
@@ -131,6 +150,8 @@ export default function App() {
           onStartCase={handleStartCase}
           onNavigate={handleNavigate}
           onSelectLevel={handleSelectLevel}
+          mode={mode}
+          onSelectMode={setMode}
         />
       )}
 
@@ -138,6 +159,7 @@ export default function App() {
         <InvestigationPage
           targetRepo={targetRepo}
           level={level}
+          mode={mode}
           rank={rank}
           onFinishCase={handleFinishCase}
           onExitCase={handleExitCase}

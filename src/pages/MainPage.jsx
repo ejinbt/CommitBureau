@@ -9,7 +9,7 @@ import CaseIntakeConsole from '../components/CaseIntakeConsole';
  * - Section 1: Bureau Briefing (Hero & Concept)
  * - Section 2: Case Intake Console (Target selection)
  */
-export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel }) {
+export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, mode, onSelectMode }) {
   const intakeSectionRef = useRef(null);
 
   const handleScrollToIntake = () => {
@@ -50,6 +50,8 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
             initialTab={intakeTab}
             level={level}
             onSelectLevel={onSelectLevel}
+            mode={mode}
+            onSelectMode={onSelectMode}
           />
         </div>
       </main>
