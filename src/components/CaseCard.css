@@ -1,0 +1,376 @@
+.case-dossier-card {
+  background: #040905;
+  border: 1px solid rgba(0, 255, 102, 0.22);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(0, 255, 102, 0.12);
+  position: relative;
+}
+
+/* Banner */
+.case-dossier-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.case-identity-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.case-badge-primary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  background: rgba(0, 255, 102, 0.1);
+  border: 1px solid rgba(0, 255, 102, 0.35);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.badge-marker {
+  color: #4b6354;
+  font-weight: 600;
+}
+
+.badge-number {
+  color: #00ff66;
+  font-weight: 800;
+}
+
+.case-category-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: #a7f3d0;
+  font-weight: 600;
+}
+
+.chip-ico {
+  color: #00ff66;
+}
+
+/* Notebook Clue Button */
+.dossier-hint-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #08110a;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dossier-hint-btn:hover {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: #fbbf24;
+  color: #ffffff;
+}
+
+.dossier-hint-btn.active {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #fbbf24;
+}
+
+.hint-fee-pill {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  font-size: 0.65rem;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* Clue Panel */
+.dossier-clue-drawer {
+  background: #0f1710;
+  border: 1px dashed rgba(245, 158, 11, 0.45);
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: clueSlide 0.2s ease-out;
+}
+
+@keyframes clueSlide {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.clue-drawer-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.clue-warn-icon {
+  color: #fbbf24;
+}
+
+.clue-fee-tag {
+  color: #ef4444;
+  font-size: 0.65rem;
+  margin-left: auto;
+}
+
+.clue-body-text {
+  color: #fef3c7;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Question Hero */
+.case-inquiry-hero {
+  border-left: 3px solid #00ff66;
+  padding-left: 16px;
+  margin: 4px 0;
+}
+
+.inquiry-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  margin-bottom: 4px;
+}
+
+.eyebrow-accent {
+  color: #00ff66;
+  font-weight: 800;
+}
+
+.eyebrow-label {
+  color: #4b6354;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.inquiry-statement {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.4;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Hypotheses Grid */
+.hypotheses-investigation-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-meta-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+}
+
+.meta-title {
+  color: #a7f3d0;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.meta-sub {
+  color: #4b6354;
+}
+
+.suspect-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* Suspect Card */
+.suspect-hypothesis-card {
+  background: #050a06;
+  border: 1px solid rgba(0, 255, 102, 0.18);
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.suspect-hypothesis-card:hover:not(:disabled) {
+  background: #09170d;
+  border-color: #00ff66;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0, 255, 102, 0.16);
+}
+
+.card-top-identity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+}
+
+.key-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chip-key {
+  color: #00ff66;
+  font-weight: 800;
+}
+
+.chip-letter {
+  color: #4b6354;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.suspect-hypothesis-card:hover:not(:disabled) .chip-letter {
+  color: #6ee7b7;
+}
+
+.card-content-body {
+  padding: 2px 0;
+}
+
+.suspect-headline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #e5e7eb;
+  line-height: 1.45;
+  display: block;
+}
+
+.suspect-hypothesis-card:hover:not(:disabled) .suspect-headline {
+  color: #ffffff;
+}
+
+.card-accent-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.suspect-hypothesis-card:hover:not(:disabled) .card-accent-bar {
+  background: #00ff66;
+  box-shadow: 0 0 8px #00ff66;
+}
+
+/* Card States */
+.suspect-hypothesis-card.state-verifying {
+  background: #0a180e;
+  border-color: #00ff66;
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
+}
+
+.verifying-pulse {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #00ff66;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.spin-slow {
+  animation: spinSlow 1s linear infinite;
+}
+
+.suspect-hypothesis-card.state-confirmed {
+  background: rgba(0, 255, 102, 0.12);
+  border-color: #00ff66;
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.35);
+}
+
+.suspect-hypothesis-card.state-confirmed .suspect-headline {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.suspect-hypothesis-card.state-confirmed .card-accent-bar {
+  background: #00ff66;
+}
+
+.badge-confirmed {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #00ff66;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.suspect-hypothesis-card.state-compromised {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+  animation: shakeCard 0.3s ease-in-out;
+}
+
+@keyframes shakeCard {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.suspect-hypothesis-card.state-compromised .suspect-headline {
+  color: #fca5a5;
+}
+
+.badge-compromised {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #ef4444;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.suspect-hypothesis-card.state-dimmed {
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media (max-width: 768px) {
+  .suspect-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
