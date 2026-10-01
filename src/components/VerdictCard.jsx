@@ -80,10 +80,10 @@ export default function VerdictCard({
         </span>
         <button
           type="button"
-          className="verdict-proceed-btn"
+          className={`verdict-proceed-btn ${isLastRound ? 'btn-compile-final' : ''}`}
           onClick={onNextRound}
         >
-          <span>{isLastRound ? 'Complete Investigation' : 'Next Case Round'}</span>
+          <span>{isLastRound ? 'COMPILE FINAL DEBRIEF' : 'PROCEED TO NEXT EVIDENCE'}</span>
           <ArrowRight size={14} />
         </button>
       </div>

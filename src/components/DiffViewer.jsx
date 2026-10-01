@@ -10,7 +10,7 @@ import './DiffViewer.css';
  * - Luminous scanline accent on added/removed lines
  * - Real syntax breakdown
  */
-export default function DiffViewer({ diff, file, author, date, roundType }) {
+export default function DiffViewer({ diff, file, author: _author, date, roundType }) {
   const [copied, setCopied] = useState(false);
   const [viewMode, setViewMode] = useState('diff'); // 'diff' | 'raw'
 

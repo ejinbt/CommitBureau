@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import MainPage from './pages/MainPage';
 import InvestigationPage from './pages/InvestigationPage';
+import DebriefPage from './pages/DebriefPage';
 
 /**
  * Root Application Component
- * Manages active screen state ('main' | 'investigation' | 'rank')
+ * Manages active screen state ('main' | 'investigation' | 'debrief')
  * and global detective clearance level.
  */
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState('main');
+  const [currentScreen, setCurrentScreen] = useState('main'); // 'main' | 'investigation' | 'debrief'
   const [targetRepo, setTargetRepo] = useState(null);
   const [level, setLevel] = useState(1);
   const [rank, setRank] = useState('Rookie');
-  const [_lastDebrief, setLastDebrief] = useState(null);
+  const [lastDebrief, setLastDebrief] = useState(null);
 
   const handleStartCase = (target) => {
     setTargetRepo(target);
@@ -22,18 +23,23 @@ export default function App() {
 
   const handleFinishCase = (finalState) => {
     setLastDebrief(finalState);
-    // Future Section 4: rank/debrief page
-    // For now, if rank unlocked, level up
-    if (finalState?.score > 300) {
+    if (finalState?.score >= 320) {
       setLevel((prev) => Math.min(prev + 1, 3));
+      setRank('Inspector');
+    } else if (finalState?.score >= 200) {
       setRank('Detective');
     }
-    // Return to main until Section 4 is built
-    setCurrentScreen('main');
+    setCurrentScreen('debrief');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleExitCase = () => {
     setCurrentScreen('main');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePlayAgain = () => {
+    setCurrentScreen('investigation');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -54,6 +60,16 @@ export default function App() {
           rank={rank}
           onFinishCase={handleFinishCase}
           onExitCase={handleExitCase}
+        />
+      )}
+
+      {currentScreen === 'debrief' && (
+        <DebriefPage
+          targetRepo={targetRepo}
+          gameState={lastDebrief}
+          level={level}
+          onPlayAgain={handlePlayAgain}
+          onReturnIntake={handleExitCase}
         />
       )}
     </>
