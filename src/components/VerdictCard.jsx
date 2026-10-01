@@ -19,6 +19,8 @@ export default function VerdictCard({
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // Enter in the investigation terminal runs a command; it must not skip to the next round.
+      if (e.target instanceof Element && e.target.closest('input, textarea')) return;
       if (e.key === 'Enter') {
         onNextRound();
       }

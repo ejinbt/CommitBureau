@@ -47,7 +47,9 @@ const fail = (message) => {
 }
 
 async function execute(ctx, input) {
-  const words = tokenize(input.trim().replace(/^\$\s*/, ''))
+  // Keyboards and phones often auto-correct "--" into a long dash. Git only knows the two hyphens.
+  const typed = input.trim().replace(/^\$\s*/, '').replace(/[—–]/g, '--')
+  const words = tokenize(typed)
   if (!words.length) return { output: '' }
   if (words[0] === 'clear') return { output: '', clear: true }
   if (words[0] === 'help') return { output: HELP_TEXT }
