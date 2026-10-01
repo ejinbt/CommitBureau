@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Flame, Award, Loader2, GitBranch } from 'lucide-react';
 import Header from '../components/Header';
 import CaseCard from '../components/CaseCard';
+import logoImg from '../assets/logo.png';
 import { buildGame, scoreAnswer } from '../api';
 import './InvestigationPage.css';
 
@@ -172,6 +173,7 @@ export default function InvestigationPage({
                 </button>
 
                 <div className="cockpit-target-chip">
+                  <img src={logoImg} alt="CommitBureau" className="cockpit-logo-icon" />
                   <GitBranch size={13} className="branch-ico" />
                   <span className="target-repo-name">
                     {targetRepo ? `${targetRepo.owner}/${targetRepo.repo}` : 'torvalds/linux'}

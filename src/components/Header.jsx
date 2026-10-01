@@ -1,21 +1,22 @@
 import React, { useRef, useEffect } from 'react';
+import { Folder, Database, FileText, Plus, ArrowRight } from 'lucide-react';
 import gsap from 'gsap';
+import logoImg from '../assets/logo.png';
 import './Header.css';
 
 /**
- * Floating Capsule Navbar with Physics & Magnetic Interactions
- * - Liquid elastic glider indicator following hovered links
- * - Magnetic spring pull on logo and CTA button
- * - Tactile mechanical keycap CTA button
+ * Cyber-Forensic Capsule Navbar modeled after user's reference:
+ * - Left: Official Brand Logo with green neon underglow & high-contrast brand lettering
+ * - Center: Bracketed active tab "Cases", Archive, How it works, GitHub
+ * - Status Pill: Pulsing green "SYSTEM ONLINE / REPO FORENSICS READY"
+ * - Right: Beveled Neon "+ NEW INVESTIGATION ->" Tactical Action Button
  */
 export default function Header({ onStartCaseClick, onNavigate }) {
-  const navLinksRef = useRef(null);
-  const gliderRef = useRef(null);
   const logoRef = useRef(null);
   const ctaRef = useRef(null);
 
-  // Magnetic effect for elements
-  const setupMagnetic = (elementRef, strength = 0.3) => {
+  // Magnetic spring pull on logo and CTA
+  const setupMagnetic = (elementRef, strength = 0.25) => {
     const el = elementRef.current;
     if (!el) return;
 
@@ -53,46 +54,14 @@ export default function Header({ onStartCaseClick, onNavigate }) {
   };
 
   useEffect(() => {
-    const cleanupLogo = setupMagnetic(logoRef, 0.35);
-    const cleanupCta = setupMagnetic(ctaRef, 0.25);
+    const cleanupLogo = setupMagnetic(logoRef, 0.2);
+    const cleanupCta = setupMagnetic(ctaRef, 0.2);
 
     return () => {
       if (cleanupLogo) cleanupLogo();
       if (cleanupCta) cleanupCta();
     };
   }, []);
-
-  // Liquid Glider for nav links
-  const handleLinkHover = (e) => {
-    const link = e.currentTarget;
-    const nav = navLinksRef.current;
-    const glider = gliderRef.current;
-    if (!link || !nav || !glider) return;
-
-    const linkRect = link.getBoundingClientRect();
-    const navRect = nav.getBoundingClientRect();
-
-    const targetX = linkRect.left - navRect.left;
-    const targetWidth = linkRect.width;
-
-    gsap.to(glider, {
-      opacity: 1,
-      x: targetX,
-      width: targetWidth,
-      duration: 0.4,
-      ease: 'elastic.out(1, 0.65)'
-    });
-  };
-
-  const handleNavLeave = () => {
-    if (gliderRef.current) {
-      gsap.to(gliderRef.current, {
-        opacity: 0,
-        duration: 0.3,
-        ease: 'power2.out'
-      });
-    }
-  };
 
   const handleNavClick = (section, tab) => (e) => {
     e.preventDefault();
@@ -106,72 +75,105 @@ export default function Header({ onStartCaseClick, onNavigate }) {
   return (
     <div className="cb-nav-wrapper">
       <header className="cb-capsule-nav">
-        {/* Left: Magnetic Circular Emblem (Returns home) */}
+        {/* Left: CommitBureau Brand with Official Logo */}
         <div 
           ref={logoRef} 
-          className="cb-nav-logo-circle" 
+          className="cb-nav-brand-container" 
           title="CommitBureau HQ (Home)"
           onClick={handleNavClick('home', 'featured')}
           role="button"
           tabIndex={0}
         >
-          <span className="cb-nav-logo-text">CB</span>
+          <div className="cb-nav-logo-wrap">
+            <img src={logoImg} alt="CommitBureau Logo" className="cb-nav-logo-img" />
+          </div>
+          <span className="cb-nav-brand-text">
+            Commit<span className="brand-accent">Bureau</span>
+          </span>
         </div>
 
-        {/* Center: Clean Nav Links with Elastic Glider */}
-        <nav 
-          ref={navLinksRef} 
-          className="cb-nav-links"
-          onMouseLeave={handleNavLeave}
-        >
-          {/* Liquid Sliding Glider */}
-          <div ref={gliderRef} className="cb-nav-glider" aria-hidden="true" />
+        {/* Center: HUD Nav Tabs */}
+        <nav className="cb-nav-links">
+          {/* Active Bracketed Cases Tab */}
+          <button 
+            type="button" 
+            className="cb-hud-tab active-cases"
+            onClick={handleNavClick('intake', 'featured')}
+          >
+            <Folder size={14} className="hud-tab-icon" />
+            <span className="hud-tab-label">CASES</span>
+            <span className="hud-corner-bl" />
+            <span className="hud-corner-br" />
+          </button>
 
-          <a 
-            href="#case-intake" 
-            className="cb-nav-link" 
-            onMouseEnter={handleLinkHover}
-            onClick={handleNavClick('intake', 'featured')}
-          >
-            Cases
-          </a>
-          <a 
-            href="#case-intake" 
-            className="cb-nav-link" 
-            onMouseEnter={handleLinkHover}
-            onClick={handleNavClick('intake', 'featured')}
-          >
-            Featured
-          </a>
-          <a 
-            href="#case-intake" 
-            className="cb-nav-link" 
-            onMouseEnter={handleLinkHover}
+          {/* Archive Tab */}
+          <button 
+            type="button" 
+            className="cb-hud-tab"
             onClick={handleNavClick('intake', 'archive')}
           >
-            My Archive
-          </a>
+            <Database size={13} className="hud-tab-icon" />
+            <span className="hud-tab-label">ARCHIVE</span>
+          </button>
+
+          {/* How It Works / Briefing */}
+          <button 
+            type="button" 
+            className="cb-hud-tab"
+            onClick={handleNavClick('home', 'featured')}
+          >
+            <FileText size={13} className="hud-tab-icon" />
+            <span className="hud-tab-label">HOW IT WORKS</span>
+          </button>
+
+          {/* GitHub Repo */}
           <a 
             href="https://github.com/ejinbt/CommitBureau" 
             target="_blank" 
             rel="noreferrer" 
-            className="cb-nav-link"
-            onMouseEnter={handleLinkHover}
+            className="cb-hud-tab cb-hud-link"
           >
-            GitHub
+            <svg 
+              className="hud-tab-icon" 
+              width="13" 
+              height="13" 
+              viewBox="0 0 24 24" 
+              fill="currentColor"
+            >
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            <span className="hud-tab-label">GITHUB</span>
           </a>
         </nav>
 
-        {/* Right: Sleek Modern Magnetic CTA */}
-        <button 
-          ref={ctaRef}
-          type="button" 
-          className="cb-nav-pill-cta"
-          onClick={handleNavClick('intake', 'featured')}
-        >
-          <span>Start Case</span>
-          <span className="cb-nav-arrow" aria-hidden="true">→</span>
-        </button>
+        {/* Right Section: System Status + Action CTA */}
+        <div className="cb-nav-right-cluster">
+          {/* Status Indicator Pill */}
+          <div className="cb-system-status">
+            <span className="status-blip-dot" />
+            <div className="status-text-stack">
+              <span className="status-online-title">SYSTEM ONLINE</span>
+              <span className="status-online-sub">REPO FORENSICS READY</span>
+            </div>
+          </div>
+
+          {/* Chamfered Beveled Neon Action Button */}
+          <button 
+            ref={ctaRef}
+            type="button" 
+            className="cb-cyber-cta"
+            onClick={handleNavClick('intake', 'featured')}
+          >
+            <span className="cb-cyber-cta-glow" />
+            <div className="cb-cyber-cta-inner">
+              <Plus size={15} strokeWidth={3} className="cb-cta-plus" />
+              <span className="cb-cta-title">NEW INVESTIGATION</span>
+              <span className="cb-cta-arrow-box">
+                <ArrowRight size={13} strokeWidth={2.5} />
+              </span>
+            </div>
+          </button>
+        </div>
       </header>
     </div>
   );

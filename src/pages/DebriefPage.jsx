@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
   ShieldCheck, 
-  Award, 
   ArrowRight, 
   CheckCircle2, 
   XCircle, 
@@ -12,6 +11,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import Header from '../components/Header';
+import logoImg from '../assets/logo.png';
 import { finalReport, HINT_PENALTY } from '../api';
 import './DebriefPage.css';
 
@@ -76,7 +76,9 @@ Inspect your commits: commitbureau.io`;
           {/* Main Clearance Banner */}
           <div className="debrief-verdict-hero">
             <div className="verdict-rank-badge">
-              <Award size={36} className="rank-badge-icon" />
+              <div className="debrief-logo-emblem">
+                <img src={logoImg} alt="CommitBureau Logo" className="debrief-logo-img" />
+              </div>
               <div className="rank-title-group">
                 <span className="rank-label">DETECTIVE CLEARANCE RANK</span>
                 <h1 className="rank-value">{report.rank}</h1>

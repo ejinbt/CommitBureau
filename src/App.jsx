@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MainPage from './pages/MainPage';
 import InvestigationPage from './pages/InvestigationPage';
 import DebriefPage from './pages/DebriefPage';
+import DetectiveCursor from './components/DetectiveCursor';
 import { finalReport } from './api';
 
 /**
@@ -95,6 +96,7 @@ export default function App() {
 
   return (
     <>
+      <DetectiveCursor />
       {currentScreen === 'main' && (
         <MainPage 
           level={level} 

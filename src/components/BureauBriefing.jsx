@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import logoImg from '../assets/logo.png';
 import './BureauBriefing.css';
 
 /**
@@ -98,6 +99,7 @@ export default function BureauBriefing({ onScrollToIntake }) {
           {/* Left Column: Direct Hook & Actions */}
           <div className="cb-hero-content">
             <div className="cb-hero-eyebrow cb-mono">
+              <img src={logoImg} alt="CommitBureau Logo" className="cb-hero-eyebrow-logo" />
               <span className="cb-eyebrow-accent">//</span>
               <span>GIT FORENSICS LAB</span>
               <span className="cb-eyebrow-sep">/</span>

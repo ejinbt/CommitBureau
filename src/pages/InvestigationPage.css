@@ -163,6 +163,13 @@
   font-size: 0.72rem;
 }
 
+.cockpit-logo-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(0, 255, 102, 0.7));
+}
+
 .branch-ico {
   color: #00ff66;
 }
