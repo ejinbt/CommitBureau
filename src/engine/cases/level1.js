@@ -133,10 +133,16 @@ export async function firstOrLater(ctx) {
     const olderMsg = firstLine(older.commit.message)
     if (newerMsg.toLowerCase() === olderMsg.toLowerCase() || commitDate(newer) === commitDate(older)) continue
 
+    // One commit of context above and below the pair, like a real slice of the log.
+    // A second round of this type in the same game must show a different stretch of history,
+    // otherwise the two log windows overlap and it looks like the same question twice.
+    const excerpt = byDate.slice(Math.max(0, top - 1), top + gap + 2)
+    ctx.shownInLog ??= new Set()
+    if (excerpt.some((c) => ctx.shownInLog.has(c.sha))) continue
+    excerpt.forEach((c) => ctx.shownInLog.add(c.sha))
+
     ctx.used.add(newer.sha)
     ctx.used.add(older.sha)
-    // One commit of context above and below the pair, like a real slice of the log.
-    const excerpt = byDate.slice(Math.max(0, top - 1), top + gap + 2)
     const log = excerpt.map(logLine).join('\n')
 
     return {
