@@ -16,6 +16,8 @@ export const SKILL_LABELS = {
   lines_changed: 'Counting changes',
   which_file: 'Matching a diff to its file',
   spot_deleted_line: 'Reading + and - lines',
+  who_touched_most: 'Who owns a file',
+  which_commit_created: 'Where a file began',
 }
 
 export function newGame(level = 1) {
