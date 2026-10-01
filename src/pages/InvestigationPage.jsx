@@ -14,6 +14,7 @@ import './InvestigationPage.css';
 export default function InvestigationPage({
   targetRepo,
   level = 1,
+  mode = 'classic',
   rank = 'Rookie',
   onFinishCase,
   onExitCase,
@@ -107,6 +108,8 @@ export default function InvestigationPage({
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (isAnswered || !currentRound || loading) return;
+      // Typing in the investigation terminal (e.g. "-n 3") must not pick an answer.
+      if (e.target instanceof Element && e.target.closest('input, textarea')) return;
 
       if (e.key === '1') handleAnswer(0);
       else if (e.key === '2') handleAnswer(1);
@@ -235,6 +238,8 @@ export default function InvestigationPage({
               isCorrect={isCorrect}
               pointsAwarded={pointsAwarded}
               onNextRound={handleNextRound}
+              mode={mode}
+              targetRepo={targetRepo}
             />
           </div>
         )}

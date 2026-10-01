@@ -60,6 +60,11 @@ export async function realOrFake(ctx) {
     explanation: `Commit ${sha} was saved with the message "${real}". The other messages belong to different commits in this repo.`,
     hint: 'Lines starting with + were added and lines starting with - were removed. Pick the message that describes that change.',
     command: `git show ${sha}`,
+    investigate: {
+      brief: `Commit ${sha} changed ${file.filename}, but its message was torn off. Read the change, then pick the message that fits.`,
+      suggest: [`git show ${sha} -- ${file.filename}`],
+      mask: { sha: commit.sha, hide: 'message' },
+    },
   }
 }
 
@@ -123,7 +128,10 @@ async function whoDidItByFileTrail(ctx, byAuthor) {
       type: 'who_did_it',
       prompt: `Who wrote commit ${sha}? It changed ${path}. Check who else works on that file.`,
       evidence: {
-        diff: [[logLine(commit), 'Author: ???'].join('\n'), `Other commits to ${path}:`, lines.join('\n')].join('\n\n'),
+        diff: [
+          [logLine(commit), 'Author: ???'].join('\n'),
+          [`$ git log --format="%h %an %s" -- ${path}`, ...lines].join('\n'),
+        ].join('\n\n'),
         author: null,
         date: commitDate(commit).slice(0, 10),
         file: path,
@@ -132,6 +140,11 @@ async function whoDidItByFileTrail(ctx, byAuthor) {
       explanation: `${real} wrote ${sha}. Of the suspects, only ${real} appears in the history of ${path}. git log -- <file> shows who has worked on a file.`,
       hint: "Look at the names in the file's history. Which suspect works on this file?",
       command: `git log --format="%h %an %s" -- ${path}`,
+      investigate: {
+        brief: `Commit ${sha} changed ${path}. Its author line was scrubbed. Find out who works on that file.`,
+        suggest: [`git show ${sha} --stat`, `git log --format="%h %an %s" -- ${path}`],
+        mask: { sha: commit.sha, hide: 'author' },
+      },
     }
   }
   return null
@@ -174,6 +187,11 @@ function whoDidItByHabits(ctx, byAuthor) {
     explanation: `${real} is recorded as the author of ${sha}. git log --author shows everything one person committed, which is how you spot who works on what.`,
     hint: 'People tend to work on the same parts of a project. Whose other commits look most like this one?',
     command: `git log --author="${real}" --oneline`,
+    investigate: {
+      brief: `Commit ${sha}'s author line was scrubbed. Compare it with what each suspect usually works on.`,
+      suggest: [`git show ${sha} --stat`, `git log --author="${options[(answer + 1) % options.length]}" --oneline`],
+      mask: { sha: commit.sha, hide: 'author' },
+    },
   }
 }
 
@@ -207,7 +225,7 @@ export async function firstOrLater(ctx) {
 
     ctx.used.add(newer.sha)
     ctx.used.add(older.sha)
-    const log = excerpt.map(logLine).join('\n')
+    const log = ['$ git log --oneline', ...excerpt.map(logLine)].join('\n')
 
     return {
       level: 1,
@@ -218,6 +236,11 @@ export async function firstOrLater(ctx) {
       explanation: `git log lists the newest commit at the top, so the lower one is older. "${olderMsg}" (${commitDate(older).slice(0, 10)}) came before "${newerMsg}" (${commitDate(newer).slice(0, 10)}).`,
       hint: 'git log shows history newest first. Find both commits in the list.',
       command: 'git log --oneline',
+      investigate: {
+        brief: 'Find both commits in the log and work out which one happened first.',
+        // Enough lines that the older commit is on screen.
+        suggest: [`git log --oneline -n ${newestFirst(ctx.commits).findIndex((c) => c.sha === older.sha) + 2}`],
+      },
     }
   }
   return null

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BookOpen, Check, X, ShieldAlert, Cpu, Sparkles, Terminal } from 'lucide-react';
 import DiffViewer from './DiffViewer';
+import InvestigationTerminal from './InvestigationTerminal';
 import VerdictCard from './VerdictCard';
 import { HINT_PENALTY } from '../api';
 import './CaseCard.css';
@@ -23,8 +24,12 @@ export default function CaseCard({
   userAnswerIndex,
   isCorrect,
   pointsAwarded,
-  onNextRound
+  onNextRound,
+  mode = 'classic',
+  targetRepo
 }) {
+  // Detective mode: the player digs up the evidence with git commands instead of being shown it.
+  const investigating = mode === 'detective' && Boolean(round.investigate);
   const [hintOpen, setHintOpen] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
   const [verifyingIdx, setVerifyingIdx] = useState(null);
@@ -58,7 +63,10 @@ export default function CaseCard({
           </div>
           <div className="case-category-chip">
             <Cpu size={12} className="chip-ico" />
-            <span>{round.type ? round.type.replace(/_/g, ' ').toUpperCase() : 'FORENSIC ANOMALY'}</span>
+            <span>
+              {round.level ? `LEVEL ${round.level} · ` : ''}
+              {round.type ? round.type.replace(/_/g, ' ').toUpperCase() : 'FORENSIC ANOMALY'}
+            </span>
           </div>
         </div>
 
@@ -97,8 +105,15 @@ export default function CaseCard({
         <h2 className="inquiry-statement">{round.prompt}</h2>
       </div>
 
-      {/* Evidence Terminal Diff Viewer (Only when diff exists) */}
-      {round.evidence?.diff && (
+      {/* Detective mode: investigation terminal. Keyed by round so each case starts fresh. */}
+      {investigating && (
+        <div className="case-evidence-envelope">
+          <InvestigationTerminal key={round.id} round={round} targetRepo={targetRepo} />
+        </div>
+      )}
+
+      {/* Classic mode: Evidence Terminal Diff Viewer (Only when diff exists) */}
+      {!investigating && round.evidence?.diff && (
         <div className="case-evidence-envelope">
           <DiffViewer
             diff={round.evidence.diff}

@@ -48,6 +48,10 @@ export async function mergeOrNormal(ctx) {
       : 'It lists one parent: the commit that came right before it. Normal commits have exactly one. Only the very first commit has none.',
     hint: 'Count the "parent" lines. Each one points to a commit that came directly before this one.',
     command: `git cat-file -p ${sha}`,
+    investigate: {
+      brief: `Is commit ${sha} a merge or a normal commit? Look at its raw form.`,
+      suggest: [`git cat-file -p ${sha}`],
+    },
   }
 }
 
@@ -81,6 +85,10 @@ export async function whoMerged(ctx) {
         : `${merger} made the merge commit, so they merged it. ${branchOwner} owns the branch the work came from.`,
     hint: 'The "from user/branch" part says whose branch it was. The merge commit\'s author is whoever merged it.',
     command: `git log -1 --format="%h %an %s" ${sha}`,
+    investigate: {
+      brief: `Merge commit ${sha} brought in pull request #${pr}. Whoever made the merge commit merged it.`,
+      suggest: [`git log -1 ${sha}`],
+    },
   }
 }
 
@@ -108,6 +116,10 @@ export async function mergedBranchParent(ctx) {
     explanation: `The second parent ("${secondMsg}") is the tip of the merged branch. The first parent ("${firstMsg}") is where the receiving branch was before the merge.`,
     hint: 'Parent 1 is the branch you were on when you ran git merge. Parent 2 is the branch you merged in.',
     command: `git log -1 --oneline ${sha}^2`,
+    investigate: {
+      brief: `Merge commit ${sha} has two parents. Which one is the last commit of the merged branch?`,
+      suggest: [`git cat-file -p ${sha}`, `git log -1 --oneline ${sha}^2`],
+    },
   }
 }
 

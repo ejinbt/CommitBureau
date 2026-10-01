@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { FEATURED_REPOS, getUserRepos } from '../api';
+import LevelPicker from './LevelPicker';
 import './CaseIntakeConsole.css';
 
 /**
@@ -8,7 +9,7 @@ import './CaseIntakeConsole.css';
  * Features tactile Forensic Folder Dossier cards,
  * smooth tab transition physics, and staggered entrance animations.
  */
-export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured' }) {
+export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured', level = 1, onSelectLevel, mode, onSelectMode }) {
   const [activeTab, setActiveTab] = useState(initialTab); // 'featured' | 'custom' | 'archive'
   const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
 
@@ -144,6 +145,11 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
           </p>
         </div>
 
+        {/* Level Picker: jump to any clearance level */}
+        {onSelectLevel && (
+          <LevelPicker level={level} onSelectLevel={onSelectLevel} mode={mode} onSelectMode={onSelectMode} />
+        )}
+
         {/* Tab Switcher */}
         <div className="cb-tabs-wrapper">
           <div className="cb-intake-tabs">
@@ -153,7 +159,7 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
               onClick={() => setActiveTab('featured')}
             >
               <span>Featured Folders</span>
-              <span className="cb-tab-count">4</span>
+              <span className="cb-tab-count">{FEATURED_REPOS.length}</span>
             </button>
 
             <button
@@ -191,7 +197,7 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                   <div className="cb-folder-body">
                     <div className="cb-folder-meta cb-mono">
                       <span className="cb-folder-stamp">CLASSIFIED EVIDENCE</span>
-                      <span className="cb-folder-level">LEVEL 1</span>
+                      <span className="cb-folder-level">LEVEL {level}</span>
                     </div>
 
                     <h3 className="cb-folder-name cb-heading">{item.title}</h3>
