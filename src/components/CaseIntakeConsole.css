@@ -582,10 +582,45 @@
    RESPONSIVE MEDIA QUERIES
    ========================================================================== */
 
+@media (max-width: 1024px) {
+  .cb-folders-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cb-intake-section {
+    padding-top: 3.5rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .cb-intake-header {
+    margin-bottom: 2rem;
+  }
+
+  .cb-intake-title {
+    font-size: 1.85rem;
+  }
+
+  .cb-intake-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .cb-tabs-wrapper {
+    margin-bottom: 2rem;
+  }
+
+  .cb-folders-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 640px) {
   .cb-intake-section {
-    padding-top: 3rem;
-    padding-bottom: 4rem;
+    padding-top: 2.75rem;
+    padding-bottom: 3.5rem;
   }
 
   .cb-intake-tabs {
@@ -598,16 +633,17 @@
     width: 100%;
     justify-content: center;
     border-radius: 8px;
+    padding: 0.6rem 1rem;
   }
 
   .cb-folder-body {
     border-radius: 0 14px 14px 14px;
-    padding: 1.35rem 1.15rem;
+    padding: 1.25rem 1rem;
   }
 
   .cb-custom-body,
   .cb-archive-body {
-    padding: 1.5rem 1.15rem;
+    padding: 1.25rem 1rem;
   }
 
   .cb-input-group {
@@ -629,6 +665,7 @@
   .cb-user-repo-item {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.75rem;
   }
 
   .cb-user-repo-btn {
@@ -642,5 +679,24 @@
 
   .cb-token-save-btn {
     width: 100%;
+  }
+
+  .cb-token-trigger-btn {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .cb-folder-tab {
+    padding: 0.4rem 1rem 0.4rem 0.85rem;
+    font-size: 0.65rem;
+  }
+
+  .cb-folder-title {
+    font-size: 1.15rem;
+  }
+
+  .cb-folder-desc {
+    font-size: 0.82rem;
   }
 }

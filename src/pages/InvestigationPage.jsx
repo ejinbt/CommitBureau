@@ -15,7 +15,8 @@ export default function InvestigationPage({
   level = 1,
   rank = 'Rookie',
   onFinishCase,
-  onExitCase
+  onExitCase,
+  onNavigate
 }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -122,7 +123,8 @@ export default function InvestigationPage({
       <Header
         level={level}
         rank={rank}
-        onStartCaseClick={() => {}}
+        onStartCaseClick={onExitCase}
+        onNavigate={onNavigate || ((sec, tab) => onExitCase(tab))}
       />
 
       <main className="investigation-viewport">

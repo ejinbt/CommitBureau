@@ -29,11 +29,12 @@ export default function DebriefPage({
   gameState,
   level = 1,
   onPlayAgain,
-  onReturnIntake
+  onReturnIntake,
+  onNavigate
 }) {
   const [copiedShare, setCopiedShare] = useState(false);
 
-  // Compute official report per engine contract
+  // Compute official report per engine contract using level played
   const report = finalReport(gameState, level);
   const repoName = targetRepo ? `${targetRepo.owner}/${targetRepo.repo}` : 'torvalds/linux';
 
@@ -56,6 +57,7 @@ Inspect your commits: commitbureau.io`;
         level={level}
         rank={report.rank}
         onStartCaseClick={onReturnIntake}
+        onNavigate={onNavigate || ((sec, tab) => onReturnIntake(tab))}
       />
 
       <main className="debrief-viewport">

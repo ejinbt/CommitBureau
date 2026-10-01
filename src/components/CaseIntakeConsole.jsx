@@ -8,8 +8,14 @@ import './CaseIntakeConsole.css';
  * Features tactile Forensic Folder Dossier cards,
  * smooth tab transition physics, and staggered entrance animations.
  */
-export default function CaseIntakeConsole({ onSelectRepo }) {
-  const [activeTab, setActiveTab] = useState('featured'); // 'featured' | 'custom' | 'archive'
+export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured' }) {
+  const [activeTab, setActiveTab] = useState(initialTab); // 'featured' | 'custom' | 'archive'
+  const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
+
+  if (initialTab !== prevInitialTab) {
+    setPrevInitialTab(initialTab);
+    setActiveTab(initialTab);
+  }
 
   // Custom Target State
   const [customInput, setCustomInput] = useState('');
@@ -93,19 +99,23 @@ export default function CaseIntakeConsole({ onSelectRepo }) {
     e.preventDefault();
     setArchiveError('');
     if (!username.trim()) {
+      setUserRepos([]);
       setArchiveError('Please enter a GitHub username.');
       return;
     }
 
     setLoadingRepos(true);
+    setUserRepos([]); // Clear previous user's repos immediately
     try {
       const repos = await getUserRepos(username.trim());
       if (!repos || repos.length === 0) {
+        setUserRepos([]);
         setArchiveError(`No public repositories found for user '${username.trim()}'.`);
       } else {
         setUserRepos(repos);
       }
     } catch (err) {
+      setUserRepos([]);
       setArchiveError(err.message || 'Failed to fetch repositories.');
     } finally {
       setLoadingRepos(false);
@@ -125,7 +135,7 @@ export default function CaseIntakeConsole({ onSelectRepo }) {
           </div>
 
           <h2 className="cb-intake-title cb-heading">
-            Select Your <span className="cb-gradient-text">Crime Scene.</span>
+            Select Your <span className="cb-gradient-text">Target Repo.</span>
           </h2>
 
           <p className="cb-intake-subtitle">

@@ -8,7 +8,7 @@ import './Header.css';
  * - Magnetic spring pull on logo and CTA button
  * - Tactile mechanical keycap CTA button
  */
-export default function Header({ onStartCaseClick }) {
+export default function Header({ onStartCaseClick, onNavigate }) {
   const navLinksRef = useRef(null);
   const gliderRef = useRef(null);
   const logoRef = useRef(null);
@@ -94,11 +94,27 @@ export default function Header({ onStartCaseClick }) {
     }
   };
 
+  const handleNavClick = (section, tab) => (e) => {
+    e.preventDefault();
+    if (onNavigate) {
+      onNavigate(section, tab);
+    } else if (onStartCaseClick) {
+      onStartCaseClick(e);
+    }
+  };
+
   return (
     <div className="cb-nav-wrapper">
       <header className="cb-capsule-nav">
-        {/* Left: Magnetic Circular Emblem */}
-        <div ref={logoRef} className="cb-nav-logo-circle" title="CommitBureau HQ">
+        {/* Left: Magnetic Circular Emblem (Returns home) */}
+        <div 
+          ref={logoRef} 
+          className="cb-nav-logo-circle" 
+          title="CommitBureau HQ (Home)"
+          onClick={handleNavClick('home', 'featured')}
+          role="button"
+          tabIndex={0}
+        >
           <span className="cb-nav-logo-text">CB</span>
         </div>
 
@@ -115,7 +131,7 @@ export default function Header({ onStartCaseClick }) {
             href="#case-intake" 
             className="cb-nav-link" 
             onMouseEnter={handleLinkHover}
-            onClick={onStartCaseClick}
+            onClick={handleNavClick('intake', 'featured')}
           >
             Cases
           </a>
@@ -123,7 +139,7 @@ export default function Header({ onStartCaseClick }) {
             href="#case-intake" 
             className="cb-nav-link" 
             onMouseEnter={handleLinkHover}
-            onClick={onStartCaseClick}
+            onClick={handleNavClick('intake', 'featured')}
           >
             Featured
           </a>
@@ -131,7 +147,7 @@ export default function Header({ onStartCaseClick }) {
             href="#case-intake" 
             className="cb-nav-link" 
             onMouseEnter={handleLinkHover}
-            onClick={onStartCaseClick}
+            onClick={handleNavClick('intake', 'archive')}
           >
             My Archive
           </a>
@@ -151,7 +167,7 @@ export default function Header({ onStartCaseClick }) {
           ref={ctaRef}
           type="button" 
           className="cb-nav-pill-cta"
-          onClick={onStartCaseClick}
+          onClick={handleNavClick('intake', 'featured')}
         >
           <span>Start Case</span>
           <span className="cb-nav-arrow" aria-hidden="true">→</span>

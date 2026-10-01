@@ -9,7 +9,7 @@ import CaseIntakeConsole from '../components/CaseIntakeConsole';
  * - Section 1: Bureau Briefing (Hero & Concept)
  * - Section 2: Case Intake Console (Target selection)
  */
-export default function MainPage({ onStartCase, level = 1, rank = 'Rookie' }) {
+export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate }) {
   const intakeSectionRef = useRef(null);
 
   const handleScrollToIntake = () => {
@@ -18,18 +18,37 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie' }) {
     }
   };
 
+  const handleNav = (section, tab) => {
+    if (section === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    if (onNavigate) {
+      onNavigate(section, tab);
+    }
+    handleScrollToIntake(tab);
+  };
+
   return (
     <div className="cb-app-shell">
       {/* Floating Capsule Header */}
-      <Header level={level} rank={rank} onStartCaseClick={handleScrollToIntake} />
+      <Header 
+        level={level} 
+        rank={rank} 
+        onStartCaseClick={() => handleScrollToIntake('featured')}
+        onNavigate={handleNav} 
+      />
 
       <main>
         {/* SECTION 1: Bureau Briefing & Forensics Mission */}
-        <BureauBriefing onScrollToIntake={handleScrollToIntake} />
+        <BureauBriefing onScrollToIntake={() => handleScrollToIntake('featured')} />
 
         {/* SECTION 2: Case Intake Console (Repository Selection) */}
         <div ref={intakeSectionRef}>
-          <CaseIntakeConsole onSelectRepo={onStartCase} />
+          <CaseIntakeConsole 
+            onSelectRepo={onStartCase} 
+            initialTab={intakeTab}
+          />
         </div>
       </main>
     </div>

@@ -105,7 +105,7 @@ export default function BureauBriefing({ onScrollToIntake }) {
             </div>
 
             <h1 className="cb-hero-title cb-heading">
-              Turn Public Repos into <span className="cb-gradient-text">Crime Cases.</span>
+              Turn Public Repos into <span className="cb-gradient-text">Forensic Cases.</span>
             </h1>
 
             <p className="cb-hero-sub">

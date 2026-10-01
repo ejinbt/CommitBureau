@@ -303,11 +303,69 @@
   color: #00ff66;
 }
 
-.live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #00ff66;
-  box-shadow: 0 0 6px #00ff66;
-  display: inline-block;
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .terminal-titlebar {
+    padding: 6px 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .terminal-file-tab {
+    padding: 4px 8px;
+    font-size: 0.68rem;
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .terminal-evidence-meta {
+    gap: 8px 12px;
+    padding: 6px 12px;
+  }
+
+  .meta-capsule {
+    font-size: 0.64rem;
+  }
+
+  .gutter-num {
+    width: 32px;
+    padding-right: 6px;
+    font-size: 0.65rem;
+  }
+
+  .gutter-symbol {
+    width: 16px;
+    font-size: 0.7rem;
+  }
+
+  .diff-table-row {
+    font-size: 0.74rem;
+  }
+
+  .terminal-statusbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .terminal-traffic-lights {
+    display: none;
+  }
+
+  .terminal-file-tab {
+    max-width: 130px;
+  }
+
+  .view-btn {
+    padding: 2px 6px;
+    font-size: 0.62rem;
+  }
 }

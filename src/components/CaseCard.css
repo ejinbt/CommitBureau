@@ -411,8 +411,86 @@
   cursor: default;
 }
 
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+
 @media (max-width: 768px) {
-  .suspect-cards-grid {
-    grid-template-columns: 1fr;
+   .case-dossier-card {
+     padding: 18px 16px;
+     gap: 16px;
+   }
+
+   .suspect-cards-grid {
+     grid-template-columns: 1fr;
+     gap: 10px;
+   }
+
+   .inquiry-statement {
+     font-size: 1.15rem;
+   }
+}
+
+@media (max-width: 640px) {
+  .case-dossier-card {
+    padding: 14px 12px;
+    border-radius: 10px;
+  }
+
+  .case-dossier-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .case-dossier-actions {
+    width: 100%;
+  }
+
+  .dossier-hint-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .case-inquiry-hero {
+    padding-left: 12px;
+  }
+
+  .inquiry-statement {
+    font-size: 1.05rem;
+    line-height: 1.45;
+  }
+
+  .suspect-hypothesis-card {
+    padding: 12px 14px;
+  }
+
+  .suspect-headline {
+    font-size: 0.82rem;
+  }
+
+  .section-meta-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 400px) {
+  .case-dossier-card {
+    padding: 12px 10px;
+  }
+
+  .case-identity-group {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .case-badge-primary {
+    font-size: 0.65rem;
+  }
+
+  .case-category-chip {
+    font-size: 0.65rem;
   }
 }

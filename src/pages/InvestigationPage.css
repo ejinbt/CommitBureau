@@ -268,12 +268,85 @@
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.45);
 }
 
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+
 @media (max-width: 860px) {
+  .investigation-viewport {
+    padding: 85px 16px 0 16px;
+  }
+
   .investigation-cockpit-bar {
     grid-template-columns: 1fr;
     gap: 12px;
+    padding: 12px 14px;
   }
-  .cockpit-right {
+
+  .cockpit-left {
     justify-content: space-between;
+  }
+
+  .cockpit-center {
+    order: 3;
+    width: 100%;
+    align-items: center;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(0, 255, 102, 0.12);
+  }
+
+  .cockpit-right {
+    order: 2;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .investigation-viewport {
+    padding: 75px 12px 0 12px;
+  }
+
+  .cockpit-target-chip {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+  }
+
+  .target-repo-name {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pips-track {
+    gap: 6px;
+  }
+
+  .round-pip {
+    width: 14px;
+    height: 5px;
+  }
+
+  .stat-phosphor-val {
+    font-size: 0.95rem;
+  }
+
+  .investigation-state-card {
+    padding: 50px 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .investigation-viewport {
+    padding: 70px 8px 0 8px;
+  }
+
+  .target-repo-name {
+    max-width: 100px;
+  }
+
+  .cockpit-exit-btn {
+    padding: 4px 8px;
+    font-size: 0.62rem;
   }
 }
