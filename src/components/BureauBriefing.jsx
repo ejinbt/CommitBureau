@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 import logoImg from '../assets/logo.png';
@@ -13,6 +13,18 @@ import './BureauBriefing.css';
 export default function BureauBriefing({ onScrollToIntake }) {
   const terminalRef = useRef(null);
   const primaryBtnRef = useRef(null);
+  const [scrolledPastHero, setScrolledPastHero] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Fade out once user scrolls past initial viewport into Case Intake
+      setScrolledPastHero(window.scrollY > 200);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const terminal = terminalRef.current;
@@ -211,8 +223,8 @@ export default function BureauBriefing({ onScrollToIntake }) {
         </div>
       </div>
 
-      {/* Bottom Right Arrow Navigation Button to Next Section */}
-      <div className="cb-hero-scroll-wrapper">
+      {/* Bottom Right Floating Arrow Navigation Button to Next Section */}
+      <div className={`cb-hero-scroll-wrapper ${scrolledPastHero ? 'hidden' : ''}`}>
         <button
           type="button"
           className="cb-hero-scroll-btn"

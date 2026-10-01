@@ -11,8 +11,8 @@
   flex-direction: column;
   justify-content: center;
   box-sizing: border-box;
-  padding-top: 5rem;
-  padding-bottom: 2.5rem;
+  padding-top: clamp(4.25rem, 8vh, 5.5rem);
+  padding-bottom: clamp(1.25rem, 2.5vh, 2rem);
   border-bottom: 1px solid var(--cb-border);
   position: relative;
 }
@@ -20,14 +20,14 @@
 .cb-hero-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3.5rem;
+  gap: clamp(2rem, 3.5vw, 3rem);
   align-items: center;
 }
 
 @media (min-width: 960px) {
   .cb-hero-grid {
     grid-template-columns: 1.22fr 0.78fr;
-    gap: 3rem;
+    gap: clamp(2rem, 3vw, 3rem);
   }
 }
 
@@ -45,7 +45,7 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   color: var(--cb-text-muted);
-  margin-bottom: 1.25rem;
+  margin-bottom: clamp(0.6rem, 1.3vh, 1rem);
 }
 
 .cb-hero-eyebrow-logo {
@@ -65,10 +65,10 @@
 }
 
 .cb-hero-title {
-  font-size: clamp(2.4rem, 5.5vw, 3.8rem);
-  line-height: 1.06;
+  font-size: clamp(2.1rem, 3.6vw, 3.4rem);
+  line-height: 1.08;
   color: #ffffff;
-  margin-bottom: 1.35rem;
+  margin-bottom: clamp(0.7rem, 1.5vh, 1.15rem);
   letter-spacing: -0.03em;
 }
 
@@ -79,11 +79,11 @@
 }
 
 .cb-hero-sub {
-  font-size: clamp(1rem, 1.25vw, 1.15rem);
-  line-height: 1.65;
+  font-size: clamp(0.92rem, 1.15vw, 1.08rem);
+  line-height: 1.55;
   color: var(--cb-text-muted);
-  max-width: 540px;
-  margin-bottom: 2rem;
+  max-width: 520px;
+  margin-bottom: clamp(1rem, 1.8vh, 1.6rem);
 }
 
 /* Actions Row */
@@ -92,7 +92,7 @@
   align-items: center;
   gap: 1.15rem;
   flex-wrap: wrap;
-  margin-bottom: 2.75rem;
+  margin-bottom: clamp(1.2rem, 2.2vh, 2rem);
 }
 
 /* Primary High-Impact Button */
@@ -174,9 +174,9 @@
 .cb-metrics-row {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
   flex-wrap: nowrap;
-  padding-top: 1.5rem;
+  padding-top: clamp(0.75rem, 1.5vh, 1.25rem);
   border-top: 1px solid var(--cb-border-subtle);
 }
 
@@ -525,63 +525,76 @@
 }
 
 /* ==========================================================================
-   HERO BOTTOM RIGHT SCROLL BUTTON
-   Positioned absolute in the bottom right corner of the screen so it has zero
-   impact on hero layout flow and vertical alignment.
+   HERO BOTTOM RIGHT FIXED SCROLL BUTTON
+   Positioned fixed in the bottom right corner of the viewport screen.
+   Always guaranteed visible in the initial viewport, fades out smoothly when scrolled.
    ========================================================================== */
 .cb-hero-scroll-wrapper {
-  position: absolute;
-  bottom: 24px;
-  right: 28px;
-  z-index: 30;
+  position: fixed;
+  bottom: clamp(20px, 3.2vh, 32px);
+  right: clamp(20px, 2.5vw, 36px);
+  z-index: 99;
   display: flex;
   align-items: center;
   margin: 0;
   padding: 0;
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cb-hero-scroll-wrapper.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px);
 }
 
 .cb-hero-scroll-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  background: rgba(10, 15, 12, 0.7);
-  border: 1px solid rgba(0, 255, 102, 0.28);
-  color: var(--cb-text-muted);
+  gap: 0.5rem;
+  background: rgba(6, 14, 8, 0.88);
+  border: 1px solid rgba(0, 255, 102, 0.45);
+  color: #ffffff;
   font-family: var(--cb-font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   cursor: pointer;
-  padding: 0.45rem 0.85rem;
+  padding: 0.55rem 0.95rem;
   border-radius: 9999px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 255, 102, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    0 0 16px rgba(0, 255, 102, 0.22),
+    inset 0 0 10px rgba(0, 255, 102, 0.08);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cb-hero-scroll-btn:hover {
   color: #ffffff;
-  border-color: rgba(0, 255, 102, 0.8);
-  background: rgba(0, 32, 16, 0.85);
-  box-shadow: 0 0 20px rgba(0, 255, 102, 0.3), inset 0 0 12px rgba(0, 255, 102, 0.15);
+  border-color: #00ff66;
+  background: rgba(0, 32, 16, 0.95);
+  box-shadow: 
+    0 8px 30px rgba(0, 0, 0, 0.75),
+    0 0 25px rgba(0, 255, 102, 0.45),
+    inset 0 0 14px rgba(0, 255, 102, 0.18);
   transform: translateY(-2px);
 }
 
 .cb-scroll-label {
-  font-size: 0.64rem;
+  font-size: 0.66rem;
   letter-spacing: 0.14em;
-  color: var(--cb-text-muted);
+  color: var(--cb-green-vivid);
+  font-weight: 700;
   transition: color 0.2s ease;
-}
-
-.cb-hero-scroll-btn:hover .cb-scroll-label {
-  color: #00ff66;
 }
 
 .cb-scroll-chevron {
   color: #00ff66;
-  filter: drop-shadow(0 0 5px rgba(0, 255, 102, 0.7));
+  filter: drop-shadow(0 0 6px rgba(0, 255, 102, 0.9));
   animation: bounceDown 1.8s ease-in-out infinite;
 }
 
@@ -598,7 +611,7 @@
 
 @media (max-width: 640px) {
   .cb-hero-scroll-wrapper {
-    bottom: 16px;
-    right: 16px;
+    bottom: 18px;
+    right: 18px;
   }
 }
