@@ -256,13 +256,15 @@ async function gitLog(ctx, args) {
     commits = commits.slice(-1) // the oldest commit that touched the file is the one that added it
   }
   if (merges !== null) commits = commits.filter((c) => isMerge(c) === merges)
+  let hiddenNote = ''
   if (author) {
+    if (commits.some((c) => view(ctx, c).hiddenAuthor)) hiddenNote = hiddenCommitNote(ctx)
     commits = commits.filter((c) => {
       const v = view(ctx, c)
       return !v.hiddenAuthor && (v.name.toLowerCase().includes(author) || v.login.toLowerCase().includes(author))
     })
   }
-  if (!commits.length) return '(no commits match)'
+  if (!commits.length) return `(no commits match)${hiddenNote}`
 
   const max = limit ?? (oneline || format ? DEFAULT_ONELINE_LIMIT : DEFAULT_LOG_LIMIT)
   let shown = commits.slice(0, max)
@@ -274,7 +276,12 @@ async function gitLog(ctx, args) {
   else out = shown.map((c) => header(ctx, c)).join('\n\n')
 
   if (commits.length > max && limit === null) out += `\n... ${commits.length - max} more (use -n <count> to see more)`
-  return out
+  return out + hiddenNote
+}
+
+// Said when a command leaves out the commit under investigation, so the player knows it's on purpose.
+function hiddenCommitNote(ctx) {
+  return `\n(${shortSha(ctx.mask.sha)} is hidden from author searches: its author is what you're investigating)`
 }
 
 // ---- git show / git diff ---------------------------------------------------------------------------
@@ -384,14 +391,19 @@ async function gitShortlog(ctx, args) {
     ? (await getFileHistory(ctx.owner, ctx.repo, paths[0])).filter((c) => !isMerge(c))
     : (await allCommits(ctx)).filter((c) => !isMerge(c))
   const counts = new Map()
+  let skippedHidden = false
   for (const c of source) {
     const v = view(ctx, c)
-    if (v.hiddenAuthor) continue // a scrubbed author stays scrubbed
+    if (v.hiddenAuthor) {
+      skippedHidden = true // a scrubbed author stays scrubbed
+      continue
+    }
     counts.set(v.name, (counts.get(v.name) || 0) + 1)
   }
   if (!counts.size) return '(no commits)'
-  return [...counts]
+  const table = [...counts]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .map(([name, n]) => `${String(n).padStart(6)}\t${name}`)
     .join('\n')
+  return skippedHidden ? `${table}\n(${shortSha(ctx.mask.sha)} is not counted: its author is what you're investigating)` : table
 }
