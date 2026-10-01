@@ -60,3 +60,16 @@ export function uniqueOthers(values, correct, count) {
 export function isBot(name) {
   return name.endsWith('[bot]')
 }
+
+const MAX_LOG_MESSAGE = 72
+
+// A commit summary clipped to fit one line of log output.
+export function clipMessage(commit, max = MAX_LOG_MESSAGE) {
+  const msg = firstLine(commit.commit.message)
+  return msg.length > max ? msg.slice(0, max - 1) + '…' : msg
+}
+
+// One line of `git log --oneline`: short sha + summary.
+export function logLine(commit) {
+  return `${shortSha(commit.sha)} ${clipMessage(commit)}`
+}

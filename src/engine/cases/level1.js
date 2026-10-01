@@ -4,7 +4,19 @@
 
 import { freshCommits, trimPatch } from '../diff.js'
 import { getCommit } from '../github.js'
-import { authorName, commitDate, firstLine, isBot, isMerge, makeOptions, pickRandom, shortSha, shuffle, uniqueOthers } from '../utils.js'
+import {
+  authorName,
+  commitDate,
+  firstLine,
+  isBot,
+  isMerge,
+  logLine,
+  makeOptions,
+  pickRandom,
+  shortSha,
+  shuffle,
+  uniqueOthers,
+} from '../utils.js'
 
 // Wrong-answer messages. Easy: from anywhere in history. Medium: from the closest commits, which look more alike.
 function otherMessages(ctx, index, real, count) {
@@ -47,14 +59,6 @@ export async function realOrFake(ctx) {
     hint: 'Lines starting with + were added and lines starting with - were removed. Pick the message that describes that change.',
     command: `git show ${sha}`,
   }
-}
-
-const MAX_LOG_MESSAGE = 72
-
-// One line of `git log --oneline`: short sha + summary, clipped to fit.
-function logLine(commit) {
-  const msg = firstLine(commit.commit.message)
-  return `${shortSha(commit.sha)} ${msg.length > MAX_LOG_MESSAGE ? msg.slice(0, MAX_LOG_MESSAGE - 1) + '…' : msg}`
 }
 
 const SUSPECT_COMMITS = 2 // other commits shown per suspect
