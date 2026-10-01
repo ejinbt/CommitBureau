@@ -73,3 +73,8 @@ export function clipMessage(commit, max = MAX_LOG_MESSAGE) {
 export function logLine(commit) {
   return `${shortSha(commit.sha)} ${clipMessage(commit)}`
 }
+
+// Newest first, the order git log prints.
+export function newestFirst(commits) {
+  return [...commits].sort((a, b) => (commitDate(b) > commitDate(a) ? 1 : commitDate(b) < commitDate(a) ? -1 : 0))
+}
