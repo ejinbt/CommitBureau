@@ -49,33 +49,59 @@ export async function realOrFake(ctx) {
   }
 }
 
-// Who did it? Show a commit message, pick its author.
-export async function whoDidIt(ctx) {
-  const authors = [...new Set(ctx.commits.map(authorName))].filter((name) => !isBot(name))
-  if (authors.length < 2) return null
+const MAX_LOG_MESSAGE = 72
 
-  const candidates = freshCommits(ctx).filter(({ commit }) => !isBot(authorName(commit)))
+// One line of `git log --oneline`: short sha + summary, clipped to fit.
+function logLine(commit) {
+  const msg = firstLine(commit.commit.message)
+  return `${shortSha(commit.sha)} ${msg.length > MAX_LOG_MESSAGE ? msg.slice(0, MAX_LOG_MESSAGE - 1) + '…' : msg}`
+}
+
+const SUSPECT_COMMITS = 2 // other commits shown per suspect
+
+// Who did it? Show a commit message and each suspect's other recent commits, pick its author.
+// People tend to work on the same parts of a project, so their other commits are the clue.
+export async function whoDidIt(ctx) {
+  // Each human author's commits in the list, newest first.
+  const byAuthor = new Map()
+  for (const c of ctx.commits) {
+    const name = authorName(c)
+    if (isBot(name) || isMerge(c)) continue
+    if (!byAuthor.has(name)) byAuthor.set(name, [])
+    byAuthor.get(name).push(c)
+  }
+  if (byAuthor.size < 2) return null
+
+  // The real author needs at least one other commit, or there is nothing to go on.
+  const candidates = freshCommits(ctx).filter(({ commit }) => (byAuthor.get(authorName(commit))?.length || 0) >= 2)
   if (!candidates.length) return null
   const { commit } = pickRandom(candidates)
   ctx.used.add(commit.sha)
 
   const real = authorName(commit)
-  const others = uniqueOthers(shuffle(authors), real, 3)
+  const { options, answer } = makeOptions(real, uniqueOthers(shuffle([...byAuthor.keys()]), real, 3))
+
+  // Evidence: what each suspect committed apart from this one, like `git log --author=<name> --oneline`.
+  const files = options.map((name) => {
+    const theirs = byAuthor.get(name).filter((c) => c.sha !== commit.sha).slice(0, SUSPECT_COMMITS)
+    return [`${name}:`, ...theirs.map((c) => `  ${logLine(c)}`)].join('\n')
+  })
+
   const sha = shortSha(commit.sha)
   return {
     level: 1,
     type: 'who_did_it',
-    prompt: `Someone committed "${firstLine(commit.commit.message)}". Who was it?`,
-    evidence: { diff: null, author: null, date: commitDate(commit).slice(0, 10), file: null },
-    ...makeOptions(real, others),
-    explanation: `${real} is recorded as the author of ${sha}. Every commit stores who wrote it and when.`,
-    hint: 'Every commit records an author name and email. git log prints them on the "Author:" line.',
-    command: `git log -1 --format="%an <%ae>" ${sha}`,
+    prompt: `Someone committed "${firstLine(commit.commit.message)}". Each suspect's other recent commits are below. Who wrote it?`,
+    evidence: { diff: files.join('\n\n'), author: null, date: commitDate(commit).slice(0, 10), file: null },
+    options,
+    answer,
+    explanation: `${real} is recorded as the author of ${sha}. git log --author shows everything one person committed, which is how you spot who works on what.`,
+    hint: 'People tend to work on the same parts of a project. Whose other commits look most like this one?',
+    command: `git log --author="${real}" --oneline`,
   }
 }
 
 const LOG_GAP = [2, 4] // how many commits apart the two suspects sit in the log excerpt
-const MAX_LOG_MESSAGE = 72
 
 // First or later? Show a slice of `git log --oneline`, ask which of two commits in it came first.
 // The lesson: git log lists the newest commit at the top, so the lower one is older.
@@ -99,12 +125,7 @@ export async function firstOrLater(ctx) {
     ctx.used.add(older.sha)
     // One commit of context above and below the pair, like a real slice of the log.
     const excerpt = byDate.slice(Math.max(0, top - 1), top + gap + 2)
-    const log = excerpt
-      .map((c) => {
-        const msg = firstLine(c.commit.message)
-        return `${shortSha(c.sha)} ${msg.length > MAX_LOG_MESSAGE ? msg.slice(0, MAX_LOG_MESSAGE - 1) + '…' : msg}`
-      })
-      .join('\n')
+    const log = excerpt.map(logLine).join('\n')
 
     return {
       level: 1,
