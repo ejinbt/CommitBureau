@@ -1,9 +1,0 @@
-# Cloudflare Worker that proxies the game's GitHub requests with a server-side token.
-# The token is NOT here: set it with `npx wrangler secret put GITHUB_TOKEN`.
-name = "commitbureau-proxy"
-main = "src/index.js"
-compatibility_date = "2025-09-01"
-
-[vars]
-# Pages allowed to call the proxy from a browser, comma separated.
-ALLOWED_ORIGINS = "https://ejinbt.github.io,http://localhost:5173"

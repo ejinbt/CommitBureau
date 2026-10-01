@@ -22,6 +22,6 @@ Thumbs.db
 *.log
 *.local
 
-# Cloudflare Worker local state and local secrets
-worker/.wrangler/
-worker/.dev.vars
+
+# Vercel
+.vercel/
