@@ -9,7 +9,6 @@ import {
   Clock, 
   Flame, 
   Award, 
-  ChevronDown,
   GitBranch,
   ShieldCheck,
   AlertTriangle
@@ -37,7 +36,7 @@ const WORD_LENGTH = 5;
  * - Authentic 6-guess Wordle evaluation with Git forensic terminology
  * - Daily synchronization, persistent streaks, and emoji share matrix
  */
-export default function DailyCommitle({ onScrollToIntake }) {
+export default function DailyCommitle() {
   const dailyCase = useMemo(() => getDailyCommitleCase(), []);
   const storageKey = `cb_commitle_${dailyCase.dateString}`;
   const statsKey = 'cb_commitle_stats';
@@ -430,22 +429,6 @@ export default function DailyCommitle({ onScrollToIntake }) {
             ))}
           </div>
         )}
-
-        {/* Viewport Down Arrow leading to Section 3: Case Intake */}
-        <div className="commitle-bottom-nav">
-          <button
-            type="button"
-            className="commitle-scroll-btn"
-            onClick={(e) => {
-              playClickSound();
-              onScrollToIntake?.(e);
-            }}
-            aria-label="Scroll to Case Intake Console"
-          >
-            <span className="scroll-hint-label">INTAKE CONSOLE</span>
-            <ChevronDown size={17} className="scroll-hint-ico" />
-          </button>
-        </div>
       </div>
     </section>
   );
