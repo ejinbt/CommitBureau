@@ -58,7 +58,10 @@ export default function CaseCard({
           </div>
           <div className="case-category-chip">
             <Cpu size={12} className="chip-ico" />
-            <span>{round.type ? round.type.replace(/_/g, ' ').toUpperCase() : 'FORENSIC ANOMALY'}</span>
+            <span>
+              {round.level ? `LEVEL ${round.level} · ` : ''}
+              {round.type ? round.type.replace(/_/g, ' ').toUpperCase() : 'FORENSIC ANOMALY'}
+            </span>
           </div>
         </div>
 
