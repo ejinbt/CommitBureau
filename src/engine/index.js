@@ -1,38 +1,29 @@
-// Game engine public API. The UI only talks to the engine through these functions.
+// Game engine public API. The UI only talks to the engine through these exports.
 // See docs/CONTRACT.md for the round shape and error rules.
 // Owner: engine (ejinbt)
 
-/**
- * Build a 5-round game from a real repo.
- * @param {{ owner: string, repo: string }} repo
- * @param {number} level 1-5
- * @returns {Promise<object[]>} rounds
- */
-export async function buildGame(repo, level) {
-  throw new Error('buildGame is not implemented yet')
-}
+import { fetchUserRepos } from './github.js'
 
-/**
- * Apply one answer to the game state.
- * @returns {object} new state
- */
-export function scoreAnswer(state, round, pickedIndex, usedHint) {
-  throw new Error('scoreAnswer is not implemented yet')
-}
+export { parseRepo } from './parseRepo.js'
+export { setToken } from './github.js'
+export { FEATURED_REPOS } from '../data/featuredRepos.js'
+export { buildGame, ROUNDS_PER_GAME } from './game.js'
+export { newGame, scoreAnswer, finalReport, RANKS, PASS_PERCENT, HINT_PENALTY } from './scoring.js'
 
-/**
- * Summarise a finished game.
- * @returns {{ score: number, percent: number, rank: string, unlocked: boolean, skills: object }}
- */
-export function finalReport(state) {
-  throw new Error('finalReport is not implemented yet')
-}
-
-/**
- * List a user's public repos for "My archive" mode.
- * @param {string} username
- * @returns {Promise<object[]>}
- */
+// "My archive" mode: a user's public repos, trimmed to what the UI needs.
 export async function getUserRepos(username) {
-  throw new Error('getUserRepos is not implemented yet')
+  const name = (username || '').trim().replace(/^@/, '')
+  if (!/^[A-Za-z0-9-]+$/.test(name)) throw new Error("That doesn't look like a GitHub username.")
+
+  const repos = await fetchUserRepos(name)
+  if (!repos.length) throw new Error(`${name} has no public repos to investigate.`)
+
+  return repos.map((r) => ({
+    owner: r.owner.login,
+    repo: r.name,
+    description: r.description,
+    language: r.language,
+    pushedAt: r.pushed_at,
+    fork: r.fork,
+  }))
 }
