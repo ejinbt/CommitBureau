@@ -1,0 +1,67 @@
+/* Difficulty tabs in the COMMITLE top bar, styled like its meta chips. */
+
+.commitle-difficulty-tabs {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.18rem;
+  background: rgba(10, 16, 12, 0.8);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  border-radius: 9999px;
+}
+
+.commitle-difficulty-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.7rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  color: var(--cb-text-muted);
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.commitle-difficulty-tab:hover {
+  color: var(--cb-text);
+}
+
+.commitle-difficulty-tab:focus-visible {
+  outline: 2px solid var(--cb-green-vivid);
+  outline-offset: 2px;
+}
+
+.commitle-difficulty-tab.active {
+  color: #030704;
+}
+
+.commitle-difficulty-tab.diff-easy.active {
+  background: var(--cb-green-vivid);
+}
+
+.commitle-difficulty-tab.diff-medium.active {
+  background: #fbbf24;
+}
+
+.commitle-difficulty-tab.diff-hard.active {
+  background: #f87171;
+}
+
+.tab-result {
+  font-size: 0.75rem;
+}
+
+.tab-result.lost {
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commitle-difficulty-tab {
+    transition: none;
+  }
+}

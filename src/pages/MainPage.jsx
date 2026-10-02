@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import Header from '../components/Header';
 import BureauBriefing from '../components/BureauBriefing';
-import DailyCommitle from '../components/DailyCommitle';
+import DailyCommitleSet from '../components/DailyCommitleSet';
 import CaseIntakeConsole from '../components/CaseIntakeConsole';
 import Footer from '../components/Footer';
 
@@ -86,7 +86,7 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
 
         {/* SECTION 2: COMMITLE (Daily Wordle Forensics Case) */}
         <div ref={commitleSectionRef} id="daily-commitle">
-          <DailyCommitle onScrollToCases={() => handleScrollToIntake('featured')} />
+          <DailyCommitleSet onScrollToCases={() => handleScrollToIntake('featured')} />
         </div>
 
         {/* SECTION 3: Case Intake Console (Repository Selection) */}
