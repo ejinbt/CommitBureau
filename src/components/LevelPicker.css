@@ -22,7 +22,9 @@
   gap: 0.5rem;
 }
 
+/* Each level has its own colour, easy to hard: green, lime, amber, orange, red (matching Daily Cases). */
 .cb-level-option {
+  --lvl: var(--cb-green-vivid);
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
@@ -38,21 +40,26 @@
   transition: border-color 0.2s var(--cb-ease), background 0.2s var(--cb-ease), color 0.2s var(--cb-ease);
 }
 
+.cb-level-option.lvl-2 { --lvl: #a3e635; }
+.cb-level-option.lvl-3 { --lvl: #fbbf24; }
+.cb-level-option.lvl-4 { --lvl: #fb923c; }
+.cb-level-option.lvl-5 { --lvl: #f87171; }
+
 .cb-level-option:hover {
-  border-color: var(--cb-border-hover);
+  border-color: color-mix(in srgb, var(--lvl) 55%, transparent);
   color: var(--cb-text);
 }
 
 .cb-level-option:focus-visible {
-  outline: 2px solid var(--cb-green-vivid);
+  outline: 2px solid var(--lvl);
   outline-offset: 2px;
 }
 
 .cb-level-option.active {
-  background: var(--cb-green-dim);
-  border-color: var(--cb-green-vivid);
+  background: color-mix(in srgb, var(--lvl) 10%, transparent);
+  border-color: var(--lvl);
   color: var(--cb-text);
-  box-shadow: 0 0 18px var(--cb-green-glow);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--lvl) 28%, transparent);
 }
 
 .cb-level-option-num {
@@ -63,15 +70,15 @@
   height: 1.75rem;
   flex-shrink: 0;
   border-radius: var(--cb-radius-sm);
-  border: 1px solid var(--cb-border);
+  border: 1px solid color-mix(in srgb, var(--lvl) 40%, transparent);
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--cb-text-muted);
+  color: var(--lvl);
 }
 
 .cb-level-option.active .cb-level-option-num {
-  background: var(--cb-green-vivid);
-  border-color: var(--cb-green-vivid);
+  background: var(--lvl);
+  border-color: var(--lvl);
   color: var(--cb-bg-deep);
 }
 
@@ -92,7 +99,7 @@
 }
 
 .cb-level-option.active .cb-level-option-topic {
-  color: var(--cb-green-bright);
+  color: var(--lvl);
 }
 
 @media (max-width: 560px) {
