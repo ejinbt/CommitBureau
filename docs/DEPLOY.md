@@ -13,7 +13,11 @@ a token of their own, and the token never reaches the browser or this repo.
    Vite; keep the defaults (build `npm run build`, output `dist`).
 3. **Add the token.** Before (or after) the first deploy: Project → Settings → Environment Variables →
    name `GITHUB_TOKEN`, value the token, for Production and Preview. Paste it only there.
-4. **Deploy.** If you added the token after deploying, redeploy once so the function picks it up.
+4. **Optional backup token.** Add a second variable, `GITHUB_BACKUP_TOKEN`, made the same way (ideally from
+   another GitHub account). The proxy switches to it automatically if `GITHUB_TOKEN` is missing, rejected or out of
+   requests.
+5. **Deploy.** Variables are read at deploy time: if you add or change one after deploying, redeploy (Deployments →
+   latest → Redeploy) so the function picks it up. Make sure each variable is enabled for **Production**.
 
 After that, every push to `main` deploys automatically, and every pull request gets its own preview link.
 
