@@ -16,6 +16,27 @@
   padding: 100px 20px 0 20px;
 }
 
+@media (min-width: 1800px) {
+  .investigation-viewport {
+    max-width: 1420px;
+    padding: 130px 30px 0 30px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .investigation-viewport {
+    max-width: 1880px;
+    padding: 160px 40px 0 40px;
+  }
+}
+
+@media (min-width: 3200px) {
+  .investigation-viewport {
+    max-width: 2350px;
+    padding: 180px 50px 0 50px;
+  }
+}
+
 /* Loading Card & Hero */
 .investigation-loading-hero {
   padding: 60px 20px;
