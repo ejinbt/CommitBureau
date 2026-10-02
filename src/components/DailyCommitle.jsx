@@ -46,10 +46,13 @@ const WORD_LENGTH = 5;
  * - Reactive Diff De-redaction: Green letters dynamically decode in the code terminal
  * - 100vh Viewport-fit layout with GSAP ScrollTrigger entrance animation
  */
-export default function DailyCommitle({ onScrollToCases }) {
-  const dailyCase = useMemo(() => getDailyCommitleCase(), []);
-  const storageKey = `cb_commitle_${dailyCase.dateString}`;
-  const statsKey = 'cb_commitle_stats';
+// `puzzle` and `slot` come from DailyCommitleSet (one per difficulty); without them it plays the
+// single classic daily puzzle. `tabs` is the difficulty switcher, shown in the top bar.
+export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
+  const dailyCase = useMemo(() => puzzle || getDailyCommitleCase(), [puzzle]);
+  const storageKey = `cb_commitle_${dailyCase.dateString}${slot ? `_${slot}` : ''}`;
+  const statsKey = slot ? `cb_commitle_stats_${slot}` : 'cb_commitle_stats';
+  const isHard = dailyCase.difficulty === 'hard';
 
   const matrixRef = useRef(null);
   const diffRef = useRef(null);
@@ -132,7 +135,7 @@ export default function DailyCommitle({ onScrollToCases }) {
   const [showReactionModal, setShowReactionModal] = useState(false);
   const [shakeRow, setShakeRow] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
-  const [showHint, setShowHint] = useState(false);
+  const [showHint, setShowHint] = useState(dailyCase.difficulty === 'easy');
   const [copiedShare, setCopiedShare] = useState(false);
   const [timeUntilTomorrow, setTimeUntilTomorrow] = useState('');
 
@@ -149,7 +152,7 @@ export default function DailyCommitle({ onScrollToCases }) {
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
-      const tomorrow = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
+      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // local midnight, when the puzzle changes
       const diffMs = tomorrow - now;
       if (diffMs <= 0) {
         setTimeUntilTomorrow('00h 00m 00s');
@@ -326,7 +329,7 @@ export default function DailyCommitle({ onScrollToCases }) {
         setCurrentInput((prev) => prev + upperKey);
       }
     },
-    [currentInput, guesses, isGameOver, dailyCase.word, storageKey, stats]
+    [currentInput, guesses, isGameOver, dailyCase.word, storageKey, statsKey, stats]
   );
 
   // Keyboard listener
@@ -363,7 +366,7 @@ export default function DailyCommitle({ onScrollToCases }) {
     });
 
     const scoreString = hasWon ? `${guesses.length}/${MAX_GUESSES}` : 'X/6';
-    const text = `COMMITLE #${dailyCase.dayNumber} ${scoreString}\n${rows.join('\n')}\nCommitBureau Forensics · commitbureau.io`;
+    const text = `COMMITLE #${dailyCase.dayNumber}${dailyCase.difficulty ? ` ${dailyCase.difficulty.toUpperCase()}` : ''} ${scoreString}\n${rows.join('\n')}\nCommitBureau Forensics · ${window.location.origin}`;
     
     navigator.clipboard.writeText(text);
     setCopiedShare(true);
@@ -371,7 +374,7 @@ export default function DailyCommitle({ onScrollToCases }) {
     setTimeout(() => setCopiedShare(false), 2500);
   };
 
-  const diff = dailyCase.diffSnippet;
+  const terminal = dailyCase.terminal || [];
 
   return (
     <section id="daily-commitle" className="commitle-section">
@@ -384,6 +387,7 @@ export default function DailyCommitle({ onScrollToCases }) {
           </div>
 
           <div className="console-status-col">
+            {tabs}
             <div className="console-meta-chip">
               <span className="meta-dot pulse" />
               <span>DOSSIER #{String(dailyCase.dayNumber).padStart(3, '0')}</span>
@@ -392,6 +396,7 @@ export default function DailyCommitle({ onScrollToCases }) {
               <GitBranch size={12} className="chip-ico" />
               <span>{dailyCase.repo}</span>
             </div>
+            {!isHard && (
             <button
               type="button"
               className={`console-hint-toggle ${showHint ? 'active' : ''}`}
@@ -404,6 +409,7 @@ export default function DailyCommitle({ onScrollToCases }) {
               <HelpCircle size={13} />
               <span>{showHint ? 'CLOSE CLUE' : 'FIELD CLUE'}</span>
             </button>
+            )}
           </div>
         </div>
 
@@ -415,9 +421,13 @@ export default function DailyCommitle({ onScrollToCases }) {
             <div className="commitle-incident-pane">
               <div className="incident-lead">
                 <span className="lead-tag">// ANOMALY STATEMENT</span>
-                <span className="lead-mode">DAILY WORDLE CIPHER</span>
+                <span className="lead-mode">{dailyCase.difficulty ? `${dailyCase.difficulty.toUpperCase()} CIPHER` : 'DAILY WORDLE CIPHER'}</span>
               </div>
-              <p className="incident-narrative">{dailyCase.brief}</p>
+              <p className="incident-narrative">
+                {isHard && !isGameOver
+                  ? 'Classified. No witness statement and no clue: only the terminal output survived. Which command printed it?'
+                  : dailyCase.brief}
+              </p>
 
               {showHint && (
                 <div className="incident-hint-drawer">
@@ -437,7 +447,7 @@ export default function DailyCommitle({ onScrollToCases }) {
                 </div>
                 <div className="diff-filename-bar">
                   <FileCode size={12} />
-                  <span>{diff ? diff.file : 'git/evidence.patch'}</span>
+                  <span>~/case-zero</span>
                 </div>
                 <div className="diff-lock-status">
                   {hasWon ? <Unlock size={12} className="unlocked-ico" /> : <Lock size={12} className="locked-ico" />}
@@ -445,36 +455,44 @@ export default function DailyCommitle({ onScrollToCases }) {
                 </div>
               </div>
 
+              {/* A real terminal session: commands ($ lines) and Git's output. The command line holding
+                  {{?}} gets the redacted word bays. Until solved, the answer is also blacked out in
+                  the output, because real Git output often names its own command. */}
               <div className="diff-terminal-code">
-                {diff?.oldCode && (
-                  <div className="diff-line del">
-                    <span className="line-gutter">14</span>
-                    <span className="line-txt">{diff.oldCode}</span>
-                  </div>
-                )}
-                <div className="diff-line add reactive-line">
-                  <span className="line-gutter">15</span>
-                  <span className="line-txt">
-                    <span className="code-prefix">{diff ? diff.prefix : '$ git '}</span>
-                    {/* Interactive Redacted Word Bays */}
-                    <span className="redacted-word-bay">
-                      {Array.from({ length: 5 }).map((_, i) => {
-                        const letter = confirmedPositions[i];
-                        const isDecrypted = Boolean(letter);
-                        return (
-                          <span 
-                            key={i} 
-                            className={`bay-slot ${isDecrypted ? 'revealed' : 'redacted'}`}
-                            title={isDecrypted ? `Confirmed: ${letter}` : 'Position Redacted'}
-                          >
-                            {letter || (currentInput[i] ? currentInput[i] : '?')}
+                {terminal.map((line, lineIdx) => {
+                  const isCommand = line.startsWith('$ ');
+                  if (line.includes('{{?}}')) {
+                    const [before, after] = line.split('{{?}}');
+                    return (
+                      <div key={lineIdx} className="diff-line add reactive-line">
+                        <span className="line-txt">
+                          <span className="code-prefix">{before}</span>
+                          <span className="redacted-word-bay">
+                            {Array.from({ length: 5 }).map((_, i) => {
+                              const letter = isGameOver ? dailyCase.word[i] : confirmedPositions[i];
+                              const isDecrypted = Boolean(letter);
+                              return (
+                                <span
+                                  key={i}
+                                  className={`bay-slot ${isDecrypted ? 'revealed' : 'redacted'}`}
+                                  title={isDecrypted ? `Confirmed: ${letter}` : 'Position Redacted'}
+                                >
+                                  {letter || (currentInput[i] ? currentInput[i] : '?')}
+                                </span>
+                              );
+                            })}
                           </span>
-                        );
-                      })}
-                    </span>
-                    <span className="code-suffix">{diff?.suffix || ''}</span>
-                  </span>
-                </div>
+                          <span className="code-suffix">{after}</span>
+                        </span>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={lineIdx} className={`diff-line ${isCommand ? 'cmd' : 'out'}`}>
+                      <span className="line-txt">{isGameOver ? line : redactAnswer(line, dailyCase.word)}</span>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="diff-terminal-footer">
@@ -678,4 +696,14 @@ export default function DailyCommitle({ onScrollToCases }) {
       </div>
     </section>
   );
+}
+
+// Black out the answer in Git's output until the puzzle is solved, letter for letter. Real output often
+// names its own command ("Merge made by...", "Cloning into...", "stash@{0}"), so the stem is hidden too
+// (MERGE also hides "Merg" in "merging", CLONE hides "Clon" in "Cloning").
+function redactAnswer(line, word) {
+  const stem = word.length > 4 && word.endsWith('E') ? word.slice(0, -1) : word;
+  // MERGE hides "Merge" whole, and "Merg" in "merging".
+  const pattern = stem === word ? word : `${stem}e?`;
+  return line.replace(new RegExp(pattern, 'gi'), (match) => '▒'.repeat(match.length));
 }

@@ -778,3 +778,20 @@
   color: #ffffff;
   border-color: rgba(255, 255, 255, 0.25);
 }
+
+/* Terminal session lines: commands the investigator typed, and Git's output. */
+.diff-line.cmd {
+  color: #e5e7eb;
+  font-weight: 600;
+}
+
+.diff-line.out {
+  color: #9bb3a3;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.diff-line.cmd .line-txt,
+.diff-line.out .line-txt {
+  min-width: 0;
+}
