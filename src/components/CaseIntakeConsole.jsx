@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ChevronDown } from 'lucide-react';
 import { FEATURED_REPOS, getUserRepos } from '../api';
+import { playClickSound } from '../utils/audio';
 import LevelPicker from './LevelPicker';
 import { SpiderPeep, SpiderLoader, SpiderInspector } from './character';
 import './CaseIntakeConsole.css';
@@ -13,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
  * Features tactile Forensic Folder Dossier cards,
  * smooth tab transition physics, and staggered entrance animations.
  */
-export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured', level = 1, onSelectLevel }) {
+export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured', level = 1, onSelectLevel, onScrollNext }) {
   const [activeTab, setActiveTab] = useState(initialTab); // 'featured' | 'custom' | 'archive'
   const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
 
@@ -497,6 +499,21 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
             </div>
           )}
         </div>
+      </div>
+      {/* Bottom-right scroll arrow to the next section, same as the hero's */}
+      <div className="cb-section-scroll-arrow">
+        <button
+          type="button"
+          className="cb-hero-scroll-btn"
+          onClick={() => {
+            playClickSound();
+            onScrollNext?.();
+          }}
+          aria-label="Scroll to How It Works"
+        >
+          <span className="cb-scroll-label">HOW IT WORKS</span>
+          <ChevronDown size={18} className="cb-scroll-chevron" />
+        </button>
       </div>
     </section>
   );

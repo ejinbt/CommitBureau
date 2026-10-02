@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { GitBranch, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { GitBranch, Clock, ArrowRight, CheckCircle2, ChevronDown } from 'lucide-react';
+import { playClickSound } from '../utils/audio';
 import { getDailyRepos } from '../api';
 import './DailyRepos.css';
 
@@ -60,7 +61,7 @@ function timeToMidnight() {
  * Three real repositories a day, Easy, Medium and Hard, the same for every player. One click starts the
  * case straight away at that repo's level, with the investigation terminal ready.
  */
-export default function DailyRepos({ onStartDaily }) {
+export default function DailyRepos({ onStartDaily, onScrollNext }) {
   const daily = useMemo(() => getDailyRepos(), []);
   const [countdown, setCountdown] = useState(timeToMidnight);
 
@@ -129,6 +130,21 @@ export default function DailyRepos({ onStartDaily }) {
             );
           })}
         </div>
+      </div>
+      {/* Bottom-right scroll arrow to the next section, same as the hero's */}
+      <div className="cb-section-scroll-arrow">
+        <button
+          type="button"
+          className="cb-hero-scroll-btn"
+          onClick={() => {
+            playClickSound();
+            onScrollNext?.();
+          }}
+          aria-label="Scroll to cases"
+        >
+          <span className="cb-scroll-label">CASES</span>
+          <ChevronDown size={18} className="cb-scroll-chevron" />
+        </button>
       </div>
     </section>
   );

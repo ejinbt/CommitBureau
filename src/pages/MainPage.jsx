@@ -92,7 +92,7 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
 
         {/* SECTION 2: DAILY REPOS (three real repos a day: easy, medium, hard) */}
         <div ref={commitleSectionRef} id="daily-commitle">
-          <DailyRepos onStartDaily={onStartDaily} />
+          <DailyRepos onStartDaily={onStartDaily} onScrollNext={() => handleScrollToIntake('featured')} />
         </div>
 
         {/* SECTION 3: Case Intake Console (Repository Selection) */}
@@ -102,6 +102,7 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
             initialTab={intakeTab}
             level={level}
             onSelectLevel={onSelectLevel}
+            onScrollNext={() => smoothScrollTo(howSectionRef)}
           />
         </div>
 
