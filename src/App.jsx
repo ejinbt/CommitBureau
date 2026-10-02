@@ -111,7 +111,19 @@ export default function App() {
     }
   };
 
+  // A Daily Repo case plays at its own level and doesn't move the player's saved level.
+  const [dailyRun, setDailyRun] = useState(null); // { difficulty, level, date } while playing a daily case
+
+  const handleStartDaily = (daily) => {
+    setDailyRun({ difficulty: daily.difficulty, level: daily.level, date: daily.date });
+    setTargetRepo({ owner: daily.owner, repo: daily.repo });
+    setCurrentScreen('investigation');
+    window.history.pushState({ screen: 'investigation' }, '', window.location.href);
+    smoothScrollToTop();
+  };
+
   const handleStartCase = (target) => {
+    setDailyRun(null);
     setTargetRepo(target);
     setCurrentScreen('investigation');
     window.history.pushState({ screen: 'investigation' }, '', window.location.href);
@@ -120,14 +132,26 @@ export default function App() {
 
   const handleFinishCase = (finalState) => {
     setLastDebrief(finalState);
-    const levelPlayed = level;
+    const levelPlayed = dailyRun ? dailyRun.level : level;
     setLastLevelPlayed(levelPlayed);
 
     const report = finalReport(finalState, levelPlayed);
-    setRank(report.rank);
 
-    if (report.unlocked) {
-      setLevel((prev) => Math.min(prev + 1, 5));
+    if (dailyRun) {
+      // Remember today's result for this difficulty, shown on the Daily Repos card.
+      try {
+        localStorage.setItem(
+          `cb_daily_${dailyRun.date}_${dailyRun.difficulty}`,
+          JSON.stringify({ percent: report.percent, score: report.score, correct: report.correctCount, total: report.totalCount })
+        );
+      } catch {
+        // Storage blocked: the card just won't show the result.
+      }
+    } else {
+      setRank(report.rank);
+      if (report.unlocked) {
+        setLevel((prev) => Math.min(prev + 1, 5));
+      }
     }
 
     setCurrentScreen('debrief');
@@ -194,6 +218,7 @@ export default function App() {
             rank={rank} 
             intakeTab={intakeTab}
             onStartCase={handleStartCase}
+            onStartDaily={handleStartDaily}
             onNavigate={handleNavigate}
             onSelectLevel={handleSelectLevel}
             mode={mode}
@@ -204,7 +229,7 @@ export default function App() {
         {currentScreen === 'investigation' && (
           <InvestigationPage
             targetRepo={targetRepo}
-            level={level}
+            level={dailyRun ? dailyRun.level : level}
             mode={mode}
             rank={rank}
             onFinishCase={handleFinishCase}
