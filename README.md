@@ -15,9 +15,8 @@
 
 **it's a detective game , it uses real GitHub repos, and you solve the cases by typing real Git commands**
 
-~~*live demo
-demo video
-devpost page*~~
+***[live demo](https://commitbureau67.vercel.app/)***
+***[devpost](https://devpost.com/software/commitbureau)***
 
 ## Why we built it
 Git is hard to learn because tutorials teach commands on toy examples, but never show you how to read a real project's history. We wanted a way to practise on the real thing, so CommitBureau turns any public GitHub repo, even the Linux kernel, into detective cases you solve with real Git commands. 
