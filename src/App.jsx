@@ -210,7 +210,7 @@ export default function App() {
             level={lastLevelPlayed}
             daily={dailyRun}
             onPlayAgain={handlePlayAgain}
-            onReturnIntake={handleExitCase}
+            onReturnIntake={() => handleNavigate('intake', 'featured')}
             onNavigate={handleNavigate}
           />
         )}
