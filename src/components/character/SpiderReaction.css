@@ -18,7 +18,7 @@
 
 .cb-spider-reaction-card {
   position: relative;
-  max-width: 520px;
+  max-width: clamp(520px, 38vw, 880px);
   width: 100%;
   background: #0d0d0e;
   border-radius: 16px;
@@ -68,8 +68,8 @@
 /* Sprite stage */
 .cb-spider-reaction-stage {
   position: relative;
-  width: clamp(160px, 22vw, 220px);
-  height: clamp(160px, 22vw, 220px);
+  width: clamp(160px, 22vw, 360px);
+  height: clamp(160px, 22vw, 360px);
   display: flex;
   align-items: center;
   justify-content: center;

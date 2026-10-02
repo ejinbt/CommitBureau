@@ -26,6 +26,15 @@
   right: -35px;
 }
 
+@media (min-width: 2560px) {
+  .cb-spider-peep--viewport.cb-spider-peep--left {
+    left: -55px;
+  }
+  .cb-spider-peep--viewport.cb-spider-peep--right {
+    right: -55px;
+  }
+}
+
 /* Container mode: absolute within target container */
 .cb-spider-peep--container {
   position: absolute;
@@ -42,7 +51,7 @@
 /* Character sprite frame */
 .cb-spider-peep-frame {
   position: relative;
-  width: clamp(120px, 14vw, 190px);
+  width: clamp(120px, 14vw, 360px);
   height: auto;
   display: flex;
   align-items: center;

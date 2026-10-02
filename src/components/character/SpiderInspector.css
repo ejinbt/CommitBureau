@@ -13,7 +13,7 @@
 
 .cb-spider-inspector-stage {
   position: relative;
-  width: clamp(120px, 14vw, 170px);
+  width: clamp(120px, 14vw, 300px);
   display: flex;
   align-items: center;
   justify-content: center;

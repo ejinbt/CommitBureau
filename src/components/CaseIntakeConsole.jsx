@@ -277,7 +277,7 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                   {/* Folder Sleeve Body */}
                   <div className="cb-folder-body">
                     <div className="cb-folder-meta cb-mono">
-                      <span className="cb-folder-stamp">CLASSIFIED EVIDENCE</span>
+                      <span className="cb-folder-stamp">CLASSIFIED</span>
                       <span className="cb-folder-level">LEVEL {level}</span>
                     </div>
 

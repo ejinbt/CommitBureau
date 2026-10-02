@@ -35,15 +35,15 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 420px;
+  max-width: clamp(420px, 32vw, 760px);
   width: 100%;
 }
 
 /* Walking Stage */
 .cb-spider-loader-stage {
   position: relative;
-  width: clamp(140px, 18vw, 200px);
-  height: clamp(140px, 18vw, 200px);
+  width: clamp(140px, 18vw, 360px);
+  height: clamp(140px, 18vw, 360px);
   display: flex;
   align-items: center;
   justify-content: center;
