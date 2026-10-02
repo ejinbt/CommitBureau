@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
-import logoImg from '../assets/logo.png';
+import logoImg from '../assets/logo.webp';
 import { playClickSound } from '../utils/audio';
 import SpiderChief from './character/SpiderChief';
 import './BureauBriefing.css';

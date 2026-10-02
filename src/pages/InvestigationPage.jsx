@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Flame, Award, GitBranch, Key, X, Check, RotateCcw } from 'lucide-react';
 import Header from '../components/Header';
 import CaseCard from '../components/CaseCard';
-import logoImg from '../assets/logo.png';
+import logoImg from '../assets/logo.webp';
 import { SpiderLoader, SpiderPeep } from '../components/character';
 import { buildGame, scoreAnswer, setToken } from '../api';
 import { playClickSound, playCorrectSound, playWrongSound } from '../utils/audio';

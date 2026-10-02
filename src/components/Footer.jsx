@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowUp, ExternalLink } from 'lucide-react';
 import gsap from 'gsap';
-import logoImg from '../assets/logo.png';
+import logoImg from '../assets/logo.webp';
 import { playClickSound } from '../utils/audio';
 import './Footer.css';
 

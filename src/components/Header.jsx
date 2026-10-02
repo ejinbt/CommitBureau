@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Folder, Database, FileText, Plus, ArrowRight, Sparkles } from 'lucide-react';
 import gsap from 'gsap';
-import logoImg from '../assets/logo.png';
+import logoImg from '../assets/logo.webp';
 import './Header.css';
 
 /**
