@@ -4,15 +4,6 @@ import { ShieldCheck, AlertOctagon, X } from 'lucide-react';
 import { SPIDER_SPRITES } from '../../assets/spiderAssets';
 import './SpiderReaction.css';
 
-/**
- * SpiderReaction: High-emotion victory or defeat reaction modal/card.
- * 
- * @param {'correct' | 'wrong'} type - Reaction type
- * @param {string} title - Heading status text
- * @param {string} subtitle - Explanatory forensic breakdown
- * @param {React.ReactNode} children - Optional action buttons or stats
- * @param {() => void} onClose - Optional dismissal handler
- */
 export default function SpiderReaction({
   type = 'correct',
   title,
@@ -33,7 +24,6 @@ export default function SpiderReaction({
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Entrance spring
       if (cardRef.current) {
         gsap.fromTo(
           cardRef.current,
@@ -42,14 +32,11 @@ export default function SpiderReaction({
         );
       }
 
-      // Sprite physics reaction
       if (spriteRef.current) {
         if (isCorrect) {
-          // Fist-pump victory bounce
           gsap.timeline({ repeat: -1, yoyo: true })
             .to(spriteRef.current, { y: -8, rotation: 1.5, duration: 1.1, ease: 'power1.inOut' });
         } else {
-          // Dejected storm wobble
           gsap.timeline({ repeat: -1, yoyo: true })
             .to(spriteRef.current, { x: 3, rotation: -1, duration: 1.4, ease: 'sine.inOut' });
         }
@@ -73,7 +60,6 @@ export default function SpiderReaction({
           </button>
         )}
 
-        {/* Character Reaction Stage */}
         <div className="cb-spider-reaction-stage">
           <img
             ref={spriteRef}
@@ -85,7 +71,6 @@ export default function SpiderReaction({
           <div className="cb-spider-reaction-glow" />
         </div>
 
-        {/* Reaction Content */}
         <div className="cb-spider-reaction-content">
           <div className="cb-spider-reaction-badge cb-mono">
             {isCorrect ? <ShieldCheck size={14} /> : <AlertOctagon size={14} />}

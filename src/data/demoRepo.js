@@ -1,13 +1,3 @@
-// "Case Zero": a made-up repo that ships with the game, for demos with no Wi-Fi, no token and no rate limit.
-// github.js answers requests for it from here instead of calling GitHub, using the same JSON shapes the
-// GitHub REST API returns, so every level runs through the normal engine code.
-//
-// The story: Night Owl Cafe, a tiny coffee-ordering site built by four people (all fictional).
-//   Mara Quinn  - frontend (menu, cart, page)      Theo Park  - server and API
-//   Ines Duarte - tests and docs                   Sam Okafor - maintainer, merges pull requests
-// The history is written so every question type has clean evidence: people stick to their own areas,
-// the main files have 3+ commits with a clear top author, and there are two merged pull requests.
-
 export const DEMO_REPO = { owner: 'commitbureau', repo: 'case-zero' }
 
 const PEOPLE = {
@@ -17,7 +7,6 @@ const PEOPLE = {
   sam: { name: 'Sam Okafor', login: 'sokafor' },
 }
 
-// Oldest first. `parents` defaults to the previous commit in this list; merges name both parents.
 const HISTORY = [
   {
     id: 'c1', who: 'ines', at: '2026-03-02T09:14:00Z', msg: 'Initial commit: README and package.json',
@@ -147,7 +136,6 @@ const HISTORY = [
     ],
   },
   {
-    // On Mara's branch mquinn/oat-milk, merged later as PR #12.
     id: 'c8', who: 'mara', at: '2026-03-11T10:15:00Z', msg: 'Add oat milk option', parents: ['c7'],
     files: [
       { name: 'src/menu.js', status: 'modified', patch: `@@ -4,3 +4,6 @@
@@ -193,7 +181,6 @@ const HISTORY = [
     ],
   },
   {
-    // On Theo's branch tpark/menu-endpoint, merged later as PR #15.
     id: 'c12', who: 'theo', at: '2026-03-14T15:10:00Z', msg: 'Serve the menu from the API', parents: ['c11'],
     files: [
       { name: 'server/orders.js', status: 'modified', patch: `@@ -14,4 +14,8 @@ http.createServer((req, res) => {
@@ -328,7 +315,6 @@ const HISTORY = [
   },
 ]
 
-// A stable, made-up 40-character sha for each commit id.
 function fakeSha(seed) {
   let h = 2166136261
   let out = ''
@@ -339,7 +325,6 @@ function fakeSha(seed) {
   return out.slice(0, 40)
 }
 
-// Build GitHub-shaped commit objects once: the list form, plus `files` for the single-commit form.
 const SHAS = Object.fromEntries(HISTORY.map((c) => [c.id, fakeSha(c.id)]))
 const COMMITS = HISTORY.map((c, i) => {
   const person = PEOPLE[c.who]
@@ -361,14 +346,13 @@ const COMMITS = HISTORY.map((c, i) => {
       return { filename: f.name, status: f.status, additions, deletions, changes: additions + deletions, patch: f.patch }
     }),
   }
-}).reverse() // GitHub lists newest first
+}).reverse()
 
 const listForm = (c) => {
   const { files: _files, ...rest } = c
   return rest
 }
 
-// Answer a GitHub API path for the demo repo, or return undefined if the path isn't for it.
 export function demoResponse(path) {
   const prefix = `/repos/${DEMO_REPO.owner}/${DEMO_REPO.repo}/`
   if (!path.toLowerCase().startsWith(prefix)) return undefined

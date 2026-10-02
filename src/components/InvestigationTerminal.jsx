@@ -4,15 +4,9 @@ import { createInvestigation } from '../api';
 import { playClickSound } from '../utils/audio';
 import './InvestigationTerminal.css';
 
-/**
- * InvestigationTerminal
- * Detective mode: instead of being shown the evidence, the player digs it up by typing real git
- * commands against the repo. The engine runs them (src/engine/terminal.js) and prints Git-style output.
- * Suggested commands fill the prompt rather than running, so the player still types Enter themselves.
- */
 export default function InvestigationTerminal({ round, targetRepo, onCommandRun }) {
   const investigation = useMemo(() => createInvestigation(targetRepo, round), [targetRepo, round]);
-  const [entries, setEntries] = useState([]); // { cmd, output, error }
+  const [entries, setEntries] = useState([]);
   const [input, setInput] = useState('');
   const [history, setHistory] = useState([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
@@ -22,8 +16,6 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
   const [focused, setFocused] = useState(false);
   const [caret, setCaret] = useState({ pos: 0, scroll: 0, show: true });
 
-  // Where the block caret goes: the input's cursor position and how far its text has scrolled.
-  // Hidden while text is selected, so the browser's own selection highlight shows instead.
   const syncCaret = () => {
     requestAnimationFrame(() => {
       const el = inputRef.current;
@@ -33,12 +25,10 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
     });
   };
 
-  // Moving through history or filling a suggestion puts the cursor at the end.
   useEffect(() => {
     syncCaret();
   }, [input]);
 
-  // Keep the newest output in view.
   useEffect(() => {
     if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
   }, [entries, busy]);
@@ -81,7 +71,6 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
     }
   };
 
-  // Clicking a suggestion puts it in the prompt. The player still presses Enter.
   const fillSuggestion = (cmd) => {
     setInput(cmd);
     inputRef.current?.focus();
@@ -182,7 +171,6 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
             aria-label="Git command"
             disabled={busy}
           />
-          {/* Vim-style block caret, drawn over the input (the browser's own caret is hidden). */}
           {caret.show && (
             <span className="inv-caret-layer" aria-hidden="true" style={{ transform: `translateX(${-caret.scroll}px)` }}>
               <span className="inv-caret-before">{input.slice(0, caret.pos)}</span>
@@ -195,12 +183,10 @@ export default function InvestigationTerminal({ round, targetRepo, onCommandRun 
   );
 }
 
-// Plain output lines: only the commit line gets a colour.
 function lineClass(line) {
   return line.startsWith('commit ') ? 'inv-line-commit' : '';
 }
 
-// Cut command output into plain text and per-file diffs. A diff starts at "diff --git a/<file> b/<file>".
 function splitDiffs(output) {
   const parts = [];
   for (const line of output.split('\n')) {
@@ -210,17 +196,15 @@ function splitDiffs(output) {
     else if (parts.length && parts[parts.length - 1].kind === 'text') parts[parts.length - 1].lines.push(line);
     else parts.push({ kind: 'text', lines: [line] });
   }
-  // Drop the blank line git leaves between the commit message and the diff.
   return parts.filter((p) => p.kind === 'diff' || p.lines.some((l) => l.trim()));
 }
 
-// Turn patch lines into GitHub-style rows with old and new line numbers.
 function diffRows(lines) {
   const rows = [];
   let oldNo = 0;
   let newNo = 0;
   for (const line of lines) {
-    if (line.startsWith('--- ') || line.startsWith('+++ ')) continue; // the file name is in the block header
+    if (line.startsWith('--- ') || line.startsWith('+++ ')) continue;
     const hunk = line.match(/^@@ -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@(.*)$/);
     if (hunk) {
       oldNo = Number(hunk[1]);
@@ -236,7 +220,6 @@ function diffRows(lines) {
       rows.push({ type: 'context', oldNo: oldNo++, newNo: newNo++, sign: ' ', text: line.slice(1) });
     }
   }
-  // A trailing empty line is just the end of the output, not part of the file.
   while (rows.length && rows[rows.length - 1].type === 'context' && rows[rows.length - 1].text === '') rows.pop();
   return rows;
 }

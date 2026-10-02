@@ -1,8 +1,3 @@
-/* ==========================================================================
-   SPIDER REACTION COMPONENT STYLES
-   Victory celebration & defeat slump modals with dynamic auras
-   ========================================================================== */
-
 .cb-spider-reaction {
   position: fixed;
   inset: 0;
@@ -65,7 +60,7 @@
   color: #ffffff;
 }
 
-/* Sprite stage */
+
 .cb-spider-reaction-stage {
   position: relative;
   width: clamp(160px, 22vw, 360px);
@@ -100,7 +95,7 @@
   z-index: -1;
 }
 
-/* Content */
+
 .cb-spider-reaction-content {
   width: 100%;
   display: flex;
@@ -147,7 +142,7 @@
   color: rgba(255, 255, 255, 0.65);
   line-height: 1.5;
   margin: 0;
-  max-width: 27.5rem; /* 440px at normal size; grows on 2K/4K */
+  max-width: 27.5rem;
 }
 
 .cb-spider-reaction-actions {

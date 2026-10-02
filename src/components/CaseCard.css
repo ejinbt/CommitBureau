@@ -10,7 +10,7 @@
   position: relative;
 }
 
-/* Banner */
+
 .case-dossier-banner {
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@
   color: #00ff66;
 }
 
-/* Notebook Clue Button */
+
 .dossier-hint-btn {
   display: flex;
   align-items: center;
@@ -98,7 +98,7 @@
   border-radius: 3px;
 }
 
-/* Clue Panel */
+
 .dossier-clue-drawer {
   background: #0f1710;
   border: 1px dashed rgba(245, 158, 11, 0.45);
@@ -142,7 +142,7 @@
   margin: 0;
 }
 
-/* Question Hero */
+
 .case-inquiry-hero {
   border-left: 3px solid #00ff66;
   padding-left: 16px;
@@ -178,7 +178,7 @@
   letter-spacing: -0.01em;
 }
 
-/* Hypotheses Grid */
+
 .hypotheses-investigation-section {
   display: flex;
   flex-direction: column;
@@ -209,7 +209,7 @@
   gap: 12px;
 }
 
-/* Suspect Card */
+
 .suspect-hypothesis-card {
   background: #050a06;
   border: 1px solid rgba(0, 255, 102, 0.18);
@@ -336,7 +336,7 @@
   box-shadow: 0 0 8px #00ff66;
 }
 
-/* Card States */
+
 .suspect-hypothesis-card.state-verifying {
   background: #0a180e;
   border-color: #00ff66;
@@ -410,10 +410,6 @@
   opacity: 0.35;
   cursor: default;
 }
-
-/* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
-   ========================================================================== */
 
 @media (max-width: 768px) {
    .case-dossier-card {

@@ -1,18 +1,12 @@
-// Level 4 (Inspector): branches, merges and pull requests.
-// Each generator takes the game context and returns one round, or null if this repo can't support it.
-// Most of this needs no extra API calls: every commit in the list already carries its `parents`.
-
 import { getCommit } from '../github.js'
 import { commitDate, firstLine, isBot, isMerge, makeOptions, pickRandom, shortSha, shuffle, uniqueOthers } from '../utils.js'
 
-// GitHub's default message when a PR is merged with a merge commit.
 const MERGE_PR_RE = /^Merge pull request #(\d+) from ([^/\s]+)\/(\S+)/
 
 function unusedMerges(ctx) {
   return ctx.commits.filter((c) => isMerge(c) && !ctx.used.has(c.sha))
 }
 
-// Roughly what `git cat-file -p <sha>` prints for a commit, minus the message (it would give merges away).
 function rawCommit(commit) {
   const author = commit.commit.author
   return [
@@ -22,11 +16,9 @@ function rawCommit(commit) {
   ].join('\n')
 }
 
-// Merge or normal commit? Show the raw commit object, count the parents.
 export async function mergeOrNormal(ctx) {
   const merges = unusedMerges(ctx)
   const normals = ctx.commits.filter((c) => c.parents.length === 1 && !ctx.used.has(c.sha))
-  // Ask about a merge half the time when the repo has any, otherwise every answer would be "normal".
   const pool = merges.length && (Math.random() < 0.5 || !normals.length) ? merges : normals
   if (!pool.length) return null
   const commit = pickRandom(pool)
@@ -55,8 +47,6 @@ export async function mergeOrNormal(ctx) {
   }
 }
 
-// Who merged it? For "Merge pull request #N from user/branch", pick the person who made the merge commit.
-// The trap answer is the branch owner: they wrote the work, but someone else often merges it.
 export async function whoMerged(ctx) {
   const prMerges = unusedMerges(ctx).filter((c) => c.author?.login && MERGE_PR_RE.test(firstLine(c.commit.message)))
   if (!prMerges.length) return null
@@ -70,7 +60,6 @@ export async function whoMerged(ctx) {
   const wrong = uniqueOthers([branchOwner, ...shuffle(logins)], merger, 3)
   if (wrong.length < 2) return null
 
-  // The PR title sits after a blank line: "Merge pull request #42 from alice/fix\n\nFix login redirect"
   const title = firstLine(commit.commit.message.split('\n').slice(1).join('\n').trim())
   const sha = shortSha(commit.sha)
   return {
@@ -92,14 +81,12 @@ export async function whoMerged(ctx) {
   }
 }
 
-// Which parent is the merged branch? A merge's first parent is where you were; the second is what you merged in.
 export async function mergedBranchParent(ctx) {
   const merges = unusedMerges(ctx).filter((c) => c.parents.length === 2)
   if (!merges.length) return null
   const commit = pickRandom(merges)
   ctx.used.add(commit.sha)
 
-  // Parents are usually in the commit list already; fetch only if not.
   const lookup = async (sha) => ctx.commits.find((c) => c.sha === sha) || getCommit(ctx.owner, ctx.repo, sha)
   const [first, second] = await Promise.all(commit.parents.map((p) => lookup(p.sha)))
   const firstMsg = firstLine(first.commit.message)

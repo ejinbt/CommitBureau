@@ -12,7 +12,6 @@ const LEVEL_INFO = {
   4: { rank: 'Inspector', topic: 'Merges and pull requests' },
 };
 
-// One line about each repo in the daily pools (src/engine/dailyRepos.js).
 const REPO_BLURBS = {
   'pallets/flask': 'The small Python web framework.',
   'expressjs/express': 'The classic minimal web server for Node.js.',
@@ -56,11 +55,6 @@ function timeToMidnight() {
   return `${h}:${m}:${s}`;
 }
 
-/**
- * DailyRepos
- * Three real repositories a day, Easy, Medium and Hard, the same for every player. One click starts the
- * case straight away at that repo's level, with the investigation terminal ready.
- */
 export default function DailyRepos({ onStartDaily, onScrollNext }) {
   const daily = useMemo(() => getDailyRepos(), []);
   const [countdown, setCountdown] = useState(timeToMidnight);
@@ -131,7 +125,6 @@ export default function DailyRepos({ onStartDaily, onScrollNext }) {
           })}
         </div>
       </div>
-      {/* Bottom-right scroll arrow to the next section, same as the hero's */}
       <div className="cb-section-scroll-arrow">
         <button
           type="button"

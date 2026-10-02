@@ -1,8 +1,3 @@
-/**
- * Sample game mock conforming to docs/CONTRACT.md
- * Provides 5 realistic Git commit investigation rounds and mock engine methods.
- */
-
 export const SAMPLE_ROUNDS = [
   {
     id: "r1",
@@ -167,19 +162,13 @@ export const FEATURED_REPOS = [
   }
 ];
 
-/**
- * Initializes a game session.
- * Contract: buildGame({ owner, repo }, level) -> Promise<Round[]>
- */
 export async function buildGame({ owner, repo }, level = 1) {
-  // Simulate brief network delay for realism
   await new Promise((resolve) => setTimeout(resolve, 400));
 
   if (!owner || !repo) {
     throw new Error("Invalid repository target. Please specify owner and repository name.");
   }
 
-  // Clone sample rounds with repo name injected
   return SAMPLE_ROUNDS.map((r, i) => ({
     ...r,
     level,
@@ -190,21 +179,15 @@ export async function buildGame({ owner, repo }, level = 1) {
 
 export const HINT_PENALTY = 50;
 
-/**
- * Scores a round answer and updates game state.
- * Contract: scoreAnswer(state, round, pickedIndex, usedHint) -> new game state
- */
 export function scoreAnswer(state, round, pickedIndex, usedHint = false) {
   const isCorrect = pickedIndex === round.answer;
   const currentStreak = isCorrect ? (state?.streak || 0) + 1 : 0;
   const maxStreak = Math.max(currentStreak, state?.maxStreak || 0);
 
-  // Scoring logic:
-  // Correct answer: 100 base + (streak * 20) bonus - (hint penalty: 50)
   let roundPoints = 0;
   if (isCorrect) {
     roundPoints = 100 + (currentStreak - 1) * 20 - (usedHint ? HINT_PENALTY : 0);
-    if (roundPoints < 20) roundPoints = 20; // minimum floor
+    if (roundPoints < 20) roundPoints = 20;
   }
 
   const newScore = (state?.score || 0) + roundPoints;
@@ -229,10 +212,6 @@ export function scoreAnswer(state, round, pickedIndex, usedHint = false) {
   };
 }
 
-/**
- * Generates final debrief report.
- * Contract: finalReport(state, level) -> { score, percent, rank, unlocked, skills }
- */
 export function finalReport(state, level = state?.level || 1) {
   const answers = state?.answers || [];
   const total = answers.length || 5;
@@ -243,7 +222,6 @@ export function finalReport(state, level = state?.level || 1) {
   const RANKS = ['Rookie', 'Officer', 'Detective', 'Inspector', 'Chief'];
   const rank = RANKS[Math.min(unlocked ? level : level - 1, RANKS.length - 1)];
 
-  // Skills aggregation
   const skillMap = {};
   answers.forEach((ans) => {
     const key = ans.type || "general";
@@ -289,16 +267,11 @@ function formatSkillLabel(type) {
   }
 }
 
-/**
- * Fetches repos for "My Archive" mode.
- * Contract: getUserRepos(username) -> Promise<Repo[]>
- */
 export async function getUserRepos(username) {
   await new Promise((resolve) => setTimeout(resolve, 300));
   if (!username) return [];
 
   return [
-    // Same shape as the real engine (docs/CONTRACT.md): { owner, repo, description, language, pushedAt, fork }
     {
       owner: username,
       repo: `${username}-portfolio`,

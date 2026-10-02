@@ -10,15 +10,6 @@ import HowItWorks from '../components/HowItWorks';
 
 gsap.registerPlugin(ScrollToPlugin);
 
-/**
- * MainPage
- * Single cohesive entry page:
- * - Section 1: Bureau Briefing (Hero & Mission with down arrow)
- * - Section 2: COMMITLE (The Daily Git Forensics Wordle with down arrow)
- * - Section 3: Case Intake Console (Target selection)
- * - Footer: System telemetry, clearance matrix & protocol links
- * - Butter-smooth GSAP ScrollToPlugin navigation physics
- */
 export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, onStartDaily }) {
   const commitleSectionRef = useRef(null);
   const intakeSectionRef = useRef(null);
@@ -75,10 +66,8 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
 
   return (
     <div className="cb-app-shell">
-      {/* High-Performance Fixed GPU Layer for Ambient Lighting */}
       <div className="cb-bg-ambient" aria-hidden="true" />
 
-      {/* Floating Capsule Header */}
       <Header 
         level={level} 
         rank={rank} 
@@ -87,15 +76,12 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
       />
 
       <main>
-        {/* SECTION 1: Bureau Briefing & Forensics Mission */}
         <BureauBriefing onScrollToIntake={handleScrollToCommitle} />
 
-        {/* SECTION 2: DAILY REPOS (three real repos a day: easy, medium, hard) */}
         <div ref={commitleSectionRef} id="daily-commitle">
           <DailyRepos onStartDaily={onStartDaily} onScrollNext={() => handleScrollToIntake('featured')} />
         </div>
 
-        {/* SECTION 3: Case Intake Console (Repository Selection) */}
         <div ref={intakeSectionRef} id="case-intake">
           <CaseIntakeConsole 
             onSelectRepo={onStartCase}
@@ -106,13 +92,11 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
           />
         </div>
 
-        {/* SECTION 4: How It Works (field manual: steps, an example round, levels, scoring) */}
         <div ref={howSectionRef} id="how-it-works">
           <HowItWorks />
         </div>
       </main>
 
-      {/* Forensic Intelligence Footer */}
       <Footer onNavigate={handleNav} />
     </div>
   );

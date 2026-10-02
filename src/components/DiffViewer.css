@@ -9,7 +9,7 @@
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* Titlebar */
+
 .terminal-titlebar {
   display: flex;
   align-items: center;
@@ -125,7 +125,7 @@
   color: #00ff66;
 }
 
-/* Metadata Strip */
+
 .terminal-evidence-meta {
   display: flex;
   align-items: center;
@@ -162,7 +162,7 @@
   font-weight: 700;
 }
 
-/* Editor Pane */
+
 .terminal-editor-pane {
   background: #020503;
   max-height: 380px;
@@ -181,7 +181,7 @@
   word-break: break-all;
 }
 
-/* Diff Table */
+
 .terminal-diff-table {
   display: flex;
   flex-direction: column;
@@ -227,7 +227,7 @@
   font-family: inherit;
 }
 
-/* Row types */
+
 .row-context {
   color: #94a3b8;
 }
@@ -282,7 +282,7 @@
   font-weight: 600;
 }
 
-/* Statusbar */
+
 .terminal-statusbar {
   display: flex;
   align-items: center;
@@ -302,10 +302,6 @@
   gap: 6px;
   color: #00ff66;
 }
-
-/* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
-   ========================================================================== */
 
 @media (max-width: 640px) {
   .terminal-titlebar {

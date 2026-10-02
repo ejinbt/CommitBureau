@@ -1,6 +1,3 @@
-// Turns whatever the player pasted into { owner, repo }.
-// Accepts: https://github.com/a/b, github.com/a/b/, a/b.git, a/b, and deeper links like a/b/tree/main.
-
 const OWNER_RE = /^[A-Za-z0-9-]+$/
 const REPO_RE = /^[A-Za-z0-9._-]+$/
 

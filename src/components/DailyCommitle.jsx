@@ -39,15 +39,6 @@ const KEYBOARD_ROWS = [
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
-/**
- * Section 2: COMMITLE (The Forensic Decryption Console)
- * - Authentic 6-guess Wordle evaluation with Git forensic terminology
- * - Split cockpit: Crime Scene & Live Redacted Diff (Left) + Decryption Matrix (Right)
- * - Reactive Diff De-redaction: Green letters dynamically decode in the code terminal
- * - 100vh Viewport-fit layout with GSAP ScrollTrigger entrance animation
- */
-// `puzzle` and `slot` come from DailyCommitleSet (one per difficulty); without them it plays the
-// single classic daily puzzle. `tabs` is the difficulty switcher, shown in the top bar.
 export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
   const dailyCase = useMemo(() => puzzle || getDailyCommitleCase(), [puzzle]);
   const storageKey = `cb_commitle_${dailyCase.dateString}${slot ? `_${slot}` : ''}`;
@@ -59,7 +50,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
   const leftColRef = useRef(null);
   const rightColRef = useRef(null);
 
-  // GSAP ScrollTrigger Entrance for Commitle Console (Fires when scrolling into Section 2)
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -95,7 +85,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
     return () => ctx.revert();
   }, []);
 
-  // Load saved state for today's game
   const [guesses, setGuesses] = useState(() => {
     try {
       const saved = localStorage.getItem(storageKey);
@@ -104,7 +93,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
         return parsed.guesses || [];
       }
     } catch {
-      // Storage unavailable
     }
     return [];
   });
@@ -139,7 +127,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
   const [copiedShare, setCopiedShare] = useState(false);
   const [timeUntilTomorrow, setTimeUntilTomorrow] = useState('');
 
-  // Player stats
   const [stats, setStats] = useState(() => {
     try {
       const saved = localStorage.getItem(statsKey);
@@ -148,11 +135,10 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
     return { played: 0, won: 0, currentStreak: 0, maxStreak: 0 };
   });
 
-  // Countdown timer to next case
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
-      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // local midnight, when the puzzle changes
+      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
       const diffMs = tomorrow - now;
       if (diffMs <= 0) {
         setTimeUntilTomorrow('00h 00m 00s');
@@ -169,7 +155,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
     return () => clearInterval(interval);
   }, []);
 
-  // GSAP reveal for verdict drawer
   useEffect(() => {
     if (isGameOver) {
       gsap.fromTo(
@@ -185,7 +170,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
     setTimeout(() => setToastMessage(null), 2200);
   };
 
-  // Build key states mapping (green, yellow, gray)
   const keyStates = useMemo(() => {
     const map = {};
     guesses.forEach((guess) => {
@@ -204,7 +188,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
     return map;
   }, [guesses, dailyCase.word]);
 
-  // Compute which letters of the target word have been confirmed in correct positions
   const confirmedPositions = useMemo(() => {
     const target = dailyCase.word;
     const confirmed = [null, null, null, null, null];
@@ -221,7 +204,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
     return confirmed;
   }, [guesses, dailyCase.word, hasWon]);
 
-  // Handle letter typing
   const handleKeyInput = useCallback(
     (key) => {
       if (isGameOver) return;
@@ -260,7 +242,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
         setGuesses(newGuesses);
         setCurrentInput('');
 
-        // Trigger GSAP 3D reveal on newest row
         if (matrixRef.current) {
           const rowElements = matrixRef.current.querySelectorAll(`.commitle-grid-row:nth-child(${newGuesses.length}) .commitle-tile`);
           if (rowElements.length > 0) {
@@ -310,7 +291,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
           playClickSound();
         }
 
-        // Save daily progress to local storage
         try {
           localStorage.setItem(
             storageKey,
@@ -332,7 +312,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
     [currentInput, guesses, isGameOver, dailyCase.word, storageKey, statsKey, stats]
   );
 
-  // Keyboard listener
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.target instanceof Element && e.target.closest('input, textarea')) return;
@@ -351,7 +330,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [handleKeyInput]);
 
-  // Generate shareable Wordle emoji matrix
   const handleShare = () => {
     playClickSound();
     const rows = guesses.map((g) => {
@@ -379,7 +357,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
   return (
     <section id="daily-commitle" className="commitle-section">
       <div className="commitle-console-frame">
-        {/* Top Intelligence Strip */}
         <div className="commitle-console-topbar">
           <div className="console-brand-col">
             <span className="console-badge">COMMITLE</span>
@@ -413,11 +390,8 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
           </div>
         </div>
 
-        {/* 2-Column Cockpit Console */}
         <div className="commitle-cockpit-grid">
-          {/* LEFT COLUMN: The Crime Scene & Live Redacted Diff */}
           <div className="commitle-left-col" ref={leftColRef}>
-            {/* Incident Statement */}
             <div className="commitle-incident-pane">
               <div className="incident-lead">
                 <span className="lead-tag">// ANOMALY STATEMENT</span>
@@ -437,7 +411,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
               )}
             </div>
 
-            {/* Live Redacted Diff Terminal */}
             <div className="commitle-diff-terminal" ref={diffRef}>
               <div className="diff-terminal-header">
                 <div className="diff-mac-dots" aria-hidden="true">
@@ -455,9 +428,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
                 </div>
               </div>
 
-              {/* A real terminal session: commands ($ lines) and Git's output. The command line holding
-                  {{?}} gets the redacted word bays. Until solved, the answer is also blacked out in
-                  the output, because real Git output often names its own command. */}
               <div className="diff-terminal-code">
                 {terminal.map((line, lineIdx) => {
                   const isCommand = line.startsWith('$ ');
@@ -506,16 +476,13 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: The Decryption Matrix & Command Input */}
           <div className="commitle-right-col" ref={rightColRef}>
-            {/* Toast Feedback Banner */}
             {toastMessage && (
               <div className="commitle-toast-banner" role="alert">
                 <span>{toastMessage}</span>
               </div>
             )}
 
-            {/* Wordle Guess Grid (6 rows of 5 tiles) */}
             <div className="commitle-matrix-panel" ref={matrixRef}>
               <div className="matrix-status-bar">
                 <span className="matrix-label">DECRYPTION ATTEMPTS</span>
@@ -557,7 +524,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
               </div>
             </div>
 
-            {/* Solved / Game Over Debrief Card */}
             {isGameOver && (
               <div className="commitle-verdict-drawer">
                 <div className="verdict-banner">
@@ -599,10 +565,8 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
               </div>
             )}
 
-            {/* Tactical CLI Prompt & Compact Keypad */}
             {!isGameOver && (
               <div className="commitle-input-suite">
-                {/* CLI Command Input Prompt */}
                 <div className="commitle-prompt-bar">
                   <span className="prompt-sym">$</span>
                   <span className="prompt-cmd">git decrypt</span>
@@ -618,7 +582,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
                   </span>
                 </div>
 
-                {/* Compact Tactical Cyber Keypad */}
                 <div className="commitle-keyboard">
                   {KEYBOARD_ROWS.map((row, rowIdx) => (
                     <div key={rowIdx} className="keyboard-row">
@@ -645,10 +608,8 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
         </div>
       </div>
 
-      {/* Interactive Spider Detective Surveillance Peep */}
       <SpiderPeep side="right" mode="viewport" top="44%" delay={2.5} interval={14} />
 
-      {/* Spider Bureau Detective Reaction Modal */}
       {showReactionModal && (
         <SpiderReaction
           type={hasWon ? 'correct' : 'wrong'}
@@ -679,7 +640,6 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
         </SpiderReaction>
       )}
 
-      {/* Bottom-Right Viewport Scroll Arrow to Section 3 (Cases) */}
       <div className="cb-section-scroll-arrow">
         <button
           type="button"
@@ -698,12 +658,8 @@ export default function DailyCommitle({ onScrollToCases, puzzle, slot, tabs }) {
   );
 }
 
-// Black out the answer in Git's output until the puzzle is solved, letter for letter. Real output often
-// names its own command ("Merge made by...", "Cloning into...", "stash@{0}"), so the stem is hidden too
-// (MERGE also hides "Merg" in "merging", CLONE hides "Clon" in "Cloning").
 function redactAnswer(line, word) {
   const stem = word.length > 4 && word.endsWith('E') ? word.slice(0, -1) : word;
-  // MERGE hides "Merge" whole, and "Merg" in "merging".
   const pattern = stem === word ? word : `${stem}e?`;
   return line.replace(new RegExp(pattern, 'gi'), (match) => '▒'.repeat(match.length));
 }

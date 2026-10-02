@@ -1,8 +1,3 @@
-/**
- * Spider Bureau Character Sprite Manifest
- * Exports clean references to all hand-crafted detective poses
- */
-
 import idlePose from './SPIDER BUREAU CHARACTER/SPIDER_IDLE_POSE.webp';
 import peepLeftPose from './SPIDER BUREAU CHARACTER/SPIDER_PEEP_LEFT_POSE.webp';
 import peepRightPose from './SPIDER BUREAU CHARACTER/SPIDER_PEEP_RIGHT_POSE.webp';

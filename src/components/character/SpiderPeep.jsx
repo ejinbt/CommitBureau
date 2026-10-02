@@ -3,17 +3,6 @@ import gsap from 'gsap';
 import { SPIDER_SPRITES } from '../../assets/spiderAssets';
 import './SpiderPeep.css';
 
-/**
- * SpiderPeep: Interactive stealth peeping detective.
- * Peeks out from the viewport edge or from behind a specific card/div container.
- * 
- * @param {'left' | 'right'} side - Which edge the detective holds onto
- * @param {'viewport' | 'container'} mode - Fixed to screen or absolute within parent container
- * @param {string} top - Vertical position (e.g. '50%', '120px')
- * @param {number} delay - Initial appearance delay in seconds
- * @param {number} interval - Periodic re-peep interval in seconds (0 to disable auto-cycle)
- * @param {boolean} active - Master toggle to allow peeping
- */
 export default function SpiderPeep({
   side = 'right',
   mode = 'viewport',
@@ -39,10 +28,8 @@ export default function SpiderPeep({
     const hideX = side === 'left' ? '-90%' : '90%';
     const showX = '0%';
 
-    // Spring peek out
     gsap.timeline({
       onComplete: () => {
-        // Subtle curious head tilt / breathe
         gsap.to(el, {
           y: '+=4',
           rotation: side === 'left' ? 1.5 : -1.5,
@@ -52,7 +39,6 @@ export default function SpiderPeep({
           ease: 'sine.inOut'
         });
 
-        // Auto-retreat after looking around for 4.5 seconds
         gsap.delayedCall(4.5, retreat);
       }
     })
@@ -80,7 +66,6 @@ export default function SpiderPeep({
     });
   }, [side]);
 
-  // Handle user hover/click interaction: playful surprise twitch then retreat
   const handleInteraction = () => {
     if (!peepRef.current || !isPeeping) return;
     const el = peepRef.current;
@@ -93,12 +78,10 @@ export default function SpiderPeep({
   useEffect(() => {
     if (!active) return;
 
-    // Initial appearance timer
     const initTimer = setTimeout(() => {
       peekOut();
     }, delay * 1000);
 
-    // Recurring stealth patrol timer
     let cycleInterval = null;
     if (interval > 0) {
       cycleInterval = setInterval(() => {

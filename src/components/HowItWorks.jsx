@@ -2,7 +2,6 @@ import React from 'react';
 import { FolderOpen, FileText, Terminal, Gavel, Lightbulb } from 'lucide-react';
 import './HowItWorks.css';
 
-// The four things a player does in every case, in order.
 const STEPS = [
   {
     icon: FolderOpen,
@@ -26,7 +25,6 @@ const STEPS = [
   },
 ];
 
-// One real round from Case Zero, the built-in practice repo, to show the loop end to end.
 const EXAMPLE = [
   { kind: 'brief', text: 'Commit b4c9fdf changed server/orders.js. Its author line was scrubbed. Find out who works on that file.' },
   { kind: 'cmd', text: 'git show b4c9fdf --stat' },
@@ -62,10 +60,6 @@ const TIPS = [
   'git log lists the newest commit first. The oldest is at the bottom.',
 ];
 
-/**
- * HowItWorks ("Field Manual")
- * Explains the game loop, walks through one real Case Zero round, and lists the levels, scoring and tips.
- */
 export default function HowItWorks() {
   return (
     <section className="cb-how-section">

@@ -1,12 +1,9 @@
-// Scoring rules. Game state is a plain object; every function returns a new one instead of changing it,
-// which is what React state expects.
-
 export const RANKS = ['Rookie', 'Officer', 'Detective', 'Inspector', 'Chief']
 export const PASS_PERCENT = 80
 
 const POINTS_CORRECT = 100
 export const HINT_PENALTY = 50
-const STREAK_BONUS = 25 // per answer in a row after the first
+const STREAK_BONUS = 25
 const MAX_STREAK_BONUS = 100
 
 export const SKILL_LABELS = {
@@ -31,7 +28,6 @@ export const SKILL_LABELS = {
   inspect: 'Inspecting changes',
 }
 
-// The UI keeps its own copy of this state, so every function tolerates missing fields.
 export function newGame(level = 1) {
   return { level, score: 0, streak: 0, maxStreak: 0, answers: [], last: null }
 }
@@ -56,7 +52,6 @@ export function scoreAnswer(state, round, pickedIndex, usedHint = false) {
   }
 }
 
-// `level` defaults to the one stored in state, since the UI's own state may not carry it.
 export function finalReport(state, level = state.level || 1) {
   const answers = state.answers || []
   const totalCount = answers.length
@@ -64,10 +59,8 @@ export function finalReport(state, level = state.level || 1) {
   const percent = totalCount ? Math.round((correctCount / totalCount) * 100) : 0
   const unlocked = percent >= PASS_PERCENT
 
-  // Level 1 is Rookie. Passing a level promotes you to the next rank, up to Chief.
   const rank = RANKS[Math.min(unlocked ? level : level - 1, RANKS.length - 1)]
 
-  // Skills report: right answers per question type, e.g. "Finding the author 1/2".
   const byType = {}
   for (const a of answers) {
     byType[a.type] ??= { type: a.type, label: SKILL_LABELS[a.type] || a.type, correct: 0, total: 0 }
@@ -80,7 +73,6 @@ export function finalReport(state, level = state.level || 1) {
     percentage: Math.round((s.correct / s.total) * 100),
   }))
 
-  // Suggest replaying the weakest question type.
   const weakest = skills.filter((s) => s.correct < s.total).sort((x, y) => x.percentage - y.percentage)[0]
 
   return {

@@ -1,8 +1,3 @@
-/* ==========================================================================
-   BUREAU BRIEFING / HERO (ELECTRIC GREEN & PITCH BLACK)
-   Guaranteed visible 3D terminal, modern high-end CTA buttons
-   ========================================================================== */
-
 .cb-hero-section {
   width: 100%;
   height: 100vh;
@@ -28,12 +23,12 @@
 
 @media (min-width: 960px) {
   .cb-hero-grid {
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); /* the headline needs less width than the spider plus the code card */
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
     gap: clamp(2rem, 3vw, 3rem);
   }
 }
 
-/* Left Column */
+
 .cb-hero-content {
   display: flex;
   flex-direction: column;
@@ -94,7 +89,7 @@
   }
 }
 
-/* Actions Row */
+
 .cb-hero-actions {
   display: flex;
   align-items: center;
@@ -103,7 +98,7 @@
   margin-bottom: clamp(0.8rem, 1.5vh, 1.35rem);
 }
 
-/* Primary High-Impact Button */
+
 .cb-cta-primary {
   display: inline-flex;
   align-items: center;
@@ -146,7 +141,7 @@
   transform: translateY(3px);
 }
 
-/* Secondary Dark Glass Button */
+
 .cb-cta-secondary {
   display: inline-flex;
   align-items: center;
@@ -178,7 +173,7 @@
   transform: translateY(1px);
 }
 
-/* Metrics Row */
+
 .cb-metrics-row {
   display: flex;
   align-items: center;
@@ -216,7 +211,7 @@
   background-color: var(--cb-border-subtle);
 }
 
-/* Right Column: 3D Tilting Terminal & Chief Detective */
+
 .cb-hero-visual {
   position: relative;
   display: flex;
@@ -230,23 +225,22 @@
 .cb-hero-chief {
   flex-shrink: 0;
   z-index: 3;
-  /* Overlap the code card's edge a little: the spider stands in front of it. */
+
   margin-right: -2.5vw;
 }
 
-/* In the hero, size the spider by its column rather than the whole screen (the shared component uses 22vw,
-   which left the code card a sliver of width on every desktop size). */
+
 .cb-hero-visual .cb-spider-chief-wrapper {
   width: clamp(170px, 13vw, 400px);
 }
 
 .cb-hero-visual .cb-terminal-window {
   flex: 1 1 auto;
-  min-width: min(23rem, 100%); /* never squash into a narrow square: dots, filename and code need room */
-  max-width: 42rem; /* bigger showcase card; in rem so it also grows on 2K/4K */
+  min-width: min(23rem, 100%);
+  max-width: 42rem;
 }
 
-/* Larger, easier-to-read code in the hero card (desktop; phones keep their own smaller size below). */
+
 @media (min-width: 961px) {
   .cb-hero-visual .cb-terminal-diff {
     font-size: 0.98rem;
@@ -275,7 +269,7 @@
 
 .cb-terminal-window {
   width: 100%;
-  max-width: 30rem; /* 480px at normal size; grows on 2K/4K */
+  max-width: 30rem;
   margin-left: auto;
   position: relative;
   z-index: 2;
@@ -454,10 +448,6 @@
   border-radius: var(--cb-radius-pill);
 }
 
-/* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
-   ========================================================================== */
-
 @media (max-width: 960px) {
    .cb-hero-section {
      padding-top: 2.75rem;
@@ -593,11 +583,7 @@
   }
 }
 
-/* ==========================================================================
-   HERO BOTTOM RIGHT FIXED SCROLL BUTTON
-   Positioned fixed in the bottom right corner of the viewport screen.
-   Always guaranteed visible in the initial viewport, fades out smoothly when scrolled.
-   ========================================================================== */
+
 .cb-hero-scroll-wrapper {
   position: fixed;
   bottom: clamp(20px, 3.2vh, 32px);

@@ -1,8 +1,3 @@
-/* ==========================================================================
-   SECTION 2: CASE INTAKE CONSOLE — FORENSIC FOLDER DOSSIER CARDS
-   Authentic folder shape with tab, electric green accents, smooth GSAP transitions
-   ========================================================================== */
-
 .cb-intake-section {
   width: 100%;
   min-height: 100vh;
@@ -16,10 +11,10 @@
   position: relative;
 }
 
-/* Header */
+
 .cb-intake-header {
   text-align: center;
-  max-width: 42.5rem; /* 680px at normal size; grows on 2K/4K */
+  max-width: 42.5rem;
   margin: 0 auto 3rem auto;
 }
 
@@ -48,7 +43,7 @@
   color: var(--cb-text-muted);
 }
 
-/* Tab Switcher */
+
 .cb-tabs-wrapper {
   display: flex;
   justify-content: center;
@@ -109,13 +104,9 @@
   color: #040805;
 }
 
-/* ==========================================================================
-   FORENSIC FOLDER DOSSIER CARDS
-   ========================================================================== */
-
 .cb-folders-grid {
   display: grid;
-  /* Four case folders per row: wider, shorter cards. Tablet and phone layouts below. */
+
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 2rem;
   margin-bottom: 3.5rem;
@@ -132,7 +123,7 @@
   transform: translateY(-6px);
 }
 
-/* The Folder Tab on Top */
+
 .cb-folder-tab {
   align-self: flex-start;
   display: inline-flex;
@@ -165,7 +156,7 @@
   border-radius: 4px;
 }
 
-/* The Main Folder Sleeve Body */
+
 .cb-folder-body {
   display: flex;
   flex-direction: column;
@@ -174,7 +165,7 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--cb-border);
-  border-radius: 0 16px 16px 16px; /* Seamless top-left connection */
+  border-radius: 0 16px 16px 16px;
   padding: 1.65rem;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
   position: relative;
@@ -269,10 +260,6 @@
 .cb-folder-open-btn:hover .cb-folder-open-arrow {
   transform: translateX(3px);
 }
-
-/* ==========================================================================
-   TAB 2 & 3: CUSTOM & ARCHIVE FOLDERS
-   ========================================================================== */
 
 .cb-custom-wrapper,
 .cb-archive-wrapper {
@@ -441,10 +428,6 @@
   color: var(--cb-green-vivid);
 }
 
-/* ==========================================================================
-   TAB 3: ARCHIVE RESULTS LIST
-   ========================================================================== */
-
 .cb-archive-results {
   margin-top: 2rem;
   padding-top: 1.75rem;
@@ -519,12 +502,8 @@
   box-shadow: 0 2px 14px rgba(0, 255, 102, 0.4);
 }
 
-/* ==========================================================================
-   INVESTIGATOR TOKEN KEY
-   ========================================================================== */
-
 .cb-token-container {
-  max-width: 42.5rem; /* 680px at normal size; grows on 2K/4K */
+  max-width: 42.5rem;
   margin: 0 auto;
   text-align: center;
 }
@@ -623,10 +602,6 @@
   font-size: 0.75rem;
   color: var(--cb-text-faint);
 }
-
-/* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
-   ========================================================================== */
 
 @media (max-width: 1024px) {
   .cb-folders-grid {

@@ -1,7 +1,6 @@
 import React from 'react';
 import './LevelPicker.css';
 
-// What each level investigates. Matches the question types in src/engine/cases/level1-5.js.
 const LEVELS = [
   { level: 1, rank: 'Rookie', topic: 'Commits' },
   { level: 2, rank: 'Officer', topic: 'Diffs' },
@@ -10,11 +9,6 @@ const LEVELS = [
   { level: 5, rank: 'Chief', topic: 'Git emergencies' },
 ];
 
-/**
- * LevelPicker
- * Lets the player jump straight to any clearance level. All levels are open, so judges and
- * demo viewers can see every question type; passing a level still moves the selection up.
- */
 export default function LevelPicker({ level, onSelectLevel }) {
   return (
     <div className="cb-level-picker" role="group" aria-label="Clearance level">

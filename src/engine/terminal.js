@@ -1,16 +1,9 @@
-// The investigation terminal: runs a small set of read-only Git commands against the repo being played,
-// using the same GitHub data as the questions, and prints what real Git would print (close enough).
-//
-// Supported: git log, git show, git cat-file -p, git shortlog -sn, git diff <rev>^ <rev>, help, clear.
-// A round can mask one clue (the case commit's author or message) so the answer has to be deduced,
-// not read off a single command.
-
 import { getCommit, getCommits, getFileHistory } from './github.js'
 import { authorName, commitDate, firstLine, isMerge, newestFirst, shortSha } from './utils.js'
 
-const DEFAULT_LOG_LIMIT = 10 // like a terminal page; -n shows more
+const DEFAULT_LOG_LIMIT = 10
 const DEFAULT_ONELINE_LIMIT = 30
-const MAX_PATCH_LINES = 60 // per file in git show / git diff
+const MAX_PATCH_LINES = 60
 const HIDDEN_AUTHOR = '???'
 const HIDDEN_MESSAGE = '[message torn off]'
 
@@ -27,7 +20,6 @@ export const HELP_TEXT = [
   '<commit> can be a short hash, HEAD, HEAD~2, <hash>^ or <hash>^2 (the second parent of a merge).',
 ].join('\n')
 
-// One investigation per round. `run` never throws: errors come back as output, like a real terminal.
 export function createInvestigation(repoRef, round) {
   const ctx = { owner: repoRef?.owner, repo: repoRef?.repo, mask: round?.investigate?.mask || null }
   return {
@@ -47,7 +39,6 @@ const fail = (message) => {
 }
 
 async function execute(ctx, input) {
-  // Keyboards and phones often auto-correct "--" into a long dash. Git only knows the two hyphens.
   const typed = input.trim().replace(/^\$\s*/, '').replace(/[—–]/g, '--')
   const words = tokenize(typed)
   if (!words.length) return { output: '' }
@@ -76,8 +67,6 @@ async function execute(ctx, input) {
   }
 }
 
-// Split a command line into words like a shell: spaces separate words, except inside quotes,
-// and the quotes themselves are dropped. So --format="%h %an %s" is one word: --format=%h %an %s
 function tokenize(line) {
   const words = []
   let word = ''
@@ -104,19 +93,15 @@ function tokenize(line) {
   return words
 }
 
-// Split args at a lone "--" into options and file paths.
 function splitArgs(args) {
   const dash = args.indexOf('--')
   return dash === -1 ? { opts: args, paths: [] } : { opts: args.slice(0, dash), paths: args.slice(dash + 1) }
 }
 
-// ---- Revisions -----------------------------------------------------------------------------------
-
 async function allCommits(ctx) {
   return newestFirst(await getCommits(ctx.owner, ctx.repo))
 }
 
-// Turn HEAD, HEAD~2, a1b2c3d, a1b2c3d^2 ... into a full commit object (with files).
 async function resolve(ctx, rev) {
   const m = rev.match(/^([^~^]+)((?:[~^]\d*)*)$/)
   if (!m) fail(`fatal: ambiguous argument '${rev}': unknown revision`)
@@ -152,8 +137,6 @@ async function resolve(ctx, rev) {
 function fullCommit(ctx, sha) {
   return getCommit(ctx.owner, ctx.repo, sha)
 }
-
-// ---- What a commit looks like (with the round's mask applied) -------------------------------------
 
 function view(ctx, commit) {
   const masked = ctx.mask?.sha && commit.sha.startsWith(ctx.mask.sha)
@@ -204,8 +187,6 @@ function formatLine(ctx, commit, format) {
   })
 }
 
-// ---- git log ---------------------------------------------------------------------------------------
-
 async function gitLog(ctx, args) {
   const { opts, paths } = splitArgs(args)
   let oneline = false
@@ -245,7 +226,6 @@ async function gitLog(ctx, args) {
     commits = await allCommits(ctx)
   }
 
-  // Starting from a commit: that commit and everything older (good enough for -1 <commit>).
   if (revs.length) {
     const start = await resolve(ctx, revs[0])
     const at = commits.findIndex((c) => c.sha === start.sha)
@@ -253,7 +233,7 @@ async function gitLog(ctx, args) {
   }
   if (addedOnly) {
     if (!paths.length) fail('Use --diff-filter=A with a file: git log --diff-filter=A -- <file>')
-    commits = commits.slice(-1) // the oldest commit that touched the file is the one that added it
+    commits = commits.slice(-1)
   }
   if (merges !== null) commits = commits.filter((c) => isMerge(c) === merges)
   let hiddenNote = ''
@@ -279,12 +259,9 @@ async function gitLog(ctx, args) {
   return out + hiddenNote
 }
 
-// Said when a command leaves out the commit under investigation, so the player knows it's on purpose.
 function hiddenCommitNote(ctx) {
   return `\n(${shortSha(ctx.mask.sha)} is hidden from author searches: its author is what you're investigating)`
 }
-
-// ---- git show / git diff ---------------------------------------------------------------------------
 
 function filesOf(commit, paths) {
   const files = commit.files || []
@@ -365,8 +342,6 @@ async function gitDiff(ctx, args) {
   return patchText(filesOf(target, paths))
 }
 
-// ---- git cat-file / git shortlog -------------------------------------------------------------------
-
 async function gitCatFile(ctx, args) {
   if (args[0] !== '-p' || !args[1]) fail('Usage here: git cat-file -p <commit>')
   const commit = await resolve(ctx, args[1])
@@ -395,7 +370,7 @@ async function gitShortlog(ctx, args) {
   for (const c of source) {
     const v = view(ctx, c)
     if (v.hiddenAuthor) {
-      skippedHidden = true // a scrubbed author stays scrubbed
+      skippedHidden = true
       continue
     }
     counts.set(v.name, (counts.get(v.name) || 0) + 1)

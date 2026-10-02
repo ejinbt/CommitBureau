@@ -1,22 +1,16 @@
-/* ==========================================================================
-   COMMIT BUREAU — ELECTRIC EMERALD & PURE BLACK DESIGN SYSTEM
-   Modeled after the user's reference: Pitch Black + Vivid Electric Green + Crisp White
-   ========================================================================== */
-
 :root {
-  /* Pitch Black & Deep Forest Canvas */
   --cb-bg: #040805;
   --cb-bg-deep: #020402;
   --cb-surface: #0a110d;
   --cb-surface-card: #0d1712;
   --cb-surface-hover: #122019;
 
-  /* Typography */
+
   --cb-text: #ffffff;
   --cb-text-muted: #9bb3a3;
   --cb-text-faint: #5a7364;
 
-  /* Electric Green Gradient Palette */
+
   --cb-green-vivid: #00ff66;
   --cb-green-bright: #00e65c;
   --cb-green-core: #10b981;
@@ -24,31 +18,31 @@
   --cb-green-glow: rgba(0, 255, 102, 0.22);
   --cb-green-dim: rgba(0, 255, 102, 0.08);
 
-  /* Diff Accents */
+
   --cb-red: #ff3366;
   --cb-red-dim: rgba(255, 51, 102, 0.15);
 
-  /* Glass Borders */
+
   --cb-border: rgba(0, 255, 102, 0.12);
   --cb-border-hover: rgba(0, 255, 102, 0.35);
   --cb-border-subtle: rgba(255, 255, 255, 0.07);
 
-  /* Modern Curved Radii */
+
   --cb-radius-sm: 8px;
   --cb-radius-md: 12px;
   --cb-radius-lg: 16px;
   --cb-radius-pill: 9999px;
 
-  /* Typography Stacks */
+
   --cb-font-heading: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
   --cb-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --cb-font-mono: "JetBrains Mono", Consolas, Menlo, monospace;
 
-  /* Motion */
+
   --cb-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Reset */
+
 *,
 *::before,
 *::after {
@@ -79,7 +73,7 @@ body {
   -ms-overflow-style: none;
 }
 
-/* Hide scrollbars everywhere while keeping smooth scrolling */
+
 * {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -91,7 +85,7 @@ body {
   height: 0;
 }
 
-/* Master Shell */
+
 .cb-app-shell {
   min-height: 100vh;
   display: flex;
@@ -102,7 +96,7 @@ body {
   width: 100%;
 }
 
-/* High-Performance Fixed GPU Layer for Ambient Lighting (Zero scroll repaint) */
+
 .cb-bg-ambient {
   position: fixed;
   inset: 0;
@@ -141,7 +135,7 @@ body {
   }
 }
 
-/* 2K / QHD Display Scaling */
+
 @media (min-width: 1800px) {
   html {
     font-size: 19px;
@@ -152,7 +146,7 @@ body {
   }
 }
 
-/* 4K / UHD Display Scaling */
+
 @media (min-width: 2560px) {
   html {
     font-size: 23px;
@@ -163,7 +157,7 @@ body {
   }
 }
 
-/* Full 4K Ultrawide / 3840px+ Scaling */
+
 @media (min-width: 3200px) {
   html {
     font-size: 28px;
@@ -174,7 +168,7 @@ body {
   }
 }
 
-/* Typography Classes */
+
 .cb-heading {
   font-family: var(--cb-font-heading);
   font-weight: 700;
@@ -186,7 +180,7 @@ body {
   font-family: var(--cb-font-mono);
 }
 
-/* Electric Green Primary Pill Button with Glossy Specular Gradient */
+
 .cb-btn-emerald {
   display: inline-flex;
   align-items: center;
@@ -225,7 +219,7 @@ body {
   transform: translateY(0);
 }
 
-/* Secondary Dark Glass Button */
+
 .cb-btn-glass {
   display: inline-flex;
   align-items: center;
@@ -252,7 +246,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* Glass Card with Green Edge Accent */
+
 .cb-glass-card {
   background: rgba(13, 23, 18, 0.7);
   backdrop-filter: blur(16px);
@@ -268,10 +262,7 @@ body {
   box-shadow: 0 24px 50px -10px rgba(0, 255, 102, 0.1);
 }
 
-/* ==========================================================================
-   GLOBAL SECTION VIEWPORT SCROLL ARROWS (SECTION 1 & SECTION 2)
-   Fixed in bottom-right corner of each viewport screen
-   ========================================================================== */
+
 .cb-section-scroll-arrow {
   position: absolute;
   bottom: clamp(16px, 2.8vh, 28px);

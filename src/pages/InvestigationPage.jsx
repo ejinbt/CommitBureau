@@ -8,12 +8,6 @@ import { buildGame, scoreAnswer, setToken } from '../api';
 import { playClickSound, playCorrectSound, playWrongSound } from '../utils/audio';
 import './InvestigationPage.css';
 
-/**
- * InvestigationPage Component (Cockpit HUD)
- * - 3-Column Cockpit Header (Repo chip, Segmented Round Pips, Glowing CRT Score readout)
- * - In-game GitHub token access for uninterrupted gameplay and rate limit recovery
- * - Case investigation flow
- */
 export default function InvestigationPage({
   targetRepo,
   level = 1,
@@ -27,7 +21,6 @@ export default function InvestigationPage({
   const [rounds, setRounds] = useState([]);
   const [currentRoundIdx, setCurrentRoundIdx] = useState(0);
 
-  // In-game GitHub Token state
   const [showTokenModal, setShowTokenModal] = useState(false);
   const [tokenInput, setTokenInput] = useState(() => {
     try {
@@ -38,7 +31,6 @@ export default function InvestigationPage({
   });
   const [tokenSavedMsg, setTokenSavedMsg] = useState(null);
 
-  // Game state per docs/CONTRACT.md
   const [gameState, setGameState] = useState({
     score: 0,
     streak: 0,
@@ -46,7 +38,6 @@ export default function InvestigationPage({
     answers: []
   });
 
-  // Current round interaction state
   const [isAnswered, setIsAnswered] = useState(false);
   const [userAnswerIndex, setUserAnswerIndex] = useState(null);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -54,7 +45,6 @@ export default function InvestigationPage({
 
   const [reloadSeq, setReloadSeq] = useState(0);
 
-  // Initialize and load game rounds
   useEffect(() => {
     let isMounted = true;
 
@@ -88,7 +78,6 @@ export default function InvestigationPage({
     setReloadSeq((prev) => prev + 1);
   }, []);
 
-  // Token management handler
   const handleSaveToken = (overrideVal) => {
     const valueToSave = (overrideVal !== undefined ? overrideVal : tokenInput).trim();
     try {
@@ -98,7 +87,6 @@ export default function InvestigationPage({
         localStorage.removeItem('cb_github_token');
       }
     } catch {
-      // Storage unavailable
     }
     setToken(valueToSave);
     setTokenInput(valueToSave);
@@ -112,7 +100,6 @@ export default function InvestigationPage({
 
   const currentRound = rounds[currentRoundIdx];
 
-  // Answer handler
   const handleAnswer = useCallback(
     (pickedIndex, usedHint = false) => {
       if (isAnswered || !currentRound) return;
@@ -135,7 +122,6 @@ export default function InvestigationPage({
     [isAnswered, currentRound, gameState]
   );
 
-  // Advance to next round or finish
   const handleNextRound = useCallback(() => {
     playClickSound();
     if (currentRoundIdx + 1 < rounds.length) {
@@ -152,11 +138,9 @@ export default function InvestigationPage({
     }
   }, [currentRoundIdx, rounds.length, gameState, onFinishCase]);
 
-  // Keyboard shortcut listener for options [1..4]
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (isAnswered || !currentRound || loading) return;
-      // Typing in the investigation terminal (e.g. "-n 3") must not pick an answer.
       if (e.target instanceof Element && e.target.closest('input, textarea')) return;
 
       if (['1', '2', '3', '4'].includes(e.key)) {
@@ -171,7 +155,6 @@ export default function InvestigationPage({
 
   return (
     <div className="investigation-screen-container">
-      {/* Top Floating Header */}
       <Header
         level={level}
         rank={rank}
@@ -180,10 +163,8 @@ export default function InvestigationPage({
       />
 
       <main className="investigation-viewport">
-        {/* Interactive Spider Detective Surveillance Peep */}
         <SpiderPeep side="right" mode="viewport" top="40%" delay={5} interval={20} />
 
-        {/* Loading state */}
         {loading && (
           <div className="investigation-loading-hero">
             <SpiderLoader
@@ -193,7 +174,6 @@ export default function InvestigationPage({
           </div>
         )}
 
-        {/* Error state */}
         {!loading && error && (
           <div className="investigation-error-block">
             <span className="error-title">Investigation Error</span>
@@ -248,12 +228,9 @@ export default function InvestigationPage({
           </div>
         )}
 
-        {/* Active Investigation Case */}
         {!loading && !error && currentRound && (
           <div className="investigation-flow">
-            {/* Cockpit HUD Bar */}
             <div className="investigation-cockpit-bar">
-              {/* Left Column: Repo & Branch Chip + Token Button */}
               <div className="cockpit-left">
                 <button
                   type="button"
@@ -286,7 +263,6 @@ export default function InvestigationPage({
                 </button>
               </div>
 
-              {/* Center Column: Segmented Round Pips */}
               <div className="cockpit-center">
                 <span className="pips-label">ROUND {currentRoundIdx + 1} / {rounds.length}</span>
                 <div className="pips-track">
@@ -304,7 +280,6 @@ export default function InvestigationPage({
                 </div>
               </div>
 
-              {/* Right Column: Digital Phosphor Readouts */}
               <div className="cockpit-right">
                 <div className="cockpit-stat-cell">
                   <div className="stat-label-row">
@@ -328,7 +303,6 @@ export default function InvestigationPage({
               </div>
             </div>
 
-            {/* Active Case Round */}
             <CaseCard
               round={currentRound}
               roundNumber={currentRoundIdx + 1}
@@ -345,7 +319,6 @@ export default function InvestigationPage({
         )}
       </main>
 
-      {/* In-Game Token Modal */}
       {showTokenModal && (
         <div className="investigation-modal-backdrop" onClick={() => setShowTokenModal(false)}>
           <div

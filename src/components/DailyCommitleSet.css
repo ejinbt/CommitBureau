@@ -1,5 +1,3 @@
-/* Difficulty tabs in the COMMITLE top bar, styled like its meta chips. */
-
 .commitle-difficulty-tabs {
   display: inline-flex;
   gap: 0.25rem;

@@ -3,11 +3,6 @@ import { Check, X, Terminal, Copy, ArrowRight, CornerDownLeft } from 'lucide-rea
 import { playClickSound } from '../utils/audio';
 import './VerdictCard.css';
 
-/**
- * VerdictCard Component (Redesigned)
- * Clean, sharp, understated forensic verdict card.
- * Uses real Lucide icons and crisp typography.
- */
 export default function VerdictCard({
   isCorrect,
   explanation,
@@ -20,7 +15,6 @@ export default function VerdictCard({
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Enter in the investigation terminal runs a command; it must not skip to the next round.
       if (e.target instanceof Element && e.target.closest('input, textarea')) return;
       if (e.key === 'Enter') {
         playClickSound();

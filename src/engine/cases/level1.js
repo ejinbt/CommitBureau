@@ -1,7 +1,3 @@
-// Level 1 (Rookie): what a commit is.
-// Each generator takes the game context and returns one round, or null if this repo can't support it
-// (for example "who did it" needs at least two different authors).
-
 import { freshCommits, trimPatch } from '../diff.js'
 import { getCommit, getFileHistory } from '../github.js'
 import {
@@ -20,14 +16,12 @@ import {
   uniqueOthers,
 } from '../utils.js'
 
-// Wrong-answer messages. Easy: from anywhere in history. Medium: from the closest commits, which look more alike.
 function otherMessages(ctx, index, real, count) {
   let others = ctx.commits.map((c, i) => ({ msg: firstLine(c.commit.message), dist: Math.abs(i - index) }))
   others = ctx.difficulty === 'medium' ? others.sort((a, b) => a.dist - b.dist) : shuffle(others)
   return uniqueOthers(others.map((o) => o.msg), real, count)
 }
 
-// Pick the file whose patch is easiest to read: has text, and is small but not empty.
 function pickDiffFile(files = []) {
   const withPatch = files.filter((f) => f.patch)
   if (!withPatch.length) return null
@@ -35,7 +29,6 @@ function pickDiffFile(files = []) {
   return pickRandom(readable.length ? readable : withPatch)
 }
 
-// Real or fake? Show a diff, pick the commit message that was really written for it.
 export async function realOrFake(ctx) {
   const candidates = freshCommits(ctx)
   if (!candidates.length) return null
@@ -68,11 +61,10 @@ export async function realOrFake(ctx) {
   }
 }
 
-const SUSPECT_COMMITS = 2 // other commits shown per suspect, in the fallback version
-const TRAIL_TRIES = 6 // case commits to try for a file trail; each try costs up to two API calls (cached, and capped by the game budget)
-const TRAIL_LINES = 6 // lines of the file's history shown as evidence
+const SUSPECT_COMMITS = 2
+const TRAIL_TRIES = 6
+const TRAIL_LINES = 6
 
-// Each human author's commits in the list, newest first.
 function commitsByAuthor(ctx) {
   const byAuthor = new Map()
   for (const c of ctx.commits) {
@@ -84,35 +76,27 @@ function commitsByAuthor(ctx) {
   return byAuthor
 }
 
-// Who did it? Prefer the file trail, which the evidence proves. Fall back to work habits when no file
-// in the tried commits has a usable trail.
 export async function whoDidIt(ctx) {
   const byAuthor = commitsByAuthor(ctx)
   if (byAuthor.size < 2) return null
   return (await whoDidItByFileTrail(ctx, byAuthor)) || whoDidItByHabits(ctx, byAuthor)
 }
 
-// The file trail: the case commit changed a file, and the evidence is that file's history.
-// Suspects are chosen so exactly one of them appears in it, so the answer follows from the evidence.
 async function whoDidItByFileTrail(ctx, byAuthor) {
   const candidates = shuffle(freshCommits(ctx)).filter(({ commit }) => !isBot(authorName(commit)))
   for (const { commit } of candidates.slice(0, TRAIL_TRIES)) {
     const real = authorName(commit)
     const detail = await getCommit(ctx.owner, ctx.repo, commit.sha)
-    // A file this commit created has no earlier history to follow.
     const file = shuffle((detail.files || []).filter((f) => f.status !== 'added' && f.status !== 'removed'))[0]
     if (!file) continue
 
     const history = (await getFileHistory(ctx.owner, ctx.repo, file.filename)).filter((c) => !isMerge(c))
     const onFile = new Set(history.map(authorName))
     const trail = newestFirst(history.filter((c) => c.sha !== commit.sha && !isBot(authorName(c))))
-    // The real author must have worked on this file before...
     if (!trail.some((c) => authorName(c) === real)) continue
-    // ...and the other suspects never, so only one suspect shows up in the trail.
     const wrong = uniqueOthers(shuffle([...byAuthor.keys()].filter((name) => !onFile.has(name))), real, 3)
     if (wrong.length < 2) continue
 
-    // Show the latest lines of the trail, making sure the real author's latest commit is among them.
     let shown = trail.slice(0, TRAIL_LINES)
     if (!shown.some((c) => authorName(c) === real)) {
       shown = [...shown.slice(0, TRAIL_LINES - 1), trail.find((c) => authorName(c) === real)]
@@ -150,10 +134,7 @@ async function whoDidItByFileTrail(ctx, byAuthor) {
   return null
 }
 
-// Work habits (fallback): show each suspect's other recent commits. People tend to work on the same
-// parts of a project, so whose other commits look like this one is the clue. Weaker than the file trail.
 function whoDidItByHabits(ctx, byAuthor) {
-  // The real author needs at least one other commit, or there is nothing to go on.
   const candidates = freshCommits(ctx).filter(({ commit }) => (byAuthor.get(authorName(commit))?.length || 0) >= 2)
   if (!candidates.length) return null
   const { commit } = pickRandom(candidates)
@@ -162,9 +143,6 @@ function whoDidItByHabits(ctx, byAuthor) {
   const real = authorName(commit)
   const { options, answer } = makeOptions(real, uniqueOthers(shuffle([...byAuthor.keys()]), real, 3))
 
-  // Evidence: the case commit itself with its author hidden, then what each suspect committed apart from it,
-  // like `git log --author=<name> --oneline`. The case commit is left out of the suspects' lists, or it would
-  // sit under the real author and give the answer away.
   const caseEntry = [logLine(commit), 'Author: ???'].join('\n')
   const suspects = options.map((name) => {
     const theirs = byAuthor.get(name).filter((c) => c.sha !== commit.sha).slice(0, SUSPECT_COMMITS)
@@ -195,12 +173,9 @@ function whoDidItByHabits(ctx, byAuthor) {
   }
 }
 
-const LOG_GAP = [2, 4] // how many commits apart the two suspects sit in the log excerpt
+const LOG_GAP = [2, 4]
 
-// First or later? Show a slice of `git log --oneline`, ask which of two commits in it came first.
-// The lesson: git log lists the newest commit at the top, so the lower one is older.
 export async function firstOrLater(ctx) {
-  // Sort by date ourselves, newest first, so the excerpt always matches what git log would show.
   const byDate = ctx.commits
     .filter((c) => !isMerge(c))
     .sort((x, y) => (commitDate(y) > commitDate(x) ? 1 : commitDate(y) < commitDate(x) ? -1 : 0))
@@ -215,9 +190,6 @@ export async function firstOrLater(ctx) {
     const olderMsg = firstLine(older.commit.message)
     if (newerMsg.toLowerCase() === olderMsg.toLowerCase() || commitDate(newer) === commitDate(older)) continue
 
-    // One commit of context above and below the pair, like a real slice of the log.
-    // A second round of this type in the same game must show a different stretch of history,
-    // otherwise the two log windows overlap and it looks like the same question twice.
     const excerpt = byDate.slice(Math.max(0, top - 1), top + gap + 2)
     ctx.shownInLog ??= new Set()
     if (excerpt.some((c) => ctx.shownInLog.has(c.sha))) continue
@@ -238,7 +210,6 @@ export async function firstOrLater(ctx) {
       command: 'git log --oneline',
       investigate: {
         brief: 'Find both commits in the log and work out which one happened first.',
-        // Enough lines that the older commit is on screen.
         suggest: [`git log --oneline -n ${newestFirst(ctx.commits).findIndex((c) => c.sha === older.sha) + 2}`],
       },
     }

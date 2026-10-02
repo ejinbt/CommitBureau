@@ -2,17 +2,9 @@ import React, { useState } from 'react';
 import { Copy, Check, FileCode, GitCommit, GitPullRequest, Terminal } from 'lucide-react';
 import './DiffViewer.css';
 
-/**
- * DiffViewer Component (High-End Terminal Chrome)
- * Emulates professional developer tools (Warp / VS Code) with:
- * - True gutter divider and line numbers
- * - Modified status badge [M]
- * - Luminous scanline accent on added/removed lines
- * - Real syntax breakdown
- */
 export default function DiffViewer({ diff, file, author: _author, date, roundType }) {
   const [copied, setCopied] = useState(false);
-  const [viewMode, setViewMode] = useState('diff'); // 'diff' | 'raw'
+  const [viewMode, setViewMode] = useState('diff');
 
   const lines = (diff || '').split('\n');
 
@@ -25,7 +17,6 @@ export default function DiffViewer({ diff, file, author: _author, date, roundTyp
 
   return (
     <div className="diff-terminal-window">
-      {/* Top Window Titlebar */}
       <div className="terminal-titlebar">
         <div className="terminal-traffic-lights">
           <span className="light light-close" />
@@ -33,14 +24,12 @@ export default function DiffViewer({ diff, file, author: _author, date, roundTyp
           <span className="light light-expand" />
         </div>
 
-        {/* Tab Header */}
         <div className="terminal-file-tab">
           <FileCode size={13} className="tab-icon" />
           <span className="tab-filename">{file || 'evidence_patch.diff'}</span>
           <span className="tab-git-status" title="Modified in working tree">M</span>
         </div>
 
-        {/* Action buttons */}
         <div className="terminal-window-actions">
           <div className="terminal-view-toggle">
             <button
@@ -71,7 +60,6 @@ export default function DiffViewer({ diff, file, author: _author, date, roundTyp
         </div>
       </div>
 
-      {/* Forensic Metadata Strip */}
       <div className="terminal-evidence-meta">
         <div className="meta-capsule">
           <GitCommit size={12} className="meta-ico" />
@@ -90,7 +78,6 @@ export default function DiffViewer({ diff, file, author: _author, date, roundTyp
         </div>
       </div>
 
-      {/* Terminal Editor Pane */}
       <div className="terminal-editor-pane">
         {viewMode === 'raw' ? (
           <pre className="terminal-raw-pre">{diff}</pre>
@@ -128,7 +115,6 @@ export default function DiffViewer({ diff, file, author: _author, date, roundTyp
         )}
       </div>
 
-      {/* Terminal Bottom Seal */}
       <div className="terminal-statusbar">
         <div className="status-item live">
           <span className="live-dot" />

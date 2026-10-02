@@ -5,9 +5,6 @@ import logoImg from '../assets/logo.webp';
 import { playClickSound } from '../utils/audio';
 import './Footer.css';
 
-/**
- * Clean Cyber-Forensic Minimalist Footer
- */
 export default function Footer({ onNavigate }) {
   const handleScrollToTop = () => {
     playClickSound();
@@ -30,7 +27,6 @@ export default function Footer({ onNavigate }) {
     <footer className="cb-footer-clean">
       <div className="cb-container">
         <div className="cb-footer-clean-content">
-          {/* Brand & Telemetry */}
           <div className="cb-footer-clean-brand">
             <img src={logoImg} alt="CommitBureau Logo" className="cb-footer-clean-logo" />
             <div className="cb-footer-clean-title-group">
@@ -41,7 +37,6 @@ export default function Footer({ onNavigate }) {
             </div>
           </div>
 
-          {/* Clean HUD Navigation Links */}
           <nav className="cb-footer-clean-nav cb-mono">
             <a href="#hero" onClick={handleScrollToTop}>
               BRIEFING
@@ -70,7 +65,6 @@ export default function Footer({ onNavigate }) {
             </a>
           </nav>
 
-          {/* Return To Top Action */}
           <div className="cb-footer-clean-action">
             <button
               type="button"
@@ -84,7 +78,6 @@ export default function Footer({ onNavigate }) {
           </div>
         </div>
 
-        {/* Minimal Copyright Line */}
         <div className="cb-footer-clean-bottom cb-mono">
           <span>© 2026 CommitBureau HQ. Authentic Git Repository Forensics.</span>
           <span className="cb-footer-clean-tag">OPEN INVESTIGATION PLATFORM</span>

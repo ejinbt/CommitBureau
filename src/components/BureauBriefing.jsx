@@ -6,18 +6,12 @@ import { playClickSound } from '../utils/audio';
 import SpiderChief from './character/SpiderChief';
 import './BureauBriefing.css';
 
-/**
- * Section 1: Bureau Briefing
- * High-impact hero with clean, modern buttons, 100% reliable terminal rendering,
- * and 3D gyroscopic cursor physics.
- */
 export default function BureauBriefing({ onScrollToIntake }) {
   const terminalRef = useRef(null);
   const primaryBtnRef = useRef(null);
   const secondaryBtnRef = useRef(null);
 
   useEffect(() => {
-    // Orchestrated GSAP Hero Entrance Timeline
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
     tl.fromTo('.cb-hero-eyebrow', 
@@ -53,7 +47,6 @@ export default function BureauBriefing({ onScrollToIntake }) {
     const terminal = terminalRef.current;
     if (!terminal) return () => tl.kill();
 
-    // 3D Gyroscopic Tilt on Terminal Window
     const handleMouseMove = (e) => {
       const rect = terminal.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -85,7 +78,6 @@ export default function BureauBriefing({ onScrollToIntake }) {
     terminal.addEventListener('mousemove', handleMouseMove);
     terminal.addEventListener('mouseleave', handleMouseLeave);
 
-    // Magnetic physics helper
     const setupMagnetic = (btn, strength = 0.25) => {
       if (!btn) return null;
       const onBtnMove = (e) => {
@@ -137,7 +129,6 @@ export default function BureauBriefing({ onScrollToIntake }) {
     <section className="cb-hero-section">
       <div className="cb-container">
         <div className="cb-hero-grid">
-          {/* Left Column: Direct Hook & Actions */}
           <div className="cb-hero-content">
             <div className="cb-hero-eyebrow cb-mono">
               <img src={logoImg} alt="CommitBureau Logo" className="cb-hero-eyebrow-logo" />
@@ -156,7 +147,6 @@ export default function BureauBriefing({ onScrollToIntake }) {
               uncover rogue authors, and master genuine terminal Git commands.
             </p>
 
-            {/* Actions Row */}
             <div className="cb-hero-actions">
               <button 
                 ref={primaryBtnRef}
@@ -178,7 +168,6 @@ export default function BureauBriefing({ onScrollToIntake }) {
               </button>
             </div>
 
-            {/* Metrics Row */}
             <div className="cb-metrics-row">
               <div className="cb-metric-item">
                 <span className="cb-metric-num cb-heading">5 Rounds</span>
@@ -197,12 +186,10 @@ export default function BureauBriefing({ onScrollToIntake }) {
             </div>
           </div>
 
-          {/* Right Column: Always Visible 3D Tilting Terminal Card & Chief Detective */}
           <div className="cb-hero-visual">
             <div className="cb-ambient-glow" aria-hidden="true" />
             <SpiderChief className="cb-hero-chief" />
             <div ref={terminalRef} className="cb-glass-card cb-terminal-window">
-              {/* Window Header */}
               <div className="cb-terminal-header">
                 <div className="cb-terminal-dots">
                   <span className="cb-dot red" />
@@ -215,7 +202,6 @@ export default function BureauBriefing({ onScrollToIntake }) {
                 </div>
               </div>
 
-              {/* Code Diff Body */}
               <div className="cb-terminal-diff cb-mono">
                 <div className="cb-diff-row hunk">
                   <span className="cb-row-num">--</span>
@@ -239,7 +225,6 @@ export default function BureauBriefing({ onScrollToIntake }) {
                 </div>
               </div>
 
-              {/* Terminal Footer with Real Git Command */}
               <div className="cb-terminal-footer">
                 <div className="cb-command-box cb-mono">
                   <span className="cb-command-prompt">$</span>
@@ -252,7 +237,6 @@ export default function BureauBriefing({ onScrollToIntake }) {
         </div>
       </div>
 
-      {/* Bottom-Right Viewport Scroll Arrow to Section 2 (Commitle) */}
       <div className="cb-section-scroll-arrow">
         <button
           type="button"

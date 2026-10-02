@@ -6,7 +6,6 @@ import './DailyCommitleSet.css';
 
 const LABELS = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
 
-// Read whether today's puzzle for a difficulty is finished, and how (DailyCommitle saves it per slot).
 function savedResult(dateString, slot) {
   try {
     const saved = JSON.parse(localStorage.getItem(`cb_commitle_${dateString}_${slot}`) || 'null');
@@ -17,18 +16,12 @@ function savedResult(dateString, slot) {
   }
 }
 
-/**
- * DailyCommitleSet
- * Three COMMITLE puzzles a day: Easy, Medium and Hard. The tabs switch between them; each keeps its
- * own progress, streak and share text. Starts on the easiest one that isn't finished yet.
- */
 export default function DailyCommitleSet({ onScrollToCases }) {
   const puzzles = useMemo(() => getDailyCommitleSet(), []);
   const dateString = puzzles[0].dateString;
   const [active, setActive] = useState(
     () => puzzles.find((p) => !savedResult(dateString, p.difficulty))?.difficulty || 'easy'
   );
-  // Bumped when a tab is clicked, so the ticks re-read what was just solved.
   const [, setRefresh] = useState(0);
 
   const tabs = (
@@ -58,7 +51,6 @@ export default function DailyCommitleSet({ onScrollToCases }) {
   );
 
   const puzzle = puzzles.find((p) => p.difficulty === active);
-  // Keyed by difficulty so each puzzle loads its own saved guesses.
   return (
     <DailyCommitle
       key={active}

@@ -1,5 +1,3 @@
-// Level 5 (Chief): choosing the right command. Scenarios are hardcoded in src/data/level5.js, so no API calls.
-
 import { scenarios } from '../../data/level5.js'
 import { pickRandom, shuffle } from '../utils.js'
 
@@ -17,7 +15,6 @@ export async function pickCommand(ctx) {
     evidence: { diff: null, author: null, date: null, file: null },
     options: choices.map((c) => c.command),
     answer: choices.indexOf(scenario.answer),
-    // One note per option, same order: what that command would have done. Lets the UI explain a wrong pick.
     optionNotes: choices.map((c) => c.why),
     explanation: scenario.answer.why,
     hint: scenario.hint,
