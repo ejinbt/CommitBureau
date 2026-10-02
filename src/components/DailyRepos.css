@@ -1,0 +1,229 @@
+/* Daily Repos: three repo cards (Easy, Medium, Hard) in a fullscreen section, like COMMITLE's. */
+
+.daily-repos-section {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: clamp(4.5rem, 8vh, 5.5rem) 1.5rem 2rem;
+  border-bottom: 1px solid var(--cb-border);
+}
+
+.daily-repos-inner {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.daily-repos-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.daily-repos-eyebrow {
+  font-family: var(--cb-font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--cb-text-muted);
+}
+
+.daily-accent,
+.daily-sep {
+  color: var(--cb-green-vivid);
+}
+
+.daily-repos-title {
+  margin: 0;
+  font-family: var(--cb-font-heading);
+  font-size: clamp(1.8rem, 3.6vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-wrap: balance;
+}
+
+.daily-repos-subtitle {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--cb-text-muted);
+}
+
+.daily-repos-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.daily-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  background: rgba(10, 16, 12, 0.8);
+  border: 1px solid var(--cb-border);
+  border-radius: 9999px;
+  font-family: var(--cb-font-mono);
+  font-size: 0.75rem;
+  color: var(--cb-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.daily-repos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.daily-repo-card {
+  --diff-color: var(--cb-green-vivid);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 1.35rem;
+  background: rgba(13, 23, 18, 0.75);
+  border: 1px solid var(--cb-border);
+  border-top: 3px solid var(--diff-color);
+  border-radius: var(--cb-radius-lg);
+  transition: border-color 0.2s var(--cb-ease), transform 0.2s var(--cb-ease);
+}
+
+.daily-repo-card:hover {
+  border-color: var(--cb-border-hover);
+  border-top-color: var(--diff-color);
+  transform: translateY(-2px);
+}
+
+.daily-repo-card.diff-medium { --diff-color: #fbbf24; }
+.daily-repo-card.diff-hard { --diff-color: #f87171; }
+
+.daily-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.daily-difficulty {
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+  background: var(--diff-color);
+  color: #030704;
+  font-family: var(--cb-font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.daily-level {
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  color: var(--cb-text-faint);
+}
+
+.daily-repo-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0;
+  font-family: var(--cb-font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.daily-repo-icon {
+  flex-shrink: 0;
+  color: var(--diff-color);
+}
+
+.daily-repo-blurb {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--cb-text-muted);
+}
+
+.daily-repo-topic {
+  margin: 0;
+  font-family: var(--cb-font-mono);
+  font-size: 0.75rem;
+  color: var(--diff-color);
+}
+
+.daily-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--cb-border);
+}
+
+.daily-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--cb-font-mono);
+  font-size: 0.78rem;
+  color: var(--cb-green-bright);
+  font-variant-numeric: tabular-nums;
+}
+
+.daily-result.pending {
+  color: var(--cb-text-faint);
+}
+
+.daily-investigate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: var(--diff-color);
+  border: none;
+  border-radius: var(--cb-radius-sm);
+  color: #030704;
+  font-family: var(--cb-font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: filter 0.2s;
+}
+
+.daily-investigate-btn:hover {
+  filter: brightness(1.1);
+}
+
+.daily-investigate-btn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 860px) {
+  .daily-repos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .daily-repo-card,
+  .daily-investigate-btn {
+    transition: none;
+  }
+}

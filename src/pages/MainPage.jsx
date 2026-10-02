@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import Header from '../components/Header';
 import BureauBriefing from '../components/BureauBriefing';
-import DailyCommitleSet from '../components/DailyCommitleSet';
+import DailyRepos from '../components/DailyRepos';
 import CaseIntakeConsole from '../components/CaseIntakeConsole';
 import Footer from '../components/Footer';
 
@@ -18,7 +18,7 @@ gsap.registerPlugin(ScrollToPlugin);
  * - Footer: System telemetry, clearance matrix & protocol links
  * - Butter-smooth GSAP ScrollToPlugin navigation physics
  */
-export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, mode, onSelectMode }) {
+export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, mode, onSelectMode, onStartDaily }) {
   const commitleSectionRef = useRef(null);
   const intakeSectionRef = useRef(null);
 
@@ -84,9 +84,9 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
         {/* SECTION 1: Bureau Briefing & Forensics Mission */}
         <BureauBriefing onScrollToIntake={handleScrollToCommitle} />
 
-        {/* SECTION 2: COMMITLE (Daily Wordle Forensics Case) */}
+        {/* SECTION 2: DAILY REPOS (three real repos a day: easy, medium, hard) */}
         <div ref={commitleSectionRef} id="daily-commitle">
-          <DailyCommitleSet onScrollToCases={() => handleScrollToIntake('featured')} />
+          <DailyRepos onStartDaily={onStartDaily} mode={mode} />
         </div>
 
         {/* SECTION 3: Case Intake Console (Repository Selection) */}
