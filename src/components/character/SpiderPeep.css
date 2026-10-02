@@ -92,3 +92,7 @@
     display: none;
   }
 }
+
+.cb-spider-peep--left .cb-spider-peep-img {
+  transform: translateX(-6.4%);
+}
