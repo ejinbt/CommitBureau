@@ -171,6 +171,10 @@ export default function App() {
       setTimeout(() => {
         smoothScrollToEl('daily-commitle');
       }, 50);
+    } else if (section === 'how') {
+      setTimeout(() => {
+        smoothScrollToEl('how-it-works');
+      }, 50);
     } else {
       setTimeout(() => {
         smoothScrollToEl('case-intake');

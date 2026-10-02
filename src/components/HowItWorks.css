@@ -1,0 +1,356 @@
+/* How It Works / Field Manual section. Uses the site's tokens from index.css. */
+
+.cb-how-section {
+  width: 100%;
+  padding-block: clamp(4.5rem, 9vh, 6.5rem) clamp(3rem, 7vh, 5rem);
+  border-bottom: 1px solid var(--cb-border);
+}
+
+.cb-how-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.cb-how-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cb-how-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--cb-text-muted);
+}
+
+.cb-how-accent {
+  color: var(--cb-green-vivid);
+}
+
+.cb-how-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-wrap: balance;
+}
+
+.cb-how-subtitle {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--cb-text-muted);
+}
+
+/* Four steps */
+.cb-how-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cb-how-step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 1.25rem;
+  background: rgba(13, 23, 18, 0.75);
+  border: 1px solid var(--cb-border);
+  border-radius: var(--cb-radius-lg);
+}
+
+.cb-how-step-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cb-how-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: var(--cb-radius-sm);
+  background: var(--cb-green-vivid);
+  color: var(--cb-bg-deep);
+  font-weight: 700;
+}
+
+.cb-how-step-icon {
+  color: var(--cb-green-bright);
+}
+
+.cb-how-step-title {
+  margin: 0.2rem 0 0;
+  font-family: var(--cb-font-heading);
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+.cb-how-step-text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--cb-text-muted);
+}
+
+/* Worked example: terminal + deduction */
+.cb-how-example {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.cb-how-terminal {
+  min-width: 0;
+  background: #030704;
+  border: 1px solid rgba(0, 255, 102, 0.22);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.cb-how-terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #08100a;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+  font-size: 0.74rem;
+  color: #ededed;
+}
+
+.cb-how-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.cb-how-dot.red { background: #ef4444; }
+.cb-how-dot.amber { background: #f59e0b; }
+.cb-how-dot.green { background: #10b981; }
+
+.cb-how-terminal-title {
+  margin-left: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cb-how-terminal-body {
+  padding: 12px 14px;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  font-variant-ligatures: none;
+}
+
+.cb-how-line {
+  white-space: pre;
+}
+
+.cb-how-line.brief {
+  margin-bottom: 8px;
+  white-space: normal;
+  color: var(--cb-text-muted);
+}
+
+.cb-how-line.cmd {
+  margin-top: 8px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.cb-how-line.out {
+  color: #c9d7cf;
+}
+
+.cb-how-prompt,
+.cb-how-brief-tag {
+  color: var(--cb-green-vivid);
+  font-weight: 700;
+}
+
+.cb-how-reasoning {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 1.5rem;
+  background: rgba(13, 23, 18, 0.75);
+  border: 1px solid var(--cb-border);
+  border-left: 3px solid var(--cb-green-vivid);
+  border-radius: var(--cb-radius-lg);
+  color: var(--cb-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.cb-how-reasoning p {
+  margin: 0;
+}
+
+.cb-how-reasoning strong {
+  color: #ffffff;
+}
+
+.cb-how-reasoning-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--cb-green-vivid);
+}
+
+.cb-how-reasoning-title {
+  margin: 0;
+  font-family: var(--cb-font-heading);
+  font-size: 1.25rem;
+  color: #ffffff;
+}
+
+.cb-how-section code {
+  font-family: var(--cb-font-mono);
+  font-size: 0.85em;
+  color: var(--cb-green-bright);
+  font-variant-ligatures: none;
+}
+
+/* Levels + scoring */
+.cb-how-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 1.25rem;
+}
+
+.cb-how-panel {
+  min-width: 0;
+  padding: 1.5rem;
+  background: rgba(13, 23, 18, 0.75);
+  border: 1px solid var(--cb-border);
+  border-radius: var(--cb-radius-lg);
+}
+
+.cb-how-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+  font-family: var(--cb-font-heading);
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+.cb-how-table-wrap {
+  overflow-x: auto;
+}
+
+.cb-how-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.cb-how-table th {
+  padding: 0 0.75rem 0.6rem 0;
+  text-align: left;
+  font-family: var(--cb-font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cb-text-faint);
+}
+
+.cb-how-table td {
+  padding: 0.6rem 0.75rem 0.6rem 0;
+  border-top: 1px solid var(--cb-border-subtle);
+  color: var(--cb-text-muted);
+  vertical-align: top;
+}
+
+.cb-how-level {
+  white-space: nowrap;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.cb-how-level .cb-mono {
+  color: var(--cb-green-vivid);
+}
+
+.cb-how-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.cb-how-rule {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.cb-how-rule dt {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--cb-green-bright);
+}
+
+.cb-how-rule dd {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--cb-text-muted);
+}
+
+.cb-how-tips-title {
+  margin-top: 1.5rem;
+}
+
+.cb-how-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--cb-text-muted);
+}
+
+@media (max-width: 1000px) {
+  .cb-how-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cb-how-example,
+  .cb-how-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .cb-how-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cb-how-rule {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+  }
+}
