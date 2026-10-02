@@ -109,8 +109,8 @@ for the steps. Locally, `npm run dev` doesn't run that function, so the game cal
 + we tested in browser after every prompts , we had a checklist with us
 
 ## Team
-+ ejinbt - the game engine , game logic , integration
-+ AlenJoby - UI , design , state management , routing 
++ [@ejinbt](https://github.com/ejinbt/) - the game engine , game logic , integration
++ [@AlenJoby](https://github.com/AlenJoby/) - UI , design , state management , routing 
 
 ## Challenges and what we learned
  **1. Keeping a secret token safe with no backend**
