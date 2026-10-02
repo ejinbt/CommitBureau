@@ -21,14 +21,14 @@
 
 .cb-hero-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(2rem, 3.5vw, 3rem);
   align-items: center;
 }
 
 @media (min-width: 960px) {
   .cb-hero-grid {
-    grid-template-columns: 1.22fr 0.78fr;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); /* room for the spider and the code card side by side */
     gap: clamp(2rem, 3vw, 3rem);
   }
 }
@@ -230,6 +230,19 @@
 .cb-hero-chief {
   flex-shrink: 0;
   z-index: 3;
+  /* Overlap the code card's edge a little: the spider stands in front of it. */
+  margin-right: -2.5vw;
+}
+
+/* In the hero, size the spider by its column rather than the whole screen (the shared component uses 22vw,
+   which left the code card a sliver of width on every desktop size). */
+.cb-hero-visual .cb-spider-chief-wrapper {
+  width: clamp(180px, 15vw, 420px);
+}
+
+.cb-hero-visual .cb-terminal-window {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .cb-ambient-glow {
@@ -248,7 +261,7 @@
 
 .cb-terminal-window {
   width: 100%;
-  max-width: 480px;
+  max-width: 30rem; /* 480px at normal size; grows on 2K/4K */
   margin-left: auto;
   position: relative;
   z-index: 2;
@@ -438,7 +451,7 @@
    }
 
    .cb-hero-grid {
-     grid-template-columns: 1fr;
+     grid-template-columns: minmax(0, 1fr);
      gap: 2.5rem;
    }
 
@@ -496,7 +509,7 @@
 
   .cb-metrics-row {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, minmax(0, 1fr)));
     gap: 1rem;
     padding: 1rem;
   }
@@ -553,7 +566,7 @@
   }
 
   .cb-metrics-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.75rem;
   }
 

@@ -147,7 +147,7 @@
   color: rgba(255, 255, 255, 0.65);
   line-height: 1.5;
   margin: 0;
-  max-width: 440px;
+  max-width: 27.5rem; /* 440px at normal size; grows on 2K/4K */
 }
 
 .cb-spider-reaction-actions {
