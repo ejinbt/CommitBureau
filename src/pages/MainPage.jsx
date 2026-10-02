@@ -1,60 +1,60 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { ChevronDown } from 'lucide-react';
+import React, { useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import Header from '../components/Header';
 import BureauBriefing from '../components/BureauBriefing';
-import DailyCommitle from '../components/DailyCommitle';
+import DailyRepos from '../components/DailyRepos';
 import CaseIntakeConsole from '../components/CaseIntakeConsole';
-import { playClickSound } from '../utils/audio';
+import Footer from '../components/Footer';
+
+gsap.registerPlugin(ScrollToPlugin);
 
 /**
  * MainPage
  * Single cohesive entry page:
- * - Section 1: Bureau Briefing (Hero & Mission)
- * - Section 2: COMMITLE (The Daily Git Forensics Wordle)
+ * - Section 1: Bureau Briefing (Hero & Mission with down arrow)
+ * - Section 2: COMMITLE (The Daily Git Forensics Wordle with down arrow)
  * - Section 3: Case Intake Console (Target selection)
- * - Unified Fixed Viewport Navigation Arrow (Identical styling on Section 1 & Section 2)
+ * - Footer: System telemetry, clearance matrix & protocol links
+ * - Butter-smooth GSAP ScrollToPlugin navigation physics
  */
-export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, mode, onSelectMode }) {
+export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, mode, onSelectMode, onStartDaily }) {
   const commitleSectionRef = useRef(null);
   const intakeSectionRef = useRef(null);
-  const [activeSection, setActiveSection] = useState('hero'); // 'hero' | 'commitle' | 'intake'
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const vh = window.innerHeight;
-      if (scrollY < vh * 0.6) {
-        setActiveSection('hero');
-      } else if (scrollY < vh * 1.6) {
-        setActiveSection('commitle');
-      } else {
-        setActiveSection('intake');
-      }
-    };
+  const smoothScrollTo = (target) => {
+    if (typeof target === 'number') {
+      gsap.to(window, {
+        duration: 0.95,
+        scrollTo: { y: target, autoKill: false },
+        ease: 'power3.inOut'
+      });
+      return;
+    }
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    if (target && target.current) {
+      gsap.to(window, {
+        duration: 0.95,
+        scrollTo: { y: target.current, autoKill: false },
+        ease: 'power3.inOut'
+      });
+    }
+  };
 
   const handleScrollToCommitle = () => {
-    if (commitleSectionRef.current) {
-      commitleSectionRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    smoothScrollTo(commitleSectionRef);
   };
 
   const handleScrollToIntake = (tab) => {
     if (onNavigate && tab) {
       onNavigate('intake', tab);
     }
-    if (intakeSectionRef.current) {
-      intakeSectionRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    smoothScrollTo(intakeSectionRef);
   };
 
   const handleNav = (section, tab) => {
     if (section === 'home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      smoothScrollTo(0);
       return;
     }
     if (section === 'commitle' || section === 'daily') {
@@ -69,6 +69,9 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
 
   return (
     <div className="cb-app-shell">
+      {/* High-Performance Fixed GPU Layer for Ambient Lighting */}
+      <div className="cb-bg-ambient" aria-hidden="true" />
+
       {/* Floating Capsule Header */}
       <Header 
         level={level} 
@@ -81,9 +84,9 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
         {/* SECTION 1: Bureau Briefing & Forensics Mission */}
         <BureauBriefing onScrollToIntake={handleScrollToCommitle} />
 
-        {/* SECTION 2: COMMITLE (Daily Wordle Forensics Case) */}
+        {/* SECTION 2: DAILY REPOS (three real repos a day: easy, medium, hard) */}
         <div ref={commitleSectionRef} id="daily-commitle">
-          <DailyCommitle />
+          <DailyRepos onStartDaily={onStartDaily} mode={mode} />
         </div>
 
         {/* SECTION 3: Case Intake Console (Repository Selection) */}
@@ -99,27 +102,8 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
         </div>
       </main>
 
-      {/* Unified Bottom-Right Viewport Scroll Arrow (Identical across Section 1 and Section 2) */}
-      <div className={`cb-hero-scroll-wrapper ${activeSection === 'intake' ? 'hidden' : ''}`}>
-        <button
-          type="button"
-          className="cb-hero-scroll-btn"
-          onClick={() => {
-            playClickSound();
-            if (activeSection === 'hero') {
-              handleScrollToCommitle();
-            } else {
-              handleScrollToIntake('featured');
-            }
-          }}
-          aria-label={activeSection === 'hero' ? 'Scroll to Commitle' : 'Scroll to Case Intake'}
-        >
-          <span className="cb-scroll-label">
-            {activeSection === 'hero' ? 'COMMITLE' : 'CASES'}
-          </span>
-          <ChevronDown size={18} className="cb-scroll-chevron" />
-        </button>
-      </div>
+      {/* Forensic Intelligence Footer */}
+      <Footer onNavigate={handleNav} />
     </div>
   );
 }

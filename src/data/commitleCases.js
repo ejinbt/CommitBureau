@@ -1,168 +1,326 @@
 /**
  * COMMITLE / The Daily Git Forensics Dossier
- * Wordle-style daily 5-letter Git Forensics puzzles.
- * Deterministic daily rotation synchronized by UTC date.
+ * Wordle-style daily puzzle: a terminal session from Case Zero (Night Owl Cafe, the game's fictional
+ * demo repo) with one git command redacted. The player reads the real Git output and works out which
+ * 5-letter command printed it. Every answer is a real git command, so solving it teaches real Git.
+ *
+ * In `terminal`, lines starting with "$ " are commands. {{?}} marks the redacted 5-letter command.
  */
 
 export const COMMITLE_TARGETS = [
   {
-    dayNumber: 1,
-    word: 'RESET',
-    repo: 'torvalds/linux',
-    brief: 'A rogue author pushed unfinished commits to HEAD. What 5-letter Git command rewinds the commit tree while preserving working files?',
-    command: 'git reset --soft HEAD~1',
-    hint: 'Opposite of advance; rewinds the current HEAD branch pointer.',
-    explanation: 'git reset moves the current branch HEAD to a specified state, letting you undo commits cleanly.'
-  },
-  {
-    dayNumber: 2,
-    word: 'BLAME',
-    repo: 'facebook/react',
-    brief: 'A memory leak was introduced in fiber reconciliation. What 5-letter Git command reveals which author modified each line?',
-    command: 'git blame -L 42,60 src/ReactFiber.js',
-    hint: 'Point fingers; shows author, commit hash, and timestamp for each line.',
-    explanation: 'git blame annotates each line in a file with the commit and author who last changed it.'
-  },
-  {
-    dayNumber: 3,
-    word: 'MERGE',
-    repo: 'microsoft/vscode',
-    brief: 'Two engineers completed feature branches simultaneously. What 5-letter Git command joins both branches into the current branch?',
-    command: 'git merge feature/copilot-bridge',
-    hint: 'Combines two separate branch histories into one commit.',
-    explanation: 'git merge integrates changes from the named branch into the current checked-out branch.'
-  },
-  {
-    dayNumber: 4,
-    word: 'CLONE',
-    repo: 'nodejs/node',
-    brief: 'An investigator needs a fresh local copy of an entire upstream repository. What 5-letter Git command downloads it?',
-    command: 'git clone https://github.com/nodejs/node.git',
-    hint: 'Makes a complete replica of a remote repo on your local machine.',
-    explanation: 'git clone copies a repository along with its commit history, branches, and tags.'
-  },
-  {
-    dayNumber: 5,
     word: 'STASH',
-    repo: 'kubernetes/kubernetes',
-    brief: 'Urgent hotfix required, but your working directory has uncommitted modifications. What 5-letter Git command shelves them temporarily?',
-    command: 'git stash save "wip-controller"',
-    hint: 'Hides dirty working state away so you can work on a clean tree.',
-    explanation: 'git stash temporarily shelves changes so you can switch branches without committing unfinished work.'
+    brief: 'Mara had half-finished menu changes when an urgent bug came in. She ran one command and her working tree was clean again, with nothing committed.',
+    hint: 'It puts work on a shelf so you can come back to it later.',
+    command: 'git stash',
+    explanation: 'git stash saves uncommitted changes and cleans the working tree. git stash pop brings them back.',
+    terminal: [
+      '$ git {{?}}',
+      'Saved working directory and index state WIP on main: 2370e68 Remember the cart between visits',
+    ],
   },
   {
-    dayNumber: 6,
-    word: 'PATCH',
-    repo: 'git/git',
-    brief: 'A vulnerability fix was mailed as a unified diff file. What 5-letter Git command applies this delta directly to the tree?',
-    command: 'git apply security-fix.patch',
-    hint: 'A compact file describing differences that can be applied to code.',
-    explanation: 'git patch / git apply takes a recorded diff format and applies code changes to working files.'
+    word: 'BLAME',
+    brief: 'The cart total on line 9 looks suspicious. Someone asked Git who last touched that exact line.',
+    hint: 'Line by line, it names the commit and the author behind each line.',
+    command: 'git blame -L 9,9 src/cart.js',
+    explanation: 'git blame shows, for each line of a file, the commit, author and date that last changed it.',
+    terminal: [
+      '$ git {{?}} -L 9,9 src/cart.js',
+      'd81ffcd5 (Ines Duarte 2026-03-15 10:25:00 +0000 9)   const total = cart.reduce((sum, item) => sum + (item.price || 0), 0)',
+    ],
   },
   {
-    dayNumber: 7,
-    word: 'STAGE',
-    repo: 'rust-lang/rust',
-    brief: 'Before creating a commit snapshot, modified files must be added to index. What 5-letter Git verb describes this operation?',
-    command: 'git add -p compiler/rustc_middle',
-    hint: 'Prepares modified files in the index before commit snapshot.',
-    explanation: 'Staging files moves modified files into the Git index preparing them for snapshot.'
+    word: 'MERGE',
+    brief: "Sam brought Mara's finished oat milk branch into main. Git combined the two histories on its own.",
+    hint: 'It joins another branch into the one you are on.',
+    command: 'git merge mquinn/oat-milk',
+    explanation: "git merge joins another branch's history into the current branch, creating a merge commit when needed.",
+    terminal: [
+      '$ git {{?}} mquinn/oat-milk',
+      "Merge made by the 'ort' strategy.",
+      ' src/menu.js | 3 +++',
+      ' 1 file changed, 3 insertions(+)',
+    ],
   },
   {
-    dayNumber: 8,
+    word: 'RESET',
+    brief: 'Theo committed too early. One command later, the commit was gone but his edits were still in the file, waiting to be committed again.',
+    hint: 'It moves the branch pointer back. HEAD~1 means one commit back.',
+    command: 'git reset HEAD~1',
+    explanation: 'git reset moves the current branch to another commit. The default (--mixed) keeps your edits as unstaged changes.',
+    terminal: [
+      '$ git {{?}} HEAD~1',
+      'Unstaged changes after reset:',
+      'M\tserver/orders.js',
+    ],
+  },
+  {
     word: 'FETCH',
-    repo: 'python/cpython',
-    brief: 'You want to inspect remote branches without touching or modifying your working directory. What 5-letter Git command is used?',
-    command: 'git fetch origin main',
-    hint: 'Retrieves remote objects and refs without auto-merging.',
-    explanation: 'git fetch downloads commits, files, and refs from a remote repository without merging them.'
+    brief: "Ines wanted to see what the team pushed overnight without touching her own branch. Git downloaded the new commits and moved only the remote's pointer.",
+    hint: 'It downloads from the remote but does not merge anything.',
+    command: 'git fetch origin',
+    explanation: 'git fetch downloads new commits from a remote and updates origin/main, without changing your branch. git pull is fetch plus merge.',
+    terminal: [
+      '$ git {{?}} origin',
+      'remote: Enumerating objects: 5, done.',
+      'remote: Counting objects: 100% (5/5), done.',
+      'remote: Total 3 (delta 2), reused 0 (delta 0)',
+      'Unpacking objects: 100% (3/3), 412 bytes | 41.00 KiB/s, done.',
+      'From github.com:commitbureau/case-zero',
+      '   2370e68..0b3b979  main       -> origin/main',
+    ],
   },
   {
-    dayNumber: 9,
     word: 'CLEAN',
-    repo: 'golang/go',
-    brief: 'Build artifacts and untracked binaries are cluttering the workspace. What 5-letter Git command removes untracked debris?',
+    brief: 'The project folder was full of leftover files Git had never tracked. Before deleting anything, Mara asked Git to list what it would remove.',
+    hint: 'It deletes untracked files. -n means "just tell me, don\'t do it".',
+    command: 'git clean -n',
+    explanation: 'git clean removes untracked files. -n is a dry run that only lists them; -f actually deletes.',
+    terminal: [
+      '$ git {{?}} -n',
+      'Would remove debug.log',
+      'Would remove notes.txt',
+    ],
+  },
+  {
+    word: 'CLONE',
+    brief: 'A new developer joined the cafe team. Their first command copied the whole repository, history and all, onto their laptop.',
+    hint: 'It makes a full local copy of a remote repository.',
+    command: 'git clone https://github.com/commitbureau/case-zero.git',
+    explanation: 'git clone copies a repository with its full history and sets up origin to point back to it.',
+    terminal: [
+      '$ git {{?}} https://github.com/commitbureau/case-zero.git',
+      "Cloning into 'case-zero'...",
+      'remote: Enumerating objects: 64, done.',
+      'remote: Counting objects: 100% (64/64), done.',
+      'Receiving objects: 100% (64/64), 9.81 KiB | 2.45 MiB/s, done.',
+      'Resolving deltas: 100% (17/17), done.',
+    ],
+  },
+  {
+    word: 'APPLY',
+    brief: 'Ines received the NaN fix as a .patch file by email. Before using it, she checked which files it would change.',
+    hint: 'It takes a patch file and applies its changes to your files.',
+    command: 'git apply --stat fix-total.patch',
+    explanation: 'git apply applies a patch file to the working tree. --stat only summarises what it would change.',
+    terminal: [
+      '$ git {{?}} --stat fix-total.patch',
+      ' src/cart.js | 2 +-',
+      ' 1 file changed, 1 insertion(+), 1 deletion(-)',
+    ],
+  },
+  {
+    word: 'NOTES',
+    brief: 'After review, Sam attached a remark to a commit without changing the commit itself. Later, someone read it back.',
+    hint: 'Extra text attached to a commit, stored separately from its message.',
+    command: 'git notes show 0b3b979',
+    explanation: 'git notes attaches extra information to commits without rewriting them. git notes show prints a note.',
+    terminal: [
+      '$ git {{?}} show 0b3b979',
+      'Reviewed by Sam. Safe to deploy before the Friday rush.',
+    ],
+  },
+  {
+    word: 'PRUNE',
+    brief: "Mara's oat milk branch was deleted on GitHub, but her laptop still listed it. One command removed the stale reference.",
+    hint: 'It trims away references to remote branches that no longer exist.',
+    command: 'git remote prune origin',
+    explanation: 'git remote prune deletes local remote-tracking branches whose branch is gone on the remote.',
+    terminal: [
+      '$ git remote {{?}} origin',
+      'Pruning origin',
+      'URL: git@github.com:commitbureau/case-zero.git',
+      ' * [pruned] origin/mquinn/oat-milk',
+    ],
+  },
+  {
+    word: 'STAGE',
+    brief: 'Theo marked his order API fix to go into the next commit. The status afterwards shows the file ready to commit.',
+    hint: 'Another name for git add.',
+    command: 'git stage server/orders.js',
+    explanation: 'git stage is a built-in synonym for git add: it puts changes in the staging area for the next commit.',
+    terminal: [
+      '$ git {{?}} server/orders.js',
+      '$ git status --short',
+      'M  server/orders.js',
+    ],
+  },
+  {
+    word: 'STASH',
+    brief: 'Mara had been shelving unfinished work all week. She asked Git to show everything on the shelf.',
+    hint: 'The shelf itself. The same command that saved the work can list it.',
+    command: 'git stash list',
+    explanation: 'git stash list shows every saved stash, newest first. stash@{0} is the latest.',
+    terminal: [
+      '$ git {{?}} list',
+      'stash@{0}: WIP on main: 2370e68 Remember the cart between visits',
+      'stash@{1}: On menu-prices: new pastry prices',
+    ],
+  },
+  {
+    word: 'MERGE',
+    brief: 'Two branches both changed the menu. This time Git could not combine them on its own.',
+    hint: 'Joining branches. A conflict means both sides edited the same lines.',
+    command: 'git merge tpark/menu-endpoint',
+    explanation: 'When two branches change the same lines, git merge stops with a conflict for you to resolve, then commit.',
+    terminal: [
+      '$ git {{?}} tpark/menu-endpoint',
+      'Auto-merging src/menu.js',
+      'CONFLICT (content): Merge conflict in src/menu.js',
+      'Automatic merge failed; fix conflicts and then commit the result.',
+    ],
+  },
+  {
+    word: 'RESET',
+    brief: 'An experiment went badly. Theo threw away every change since the last good commit and jumped straight back to it.',
+    hint: '--hard moves the branch back and discards edits too. Use with care.',
+    command: 'git reset --hard 9aff3ef',
+    explanation: 'git reset --hard moves the branch and overwrites the working tree, discarding uncommitted changes.',
+    terminal: [
+      '$ git {{?}} --hard 9aff3ef',
+      'HEAD is now at 9aff3ef Explain the order API in the README',
+    ],
+  },
+  {
+    word: 'BLAME',
+    brief: 'The server started logging every order. The team wanted to know who added that log line and when.',
+    hint: 'Line by line authorship. -L picks the lines to look at.',
+    command: 'git blame -L 15,16 server/orders.js',
+    explanation: 'git blame -L limits the annotation to a range of lines, so you can find who last changed them.',
+    terminal: [
+      '$ git {{?}} -L 15,16 server/orders.js',
+      '71bde5a2 (Sam Okafor 2026-03-13 11:35:00 +0000 15)     orders.push({ id: crypto.randomUUID(), at: Date.now() })',
+      "0b3b9790 (Theo Park  2026-03-24 17:15:00 +0000 16)     console.log('New order', orders.at(-1).id)",
+    ],
+  },
+  {
+    word: 'CLEAN',
+    brief: 'The dry run looked right, so Mara told Git to actually delete the untracked files and folders.',
+    hint: '-f forces the deletion, -d includes folders.',
     command: 'git clean -fd',
-    hint: 'Removes untracked files from the working tree.',
-    explanation: 'git clean sweeps away untracked files and directories from your working directory.'
+    explanation: 'git clean -fd deletes untracked files (-f) and untracked folders (-d). It cannot be undone.',
+    terminal: [
+      '$ git {{?}} -fd',
+      'Removing debug.log',
+      'Removing notes.txt',
+      'Removing tmp/',
+    ],
   },
-  {
-    dayNumber: 10,
-    word: 'ABORT',
-    repo: 'vuejs/core',
-    brief: 'A three-way merge resulted in messy conflicts. What 5-letter Git flag cancels the merge and restores the pre-merge branch state?',
-    command: 'git merge --abort',
-    hint: 'Stops the merge and returns to the exact state before merging started.',
-    explanation: 'The --abort flag safely halts a conflicted merge or rebase, restoring the baseline commit.'
-  },
-  {
-    dayNumber: 11,
-    word: 'DIFFS',
-    repo: 'django/django',
-    brief: 'An auditor wants to inspect textual line deltas between two releases. What 5-letter Git plural noun describes these deltas?',
-    command: 'git diff v4.2.0..v5.0.0',
-    hint: 'Displays changes between commits, commit and working tree, etc.',
-    explanation: 'Git diffs show line-by-line additions and deletions between branches or commit points.'
-  },
-  {
-    dayNumber: 12,
-    word: 'TRACK',
-    repo: 'neovim/neovim',
-    brief: 'You branched off main and want upstream pull notifications. What 5-letter verb sets up remote branch linkage?',
-    command: 'git branch --set-upstream-to=origin/main',
-    hint: 'Links a local branch to an upstream counterpart.',
-    explanation: 'Tracking branches maintain an explicit relationship between local branch and remote branch.'
-  },
-  {
-    dayNumber: 13,
-    word: 'HOOKS',
-    repo: 'denoland/deno',
-    brief: 'Security wants pre-commit linter checks to run automatically. What 5-letter Git feature folder handles lifecycle triggers?',
-    command: 'cat .git/hooks/pre-commit',
-    hint: 'Custom executable scripts Git executes before or after actions.',
-    explanation: 'Git hooks are event-driven scripts that run automatically during commit, push, and receive operations.'
-  },
-  {
-    dayNumber: 14,
-    word: 'FORCE',
-    repo: 'oven-sh/bun',
-    brief: 'A corrupted commit was amended locally. What 5-letter flag forces the remote to accept the rewritten history with lease check?',
-    command: 'git push --force-with-lease',
-    hint: 'Overrides remote branch ref, disabling fast-forward safety check.',
-    explanation: 'git push --force allows rewriting remote history, recommended with --force-with-lease for safety.'
-  }
-];
+]
 
-// Valid 5-letter words accepted as guesses (Git & Tech terminology)
+// Every puzzle is set in Case Zero, the game's built-in fictional repo.
+const CASE_REPO = 'commitbureau/case-zero'
+
+// Three puzzles a day, one per difficulty. Easy: everyday commands, clue shown. Medium: trickier
+// commands and output, clue on request. Hard: rarer commands, and only the terminal output is given.
+export const DIFFICULTIES = ['easy', 'medium', 'hard']
+
+const DIFFICULTY_BY_COMMAND = {
+  'git stash': 'easy',
+  'git merge mquinn/oat-milk': 'easy',
+  'git clone https://github.com/commitbureau/case-zero.git': 'easy',
+  'git fetch origin': 'easy',
+  'git reset HEAD~1': 'medium',
+  'git blame -L 9,9 src/cart.js': 'medium',
+  'git clean -n': 'medium',
+  'git stash list': 'medium',
+  'git merge tpark/menu-endpoint': 'medium',
+  'git apply --stat fix-total.patch': 'hard',
+  'git notes show 0b3b979': 'hard',
+  'git remote prune origin': 'hard',
+  'git stage server/orders.js': 'hard',
+  'git reset --hard 9aff3ef': 'hard',
+  'git blame -L 15,16 server/orders.js': 'hard',
+  'git clean -fd': 'hard',
+}
+
+for (const t of COMMITLE_TARGETS) t.difficulty = DIFFICULTY_BY_COMMAND[t.command] || 'medium'
+
+// Words players may guess: real 5-letter words, weighted towards Git and programming so guesses are
+// meaningful. Every answer is added below, so the list can never reject the solution.
+const WORD_LIST = `
+  apply blame clean clone fetch merge notes prune reset stage stash
+  about above abort actor added adder admin adopt after again agent alert alias align alike alive allow
+  alpha alter amend among angle apple apron array arrow aside asset async atlas audio audit avoid await
+  awake award aware badge baker basic batch beach begin being below bench birth black blade blank blast
+  block blood board boost bound brace brain brand brave bread break brick bring broad brown brush buddy
+  build built bunch burst buyer cable cache calls carry catch cause chain chair chalk chart chase cheap
+  check chest chief child chips civil claim class clear click climb clock close cloud coach coast codec
+  codes color comma count court cover crack craft crash crate crawl crazy cream crisp cross crowd cubic
+  curve cycle daily dance dated deals debug decay delay delta dense depth digit diner dirty ditch dodge
+  doing draft drain drama drawn dream dress drift drink drive dummy eager early earth eight elect email
+  empty enjoy enter entry equal error event every exact exist extra faith false fault fiber field fifth
+  fifty fight files final first fixed flags flash fleet float floor flush focus force forge forks forth
+  forum found frame fresh front fruit fully funny ghost giant given glass globe grace grade grain grand
+  grant graph grasp green greet group guard guess guest guide habit happy harsh heads heart heavy hello
+  hence hints hooks horse hotel house human humor hunks ideal image index inner input issue joins joint
+  judge juice keyed known label large laser later layer learn least leave legal level light limit lines
+  links lists local logic loops lower lucky lunch magic major maker match maybe mayor media metal meter
+  might minor mixed model money month moral motor mount mouse mouth moved movie music naive nerve never
+  newer night nodes noise north noted novel nurse occur ocean offer often older opens order other outer
+  owner pages paint panel panic paper parse party paste patch pause peace phase phone photo piece pilot
+  pipes pivot pixel place plain plane plant plate point polls ports power press price pride prime print
+  prior prize probe proof proxy pulls pushy quick quiet quite quota quote radar radio raise range rapid
+  ratio reach react ready realm rebel refer reply rider right rigid river roads robot rogue roots rough
+  round route royal rules rural safer salad scale scene scope score scout screw seeds sense serve setup
+  seven shade shake shape share sharp sheet shelf shell shift shirt shock shoot short shown sides sight
+  sigma since sixth skill slack sleep slice slide slots small smart smile smoke solid solve sorry sound
+  south space spare spark speak speed spend spent spike spine split spoke sport squad stack staff stake
+  stand start state steal steam steel stick still stock stone store storm story strip stuck study stuff
+  style sugar suite super sweet swift swing sync syncs table taken taste teach teams terms tests thank
+  theme there thing think third those three throw tight timer times title today token topic total touch
+  tough tower trace track trade trail train trash treat trees trend trial trick tried trunk trust truth
+  tuple twice types under union unite unity until upper upset urban usage users usual valid value video
+  views virus visit vital voice watch water wheel where which while white whole width woman words world
+  worry worse worst worth would write wrong wrote yield young yours youth zebra zones
+`
+
 export const VALID_GUESSES = new Set([
-  'RESET', 'BLAME', 'MERGE', 'CLONE', 'STASH', 'PATCH', 'STAGE', 'FETCH',
-  'CLEAN', 'ABORT', 'DIFFS', 'TRACK', 'HOOKS', 'FORCE', 'CHECK', 'REVERT',
-  'PULLS', 'CHERRY', 'TREES', 'NODES', 'REFSX', 'BLOBS', 'LOGGS', 'INDEX',
-  'GRAPH', 'DELTA', 'SQUASH', 'TAGGS', 'HEADS', 'BRANCH', 'REMOTE', 'ORIGIN',
-  'PROXY', 'TOKEN', 'LOGIN', 'BUILDS', 'LINTS', 'CODES', 'BYTES', 'DEBUG',
-  'STACK', 'CACHE', 'FILES', 'LINES', 'FIXES', 'CRASH', 'ALERT', 'FAULT',
-  'PANIC', 'PIPES', 'PORTS', 'PARSE', 'SHELL', 'ROUTE', 'ASYNC', 'AWAIT',
-  'SCOPE', 'CLASS', 'STATE', 'STORE', 'VALUE', 'PARAM', 'QUERY', 'CLICK',
-  'DRIVE', 'ENTER', 'SHIFT', 'SPACE', 'MACRO', 'LINUX', 'REACT', 'RUSTY',
-  'NODES', 'SWIFT', 'CLEAN', 'CLOSE', 'WRITE', 'READS', 'PRINT', 'FLUSH',
-  'ABORT', 'CHDIR', 'UNSET', 'ALIAS', 'BATCH', 'TRUNC', 'POSIX', 'EPOCH',
-  'AUDIT', 'GUARD', 'CIPHER', 'SHAH1', 'SHAH2', 'KEYED', 'SIGNS', 'TRUST'
-]);
+  ...WORD_LIST.split(/\s+/).filter((w) => w.length === 5).map((w) => w.toUpperCase()),
+  ...COMMITLE_TARGETS.map((t) => t.word),
+])
 
 /**
- * Get deterministic daily case based on days elapsed since launch epoch
+ * Today's puzzle: the same for every player on the same local calendar date.
  */
 export function getDailyCommitleCase(customDate = new Date()) {
   const epoch = new Date('2026-01-01T00:00:00Z');
   const now = new Date(Date.UTC(customDate.getFullYear(), customDate.getMonth(), customDate.getDate()));
   const dayIndex = Math.max(0, Math.floor((now - epoch) / (1000 * 60 * 60 * 24)));
-  
+
   const caseData = COMMITLE_TARGETS[dayIndex % COMMITLE_TARGETS.length];
   return {
     ...caseData,
+    repo: CASE_REPO,
     dayNumber: dayIndex + 1,
     dateString: now.toISOString().split('T')[0]
   };
+}
+
+function dayInfo(customDate) {
+  const epoch = new Date('2026-01-01T00:00:00Z');
+  const now = new Date(Date.UTC(customDate.getFullYear(), customDate.getMonth(), customDate.getDate()));
+  const dayIndex = Math.max(0, Math.floor((now - epoch) / (1000 * 60 * 60 * 24)));
+  return { dayIndex, dayNumber: dayIndex + 1, dateString: now.toISOString().split('T')[0] };
+}
+
+/**
+ * Today's three puzzles, [easy, medium, hard], the same for every player on the same local date.
+ * Each difficulty rotates through its own pool, and the three never share an answer on one day.
+ */
+export function getDailyCommitleSet(customDate = new Date()) {
+  const { dayIndex, dayNumber, dateString } = dayInfo(customDate);
+  const used = new Set();
+  return DIFFICULTIES.map((difficulty) => {
+    const pool = COMMITLE_TARGETS.filter((t) => t.difficulty === difficulty);
+    let pick = pool[dayIndex % pool.length];
+    for (let step = 1; used.has(pick.word) && step < pool.length; step++) {
+      pick = pool[(dayIndex + step) % pool.length];
+    }
+    used.add(pick.word);
+    return { ...pick, difficulty, repo: CASE_REPO, dayNumber, dateString };
+  });
 }
 
 /**

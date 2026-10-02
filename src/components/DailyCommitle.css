@@ -1,90 +1,119 @@
 /* ==========================================================================
-   COMMITLE / SECTION 2: THE DAILY GIT FORENSICS WORDLE
-   100vh Viewport-fit interactive matrix, tactical cyber HUD
+   COMMITLE / FORENSIC DECRYPTION CONSOLE (SECTION 2)
+   100vh Viewport-Fit Cockpit: Crime Scene Diff (Left) + Decryption Matrix (Right)
    ========================================================================== */
 
 .commitle-section {
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 520px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  padding: clamp(4.5rem, 8vh, 5.5rem) 1.25rem clamp(1.5rem, 3vh, 2.5rem);
+  padding: clamp(4.5rem, 8vh, 5.5rem) 1.5rem clamp(1rem, 2vh, 1.5rem);
   border-bottom: 1px solid var(--cb-border);
   position: relative;
+  overflow: hidden;
   background: 
-    radial-gradient(ellipse at 50% 20%, rgba(0, 255, 102, 0.07) 0%, transparent 60%),
-    radial-gradient(circle at 85% 75%, rgba(0, 230, 92, 0.05) 0%, transparent 40%),
+    radial-gradient(ellipse at 20% 30%, rgba(0, 255, 102, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 70%, rgba(0, 230, 92, 0.05) 0%, transparent 50%),
     transparent;
 }
 
-.commitle-viewport-container {
+.commitle-console-frame {
   width: 100%;
-  max-width: 580px;
+  max-width: 1060px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   margin: 0 auto;
 }
 
-/* Header HUD */
-.commitle-hud-header {
+/* Console Top Intelligence Strip */
+.commitle-console-topbar {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: clamp(0.6rem, 1.4vh, 1rem);
-  gap: 0.75rem;
+  margin-bottom: clamp(0.75rem, 1.8vh, 1.25rem);
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.commitle-hud-left {
+.console-brand-col {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.console-badge {
+  font-family: var(--cb-font-heading);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #030604;
+  background: var(--cb-green-vivid);
+  padding: 0.22rem 0.6rem;
+  border-radius: 4px;
+  box-shadow: 0 0 14px rgba(0, 255, 102, 0.45);
+}
+
+.console-title {
+  font-family: var(--cb-font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+}
+
+.console-status-col {
   display: flex;
   align-items: center;
   gap: 0.65rem;
   flex-wrap: wrap;
 }
 
-.commitle-badge {
-  font-family: var(--cb-font-heading);
-  font-size: 0.95rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  color: #030604;
-  background: var(--cb-green-vivid);
-  padding: 0.2rem 0.55rem;
-  border-radius: 4px;
-  box-shadow: 0 0 14px rgba(0, 255, 102, 0.45);
-}
-
-.commitle-day-tag {
-  font-family: var(--cb-font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--cb-text-muted);
-  letter-spacing: 0.08em;
-}
-
-.commitle-target-chip {
+.console-meta-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  background: rgba(0, 255, 102, 0.08);
+  gap: 0.4rem;
+  background: rgba(10, 16, 12, 0.8);
   border: 1px solid rgba(0, 255, 102, 0.25);
-  padding: 0.2rem 0.55rem;
+  padding: 0.22rem 0.65rem;
   border-radius: 9999px;
   font-family: var(--cb-font-mono);
   font-size: 0.72rem;
-  color: var(--cb-text);
+  color: var(--cb-text-muted);
 }
 
-.commitle-target-chip .chip-ico {
+.console-meta-chip.repo {
+  color: #ffffff;
+  border-color: rgba(0, 255, 102, 0.4);
+}
+
+.console-meta-chip .chip-ico {
   color: var(--cb-green-vivid);
 }
 
-.commitle-hint-btn {
+.meta-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cb-green-vivid);
+}
+
+.meta-dot.pulse {
+  animation: pulseGlow 1.8s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; box-shadow: 0 0 4px #00ff66; }
+  50% { opacity: 1; box-shadow: 0 0 10px #00ff66; }
+}
+
+.console-hint-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -95,106 +124,297 @@
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  padding: 0.35rem 0.75rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 9999px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.commitle-hint-btn:hover,
-.commitle-hint-btn.active {
+.console-hint-toggle:hover,
+.console-hint-toggle.active {
   color: #00ff66;
-  border-color: rgba(0, 255, 102, 0.5);
-  background: rgba(0, 255, 102, 0.1);
-  box-shadow: 0 0 12px rgba(0, 255, 102, 0.2);
+  border-color: rgba(0, 255, 102, 0.6);
+  background: rgba(0, 255, 102, 0.12);
+  box-shadow: 0 0 14px rgba(0, 255, 102, 0.25);
 }
 
-/* Incident Brief Card */
-.commitle-brief-card {
-  width: 100%;
-  background: rgba(8, 14, 10, 0.82);
+/* 2-Column Split Cockpit Grid */
+.commitle-cockpit-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .commitle-cockpit-grid {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+}
+
+/* ==========================================================================
+   LEFT COLUMN: CRIME SCENE & REACTIVE DIFF
+   ========================================================================== */
+.commitle-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.6vh, 1.25rem);
+}
+
+.commitle-incident-pane {
+  background: rgba(8, 14, 10, 0.85);
   border: 1px solid rgba(0, 255, 102, 0.2);
   border-radius: 12px;
-  padding: clamp(0.65rem, 1.3vh, 0.95rem) clamp(0.85rem, 1.8vw, 1.15rem);
-  margin-bottom: clamp(0.65rem, 1.4vh, 1.1rem);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  padding: clamp(0.75rem, 1.5vh, 1.15rem);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.brief-lead-row {
+.incident-lead {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
   font-family: var(--cb-font-mono);
   font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
 }
 
-.brief-tag {
+.lead-tag {
   color: var(--cb-green-vivid);
   font-weight: 800;
 }
 
-.brief-instruction {
+.lead-mode {
   color: var(--cb-text-faint);
 }
 
-.brief-text {
-  font-size: clamp(0.82rem, 1vw, 0.88rem);
-  line-height: 1.45;
+.incident-narrative {
+  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+  line-height: 1.55;
   color: #e5e7eb;
   margin: 0;
 }
 
-.commitle-clue-popover {
-  margin-top: 0.5rem;
-  padding-top: 0.45rem;
-  border-top: 1px dashed rgba(0, 255, 102, 0.2);
+.incident-hint-drawer {
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed rgba(0, 255, 102, 0.25);
   display: flex;
   align-items: center;
   gap: 0.45rem;
   font-family: var(--cb-font-mono);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   color: #38bdf8;
+  animation: popIn 0.25s ease;
 }
 
-.clue-sparkle {
-  color: #38bdf8;
-  flex-shrink: 0;
+/* Live Redacted Diff Terminal */
+.commitle-diff-terminal {
+  background: rgba(6, 10, 7, 0.92);
+  border: 1px solid rgba(0, 255, 102, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 
+    0 16px 40px rgba(0, 0, 0, 0.7),
+    0 0 24px rgba(0, 255, 102, 0.12);
 }
 
-/* Toast Message */
-.commitle-toast-banner {
-  background: #00ff66;
-  color: #020603;
+.diff-terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  background: rgba(3, 7, 4, 0.85);
+  border-bottom: 1px solid rgba(0, 255, 102, 0.18);
   font-family: var(--cb-font-mono);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  padding: 0.35rem 1rem;
-  border-radius: 9999px;
-  box-shadow: 0 0 16px rgba(0, 255, 102, 0.6);
-  margin-bottom: 0.5rem;
-  animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 0.7rem;
 }
 
-@keyframes popIn {
-  0% { transform: scale(0.9); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+.diff-mac-dots {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.diff-mac-dots .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.diff-mac-dots .dot.red { background: #ef4444; }
+.diff-mac-dots .dot.yellow { background: #f59e0b; }
+.diff-mac-dots .dot.green { background: #10b981; }
+
+.diff-filename-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--cb-text-muted);
+}
+
+.diff-lock-status {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--cb-green-vivid);
+}
+
+.locked-ico { color: #f59e0b; }
+.unlocked-ico { color: var(--cb-green-vivid); }
+
+.diff-terminal-code {
+  padding: clamp(0.75rem, 1.5vh, 1.15rem);
+  font-family: var(--cb-font-mono);
+  font-size: clamp(0.75rem, 0.95vw, 0.85rem);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.diff-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.diff-line.del {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+  border-left: 2px solid #ef4444;
+}
+
+.diff-line.add {
+  background: rgba(0, 255, 102, 0.08);
+  color: #e5e7eb;
+  border-left: 2px solid var(--cb-green-vivid);
+}
+
+.line-gutter {
+  color: var(--cb-text-faint);
+  font-size: 0.7rem;
+  user-select: none;
+}
+
+.line-txt {
+  word-break: break-all;
+}
+
+.code-prefix, .code-suffix {
+  color: #a7f3d0;
+}
+
+/* Reactive Word Bay in the Diff Code */
+.redacted-word-bay {
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+  margin: 0 4px;
+}
+
+.bay-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 24px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bay-slot.redacted {
+  background: rgba(0, 255, 102, 0.12);
+  border: 1px dashed rgba(0, 255, 102, 0.4);
+  color: var(--cb-green-vivid);
+}
+
+.bay-slot.revealed {
+  background: var(--cb-green-vivid);
+  color: #030604;
+  border: 1px solid #00ff66;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.6);
+  transform: scale(1.08);
+}
+
+.diff-terminal-footer {
+  padding: 0.5rem 0.9rem;
+  background: rgba(3, 7, 4, 0.7);
+  border-top: 1px solid rgba(0, 255, 102, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--cb-font-mono);
+  font-size: 0.68rem;
+}
+
+.footer-tag {
+  color: var(--cb-green-vivid);
+  font-weight: 800;
+}
+
+.footer-msg {
+  color: var(--cb-text-muted);
+}
+
+/* ==========================================================================
+   RIGHT COLUMN: DECRYPTION MATRIX & CLI PROMPT
+   ========================================================================== */
+.commitle-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.6rem, 1.4vh, 1rem);
+}
+
+.commitle-matrix-panel {
+  background: rgba(8, 14, 10, 0.85);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  border-radius: 12px;
+  padding: clamp(0.65rem, 1.4vh, 1rem);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.matrix-status-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.55rem;
+  font-family: var(--cb-font-mono);
+  font-size: 0.68rem;
+}
+
+.matrix-label {
+  color: var(--cb-text-muted);
+  letter-spacing: 0.1em;
+}
+
+.matrix-counter {
+  color: var(--cb-green-vivid);
+  font-weight: 800;
 }
 
 /* Guess Matrix Grid */
 .commitle-grid-wrap {
   display: flex;
   flex-direction: column;
-  gap: clamp(4px, 0.7vh, 7px);
-  margin-bottom: clamp(0.65rem, 1.4vh, 1.15rem);
+  gap: clamp(3px, 0.6vh, 6px);
 }
 
 .commitle-grid-row {
   display: flex;
-  gap: clamp(4px, 0.8vw, 7px);
+  gap: clamp(3px, 0.6vw, 6px);
 }
 
 .commitle-grid-row.shake {
@@ -209,20 +429,21 @@
 }
 
 .commitle-tile {
-  width: clamp(42px, 7.5vw, 54px);
-  height: clamp(42px, 7.5vw, 54px);
+  width: clamp(38px, 5.5vw, 48px);
+  height: clamp(38px, 5.5vw, 48px);
   border: 2px solid rgba(255, 255, 255, 0.12);
   background: rgba(10, 16, 12, 0.65);
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--cb-font-heading);
-  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
   font-weight: 800;
   color: #ffffff;
   box-sizing: border-box;
   user-select: none;
+  perspective: 1000px;
   transition: border-color 0.15s ease;
 }
 
@@ -243,7 +464,6 @@
   border-color: #00ff66;
   color: #ffffff;
   box-shadow: 0 0 12px rgba(0, 255, 102, 0.35);
-  animation: flipTile 0.5s ease forwards;
 }
 
 .commitle-tile.present {
@@ -251,49 +471,106 @@
   border-color: #fbbf24;
   color: #ffffff;
   box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
-  animation: flipTile 0.5s ease forwards;
 }
 
 .commitle-tile.absent {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.08);
   color: var(--cb-text-muted);
-  animation: flipTile 0.5s ease forwards;
 }
 
-@keyframes flipTile {
-  0% { transform: rotateX(0); }
-  50% { transform: rotateX(90deg); }
-  100% { transform: rotateX(0); }
-}
-
-/* Tactical Keyboard */
-.commitle-keyboard {
-  width: 100%;
-  max-width: 480px;
+/* Tactical CLI Prompt */
+.commitle-input-suite {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.commitle-prompt-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(4, 8, 5, 0.85);
+  border: 1px solid rgba(0, 255, 102, 0.35);
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  font-family: var(--cb-font-mono);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+.prompt-sym {
+  color: var(--cb-green-vivid);
+  font-weight: 800;
+}
+
+.prompt-cmd {
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.prompt-input-preview {
+  display: flex;
+  gap: 4px;
+  margin-left: 0.35rem;
+}
+
+.prompt-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 22px;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.prompt-char.filled {
+  color: var(--cb-green-vivid);
+  border-bottom: 2px solid var(--cb-green-vivid);
+}
+
+.prompt-char.empty {
+  color: var(--cb-text-faint);
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.prompt-key-hint {
+  margin-left: auto;
+  font-size: 0.66rem;
+  color: var(--cb-text-faint);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Compact Cyber Keypad */
+.commitle-keyboard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   user-select: none;
 }
 
 .keyboard-row {
   display: flex;
   justify-content: center;
-  gap: 5px;
+  gap: 4px;
 }
 
 .keyboard-key {
-  height: clamp(38px, 6.2vh, 46px);
-  min-width: clamp(24px, 4.2vw, 36px);
+  height: clamp(32px, 4.8vh, 38px);
+  min-width: clamp(20px, 3.2vw, 30px);
   flex: 1;
-  max-width: 42px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(20, 26, 22, 0.7);
-  border-radius: 6px;
+  max-width: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(18, 24, 20, 0.7);
+  border-radius: 5px;
   color: #e5e7eb;
   font-family: var(--cb-font-mono);
-  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+  font-size: clamp(0.68rem, 0.9vw, 0.78rem);
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -305,9 +582,9 @@
 
 .keyboard-key.special-key {
   flex: 1.5;
-  max-width: 58px;
-  font-size: 0.68rem;
-  background: rgba(30, 38, 32, 0.85);
+  max-width: 48px;
+  font-size: 0.65rem;
+  background: rgba(28, 36, 30, 0.85);
 }
 
 .keyboard-key:hover {
@@ -334,23 +611,43 @@
 }
 
 .keyboard-key.absent {
-  background: rgba(12, 16, 14, 0.8) !important;
+  background: rgba(10, 14, 12, 0.8) !important;
   border-color: transparent !important;
-  color: #4b5563 !important;
-  opacity: 0.55;
+  color: #374151 !important;
+  opacity: 0.45;
 }
 
-/* Verdict / Solved Banner */
+/* Toast Banner */
+.commitle-toast-banner {
+  background: #00ff66;
+  color: #020603;
+  font-family: var(--cb-font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+  box-shadow: 0 0 16px rgba(0, 255, 102, 0.6);
+  align-self: center;
+  animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Verdict / Debrief Card */
 .commitle-verdict-drawer {
   width: 100%;
   background: rgba(6, 14, 8, 0.95);
   border: 1px solid rgba(0, 255, 102, 0.4);
   border-radius: 12px;
-  padding: clamp(0.75rem, 1.6vh, 1.15rem);
+  padding: clamp(0.7rem, 1.4vh, 1rem);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75), 0 0 20px rgba(0, 255, 102, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.55rem;
   animation: popIn 0.3s ease-out;
 }
 
@@ -359,7 +656,7 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .verdict-badge {
@@ -367,7 +664,7 @@
   align-items: center;
   gap: 0.4rem;
   font-family: var(--cb-font-heading);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -383,7 +680,7 @@
 .verdict-stats-strip {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
 .stat-pill {
@@ -391,21 +688,21 @@
   align-items: center;
   gap: 0.3rem;
   font-family: var(--cb-font-mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--cb-text-muted);
   background: rgba(255, 255, 255, 0.05);
-  padding: 0.2rem 0.5rem;
+  padding: 0.15rem 0.45rem;
   border-radius: 6px;
 }
 
 .verdict-explanation {
   font-family: var(--cb-font-mono);
-  font-size: 0.76rem;
-  line-height: 1.5;
+  font-size: 0.74rem;
+  line-height: 1.45;
   color: #d1d5db;
   background: rgba(0, 0, 0, 0.45);
-  padding: 0.55rem 0.75rem;
+  padding: 0.5rem 0.7rem;
   border-radius: 8px;
   border-left: 2px solid var(--cb-green-vivid);
   margin: 0;
@@ -419,20 +716,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.65rem;
   flex-wrap: wrap;
 }
 
 .commitle-share-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   background: linear-gradient(135deg, #00ff66 0%, #00e65c 40%, #10b981 100%);
   color: #030604;
   font-family: var(--cb-font-sans);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.9rem;
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -448,9 +745,53 @@
 .commitle-countdown-box {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   font-family: var(--cb-font-mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--cb-text-muted);
+}
+
+/* Spider Reaction modal actions */
+.cb-reaction-actions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.cb-reaction-dismiss-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cb-reaction-dismiss-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Terminal session lines: commands the investigator typed, and Git's output. */
+.diff-line.cmd {
+  color: #e5e7eb;
+  font-weight: 600;
+}
+
+.diff-line.out {
+  color: #9bb3a3;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.diff-line.cmd .line-txt,
+.diff-line.out .line-txt {
+  min-width: 0;
 }

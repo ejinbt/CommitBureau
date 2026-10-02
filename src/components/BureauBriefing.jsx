@@ -1,6 +1,9 @@
 import React, { useRef, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 import logoImg from '../assets/logo.png';
+import { playClickSound } from '../utils/audio';
+import SpiderChief from './character/SpiderChief';
 import './BureauBriefing.css';
 
 /**
@@ -11,10 +14,44 @@ import './BureauBriefing.css';
 export default function BureauBriefing({ onScrollToIntake }) {
   const terminalRef = useRef(null);
   const primaryBtnRef = useRef(null);
+  const secondaryBtnRef = useRef(null);
 
   useEffect(() => {
+    // Orchestrated GSAP Hero Entrance Timeline
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    tl.fromTo('.cb-hero-eyebrow', 
+      { opacity: 0, y: -16, scale: 0.96 }, 
+      { opacity: 1, y: 0, scale: 1, duration: 0.6 }
+    )
+    .fromTo('.cb-hero-title', 
+      { opacity: 0, y: 24 }, 
+      { opacity: 1, y: 0, duration: 0.7 }, 
+      '-=0.4'
+    )
+    .fromTo('.cb-hero-sub', 
+      { opacity: 0, y: 18 }, 
+      { opacity: 1, y: 0, duration: 0.6 }, 
+      '-=0.45'
+    )
+    .fromTo(['.cb-cta-primary', '.cb-cta-secondary'], 
+      { opacity: 0, y: 15, scale: 0.95 }, 
+      { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.5 }, 
+      '-=0.35'
+    )
+    .fromTo('.cb-metric-item', 
+      { opacity: 0, y: 16 }, 
+      { opacity: 1, y: 0, stagger: 0.08, duration: 0.45 }, 
+      '-=0.3'
+    )
+    .fromTo(terminalRef.current, 
+      { opacity: 0, y: 35, rotateY: 10, scale: 0.98 }, 
+      { opacity: 1, y: 0, rotateY: 0, scale: 1, duration: 0.85, ease: 'power2.out' }, 
+      '-=0.6'
+    );
+
     const terminal = terminalRef.current;
-    if (!terminal) return;
+    if (!terminal) return () => tl.kill();
 
     // 3D Gyroscopic Tilt on Terminal Window
     const handleMouseMove = (e) => {
@@ -48,16 +85,15 @@ export default function BureauBriefing({ onScrollToIntake }) {
     terminal.addEventListener('mousemove', handleMouseMove);
     terminal.addEventListener('mouseleave', handleMouseLeave);
 
-    // Magnetic physics on Primary CTA Button
-    const btn = primaryBtnRef.current;
-    let cleanupBtn = null;
-    if (btn) {
+    // Magnetic physics helper
+    const setupMagnetic = (btn, strength = 0.25) => {
+      if (!btn) return null;
       const onBtnMove = (e) => {
         const rect = btn.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-        const deltaX = (e.clientX - centerX) * 0.25;
-        const deltaY = (e.clientY - centerY) * 0.25;
+        const deltaX = (e.clientX - centerX) * strength;
+        const deltaY = (e.clientY - centerY) * strength;
 
         gsap.to(btn, {
           x: deltaX,
@@ -79,16 +115,21 @@ export default function BureauBriefing({ onScrollToIntake }) {
       btn.addEventListener('mousemove', onBtnMove);
       btn.addEventListener('mouseleave', onBtnLeave);
 
-      cleanupBtn = () => {
+      return () => {
         btn.removeEventListener('mousemove', onBtnMove);
         btn.removeEventListener('mouseleave', onBtnLeave);
       };
-    }
+    };
+
+    const cleanupPrimary = setupMagnetic(primaryBtnRef.current, 0.25);
+    const cleanupSecondary = setupMagnetic(secondaryBtnRef.current, 0.2);
 
     return () => {
+      tl.kill();
       terminal.removeEventListener('mousemove', handleMouseMove);
       terminal.removeEventListener('mouseleave', handleMouseLeave);
-      if (cleanupBtn) cleanupBtn();
+      if (cleanupPrimary) cleanupPrimary();
+      if (cleanupSecondary) cleanupSecondary();
     };
   }, []);
 
@@ -128,6 +169,7 @@ export default function BureauBriefing({ onScrollToIntake }) {
               </button>
 
               <button 
+                ref={secondaryBtnRef}
                 type="button" 
                 className="cb-cta-secondary"
                 onClick={onScrollToIntake}
@@ -155,9 +197,10 @@ export default function BureauBriefing({ onScrollToIntake }) {
             </div>
           </div>
 
-          {/* Right Column: Always Visible 3D Tilting Terminal Card */}
+          {/* Right Column: Always Visible 3D Tilting Terminal Card & Chief Detective */}
           <div className="cb-hero-visual">
             <div className="cb-ambient-glow" aria-hidden="true" />
+            <SpiderChief className="cb-hero-chief" />
             <div ref={terminalRef} className="cb-glass-card cb-terminal-window">
               {/* Window Header */}
               <div className="cb-terminal-header">
@@ -207,6 +250,22 @@ export default function BureauBriefing({ onScrollToIntake }) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Bottom-Right Viewport Scroll Arrow to Section 2 (Commitle) */}
+      <div className="cb-section-scroll-arrow">
+        <button
+          type="button"
+          className="cb-hero-scroll-btn"
+          onClick={() => {
+            playClickSound();
+            onScrollToIntake();
+          }}
+          aria-label="Scroll to Daily Cases"
+        >
+          <span className="cb-scroll-label">DAILY CASES</span>
+          <ChevronDown size={18} className="cb-scroll-chevron" />
+        </button>
       </div>
     </section>
   );

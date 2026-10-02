@@ -1,8 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FEATURED_REPOS, getUserRepos } from '../api';
 import LevelPicker from './LevelPicker';
+import { SpiderPeep, SpiderLoader, SpiderInspector } from './character';
 import './CaseIntakeConsole.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Section 2: Case Intake Console
@@ -31,7 +35,11 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
   // Token Management
   const [showTokenSettings, setShowTokenSettings] = useState(false);
   const [githubToken, setGithubToken] = useState(() => {
-    return typeof window !== 'undefined' ? localStorage.getItem('cb_github_token') || '' : '';
+    try {
+      return localStorage.getItem('cb_github_token') || '';
+    } catch {
+      return ''; // storage blocked (private mode)
+    }
   });
   const [tokenSaved, setTokenSaved] = useState(false);
 
@@ -58,12 +66,82 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
     }
   }, [activeTab]);
 
+  // Section 3 ScrollTrigger entrance animation (triggers when scrolling into Section 3)
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const header = document.querySelector('.cb-intake-header');
+      if (header) {
+        gsap.fromTo(
+          header,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '#case-intake',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      }
+
+      const tabs = document.querySelector('.cb-intake-tabs');
+      if (tabs) {
+        gsap.fromTo(
+          tabs,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '#case-intake',
+              start: 'top 75%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      }
+
+      const cards = document.querySelectorAll('.cb-folder-card');
+      if (cards.length > 0) {
+        gsap.fromTo(
+          cards,
+          { opacity: 0, y: 35, scale: 0.96 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.55,
+            stagger: 0.08,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: '#case-intake',
+              start: 'top 70%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      }
+    });
+
+    return () => ctx.revert();
+  }, [activeTab]);
+
   const handleSaveToken = (e) => {
     e.preventDefault();
-    if (githubToken.trim()) {
-      localStorage.setItem('cb_github_token', githubToken.trim());
-    } else {
-      localStorage.removeItem('cb_github_token');
+    try {
+      if (githubToken.trim()) {
+        localStorage.setItem('cb_github_token', githubToken.trim());
+      } else {
+        localStorage.removeItem('cb_github_token');
+      }
+    } catch {
+      // Storage blocked (private mode): the token can't be saved, but the game still works.
     }
     setTokenSaved(true);
     setTimeout(() => setTokenSaved(false), 2000);
@@ -125,6 +203,9 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
 
   return (
     <section id="case-intake" className="cb-intake-section">
+      {/* Interactive Spider Detective Surveillance Peep */}
+      <SpiderPeep side="left" mode="viewport" top="36%" delay={3.5} interval={16} />
+
       <div className="cb-container">
         {/* Section Header */}
         <div className="cb-intake-header">
@@ -235,9 +316,12 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                 </div>
 
                 <div className="cb-folder-body cb-custom-body">
-                  <div className="cb-custom-header">
-                    <h3 className="cb-heading">Investigate Any Public Repository</h3>
-                    <p>Paste a GitHub link or specify owner and repository name.</p>
+                  <div className="cb-custom-top-row">
+                    <div className="cb-custom-header">
+                      <h3 className="cb-heading">Investigate Any Public Repository</h3>
+                      <p>Paste a GitHub link or specify owner and repository name.</p>
+                    </div>
+                    <SpiderInspector label="TARGET FORENSIC AUDITOR" className="cb-custom-inspector" />
                   </div>
 
                   <form onSubmit={handleLaunchCustom} className="cb-custom-form">
@@ -323,6 +407,16 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                       </div>
                     )}
                   </form>
+
+                  {/* High-Action Forensic Detective Loader */}
+                  {loadingRepos && (
+                    <div className="cb-archive-loader-wrapper">
+                      <SpiderLoader
+                        text="SCANNING GITHUB USER ARCHIVE..."
+                        subtext={`INTERROGATING PUBLIC REPOSITORIES FOR @${username.toUpperCase() || 'USER'}`}
+                      />
+                    </div>
+                  )}
 
                   {/* Retrieved User Repos List */}
                   {userRepos.length > 0 && (

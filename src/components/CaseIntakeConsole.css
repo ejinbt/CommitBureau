@@ -285,9 +285,27 @@
   padding: 2.25rem;
 }
 
+.cb-custom-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.cb-custom-inspector {
+  flex-shrink: 0;
+}
+
+.cb-archive-loader-wrapper {
+  margin-top: 2rem;
+  width: 100%;
+}
+
 .cb-custom-header,
 .cb-archive-header {
-  margin-bottom: 1.75rem;
+  margin-bottom: 0;
 }
 
 .cb-custom-header h3,

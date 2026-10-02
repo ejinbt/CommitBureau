@@ -28,6 +28,7 @@ export default function DebriefPage({
   targetRepo,
   gameState,
   level = 1,
+  daily = null,
   onPlayAgain,
   onReturnIntake,
   onNavigate
@@ -43,7 +44,7 @@ Target: ${repoName}
 Rank: ${report.rank.toUpperCase()} (${report.percent}%)
 Score: ${report.score} PTS | Max Streak: ${gameState?.maxStreak || 0}x
 Clearance: ${report.unlocked ? 'Level Up Authorized' : 'Standard Archival'}
-Inspect your commits: commitbureau.io`;
+Inspect your commits: ${window.location.origin}`;
 
   const handleCopyShare = () => {
     navigator.clipboard.writeText(shareText);
@@ -105,8 +106,22 @@ Inspect your commits: commitbureau.io`;
             </div>
           </div>
 
-          {/* Promotion / Clearance Status Callout */}
-          {report.unlocked ? (
+          {/* Promotion / Clearance Status Callout. A Daily case doesn't change the player's level, so it gets its own banner. */}
+          {daily ? (
+            <div className={`clearance-unlock-banner ${report.unlocked ? 'banner-promoted' : 'banner-retained'}`}>
+              <Sparkles size={18} className="unlock-ico" />
+              <div className="unlock-content">
+                <span className="unlock-title">
+                  DAILY CASE CLOSED // {daily.difficulty.toUpperCase()} · {report.correctCount}/{report.totalCount} SOLVED
+                </span>
+                <span className="unlock-desc">
+                  {report.unlocked
+                    ? 'Case cracked. Come back tomorrow for three new repos.'
+                    : 'Not every lead checked out. Replay it, or come back tomorrow for three new repos.'}
+                </span>
+              </div>
+            </div>
+          ) : report.unlocked ? (
             <div className="clearance-unlock-banner banner-promoted">
               <Sparkles size={18} className="unlock-ico" />
               <div className="unlock-content">
@@ -216,7 +231,7 @@ Inspect your commits: commitbureau.io`;
               >
                 <RotateCcw size={14} />
                 {/* After a promotion, App has already moved to the next level, so say so. */}
-                <span>{report.unlocked && level < 5 ? `START LEVEL ${level + 1}` : 'RE-EXAMINE REPO'}</span>
+                <span>{daily ? 'REPLAY CASE' : report.unlocked && level < 5 ? `START LEVEL ${level + 1}` : 'RE-EXAMINE REPO'}</span>
               </button>
 
               <button

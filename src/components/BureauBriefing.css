@@ -5,16 +5,18 @@
 
 .cb-hero-section {
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 520px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-sizing: border-box;
-  padding-top: clamp(4.25rem, 8vh, 5.5rem);
-  padding-bottom: clamp(1.25rem, 2.5vh, 2rem);
+  padding-top: clamp(4.5rem, 8vh, 5.5rem);
+  padding-bottom: clamp(1rem, 2vh, 1.5rem);
   border-bottom: 1px solid var(--cb-border);
   position: relative;
+  overflow: hidden;
 }
 
 .cb-hero-grid {
@@ -65,10 +67,10 @@
 }
 
 .cb-hero-title {
-  font-size: clamp(2.1rem, 3.6vw, 3.4rem);
-  line-height: 1.08;
+  font-size: clamp(1.95rem, 3.3vw, 3.1rem);
+  line-height: 1.1;
   color: #ffffff;
-  margin-bottom: clamp(0.7rem, 1.5vh, 1.15rem);
+  margin-bottom: clamp(0.5rem, 1.2vh, 0.85rem);
   letter-spacing: -0.03em;
 }
 
@@ -79,11 +81,11 @@
 }
 
 .cb-hero-sub {
-  font-size: clamp(0.92rem, 1.15vw, 1.08rem);
-  line-height: 1.55;
+  font-size: clamp(0.88rem, 1.1vw, 1rem);
+  line-height: 1.5;
   color: var(--cb-text-muted);
   max-width: 520px;
-  margin-bottom: clamp(1rem, 1.8vh, 1.6rem);
+  margin-bottom: clamp(0.8rem, 1.5vh, 1.3rem);
 }
 
 /* Actions Row */
@@ -92,7 +94,7 @@
   align-items: center;
   gap: 1.15rem;
   flex-wrap: wrap;
-  margin-bottom: clamp(1.2rem, 2.2vh, 2rem);
+  margin-bottom: clamp(0.8rem, 1.5vh, 1.35rem);
 }
 
 /* Primary High-Impact Button */
@@ -208,7 +210,7 @@
   background-color: var(--cb-border-subtle);
 }
 
-/* Right Column: 3D Tilting Terminal */
+/* Right Column: 3D Tilting Terminal & Chief Detective */
 .cb-hero-visual {
   position: relative;
   display: flex;
@@ -216,13 +218,20 @@
   align-items: center;
   perspective: 1000px;
   width: 100%;
+  gap: clamp(0.75rem, 1.5vw, 2rem);
+}
+
+.cb-hero-chief {
+  flex-shrink: 0;
+  z-index: 3;
 }
 
 .cb-ambient-glow {
   position: absolute;
   top: 50%;
   left: 55%;
-  transform: translate(-50%, -50%);
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
   width: 440px;
   height: 440px;
   background: radial-gradient(circle, rgba(0, 255, 102, 0.22) 0%, rgba(9, 72, 40, 0.07) 50%, transparent 70%);

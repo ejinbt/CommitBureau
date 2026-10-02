@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Flame, Award, Loader2, GitBranch, Key, X, Check, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Flame, Award, GitBranch, Key, X, Check, RotateCcw } from 'lucide-react';
 import Header from '../components/Header';
 import CaseCard from '../components/CaseCard';
 import logoImg from '../assets/logo.png';
+import { SpiderLoader, SpiderPeep } from '../components/character';
 import { buildGame, scoreAnswer, setToken } from '../api';
 import { playClickSound, playCorrectSound, playWrongSound } from '../utils/audio';
 import './InvestigationPage.css';
@@ -180,14 +181,16 @@ export default function InvestigationPage({
       />
 
       <main className="investigation-viewport">
+        {/* Interactive Spider Detective Surveillance Peep */}
+        <SpiderPeep side="right" mode="viewport" top="40%" delay={5} interval={20} />
+
         {/* Loading state */}
         {loading && (
-          <div className="investigation-state-card">
-            <Loader2 size={32} className="spin-indicator" />
-            <div className="state-text-block">
-              <span className="state-headline">INITIALIZING FORENSIC ENVIRONMENT</span>
-              <span className="state-sub">Decrypting commit tree and verifying cryptographic hashes...</span>
-            </div>
+          <div className="investigation-loading-hero">
+            <SpiderLoader
+              text="INITIALIZING FORENSIC ENVIRONMENT"
+              subtext="DECRYPTING REVISION TREE & EXTRACTING COMMITS"
+            />
           </div>
         )}
 

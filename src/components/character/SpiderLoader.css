@@ -1,0 +1,153 @@
+/* ==========================================================================
+   SPIDER LOADER COMPONENT STYLES
+   Marching walking detective with shadow physics & telemetry scanning
+   ========================================================================== */
+
+.cb-spider-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Fullscreen modal overlay */
+.cb-spider-loader--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(5, 5, 5, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 2rem;
+}
+
+/* Inline container mode */
+.cb-spider-loader--inline {
+  position: relative;
+  padding: 2.5rem 1.5rem;
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid rgba(234, 179, 8, 0.2);
+  border-radius: 12px;
+}
+
+.cb-spider-loader-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Walking Stage */
+.cb-spider-loader-stage {
+  position: relative;
+  width: clamp(140px, 18vw, 200px);
+  height: clamp(140px, 18vw, 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.cb-spider-loader-sprite {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.85))
+         drop-shadow(0 0 20px rgba(234, 179, 8, 0.2));
+  will-change: transform;
+}
+
+/* Ground shadow below walking shoes */
+.cb-spider-loader-shadow {
+  position: absolute;
+  bottom: 0px;
+  left: 20%;
+  right: 20%;
+  height: 14px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.75) 0%, transparent 75%);
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+
+/* Body & Telemetry */
+.cb-spider-loader-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cb-spider-loader-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #eab308;
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.cb-spider-loader-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #eab308;
+  box-shadow: 0 0 8px #eab308;
+  animation: cb-pulse-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes cb-pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.cb-spider-loader-text {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0.25rem 0 0;
+}
+
+.cb-spider-loader-sub {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* Progress track & laser scan */
+.cb-spider-loader-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cb-spider-loader-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #eab308, #22c55e);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+.cb-spider-loader-progress-scanner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, #eab308, #22c55e, transparent);
+  will-change: transform;
+}

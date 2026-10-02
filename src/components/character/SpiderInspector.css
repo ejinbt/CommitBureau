@@ -1,0 +1,66 @@
+/* ==========================================================================
+   SPIDER INSPECTOR COMPONENT STYLES
+   Crouched magnifying glass inspection stance
+   ========================================================================== */
+
+.cb-spider-inspector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  pointer-events: none;
+}
+
+.cb-spider-inspector-stage {
+  position: relative;
+  width: clamp(120px, 14vw, 170px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cb-spider-inspector-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.85))
+         drop-shadow(0 0 16px rgba(234, 179, 8, 0.2));
+  will-change: transform;
+}
+
+.cb-spider-inspector-lens {
+  position: absolute;
+  bottom: 24%;
+  right: 2%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.7) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(4px);
+  opacity: 0.4;
+  will-change: transform, opacity;
+}
+
+.cb-spider-inspector-tag {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(10, 10, 10, 0.8);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #eab308;
+}
+
+.cb-spider-inspector-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #eab308;
+  box-shadow: 0 0 6px #eab308;
+}
