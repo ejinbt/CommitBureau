@@ -104,7 +104,7 @@ for the steps. Locally, `npm run dev` doesn't run that function, so the game cal
 ## AI DISCLOSURE
 + we used AI tools like VScode with claude code extension and Antigravity
 + on backend AI designed the levels and in frontend AI designed common things like navbar, icons , animations
-+ we ourselves designed the core-engine of the game and guide AI to create levels in iterative model. so we can revert back when something happens , in frontend we placed and installed mascot ourselves and other things like color-schemes, folder theme , navigation , state management
++ we ourselves designed the core-engine of the game and guide AI to create levels in iterative model. so we can revert back when something wrong happens , in frontend we placed and installed mascot ourselves and other things like color-schemes, folder theme , navigation , state management
 + we reviewed every changes AI made and gave us our opinions and suggested the fixes 
 + we tested in browser after every prompts , we had a checklist with us
 
