@@ -28,7 +28,7 @@
 
 @media (min-width: 960px) {
   .cb-hero-grid {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); /* room for the spider and the code card side by side */
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); /* the headline needs less width than the spider plus the code card */
     gap: clamp(2rem, 3vw, 3rem);
   }
 }
@@ -242,7 +242,7 @@
 
 .cb-hero-visual .cb-terminal-window {
   flex: 1 1 auto;
-  min-width: 0;
+  min-width: min(23rem, 100%); /* never squash into a narrow square: dots, filename and code need room */
 }
 
 .cb-ambient-glow {
