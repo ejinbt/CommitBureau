@@ -243,6 +243,7 @@ export default function App() {
             targetRepo={targetRepo}
             gameState={lastDebrief}
             level={lastLevelPlayed}
+            daily={dailyRun}
             onPlayAgain={handlePlayAgain}
             onReturnIntake={handleExitCase}
             onNavigate={handleNavigate}
