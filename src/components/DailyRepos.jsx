@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { GitBranch, Clock, ArrowRight, CheckCircle2, ChevronDown } from 'lucide-react';
 import { playClickSound } from '../utils/audio';
+import { SpiderPeep } from './character';
 import { getDailyRepos } from '../api';
 import './DailyRepos.css';
 
@@ -68,6 +69,7 @@ export default function DailyRepos({ onStartDaily, onScrollNext }) {
 
   return (
     <section className="daily-repos-section">
+      <SpiderPeep side="right" mode="viewport" top="44%" delay={2.5} interval={14} />
       <div className="daily-repos-inner">
         <header className="daily-repos-header">
           <div className="daily-repos-eyebrow">
