@@ -30,3 +30,91 @@ Git is hard to learn because tutorials teach commands on toy examples, but never
 + **Terminal**: it doesn't run real Git , it requires user to connect his github account. for easier It **imitates** Git's output using the API data, and **masks** the clue the player has to find.
  + **The token proxy:**  a Vercel Function (`api/github.js`) adds a GitHub token  **on the server**, so players get 5,000 requests an hour and the browser never sees the token.
  + **Case Zero**: answers from local data, with no network at all (DEMO)
+
+
+ ## Technologies
+-   React 19, Vite 8, JavaScript
+-   GSAP (animations), lucide-react (icons)
+-   The GitHub REST API, Vercel (hosting plus a serverless function), oxlint (linting)
+-   Google Fonts: Inter, JetBrains Mono, Space Grotesk
+-   The Web Audio API (the sound effects are generated in code, with no audio files)
+
+
+## Setup
+
+### Requirements
+- [Node.js](https://nodejs.org/) 22 (LTS) or newer
+- Git, to clone the repository
+
+### Run it locally
+```bash
+git clone https://github.com/ejinbt/CommitBureau.git
+cd CommitBureau
+npm install
+npm run dev
+```
+Then open http://localhost:5173/ in your browser.
+
+### GitHub token (optional)
+Without a token, GitHub allows about 60 API requests an hour, which is roughly 6 games.
+For more, create a [fine-grained personal access token](https://github.com/settings/personal-access-tokens/new)
+with **Public repositories (read-only)** access and no other permissions, then paste it into the
+token field in the game. It is stored only in your browser and sent only to GitHub.
+***demo token is already passed to the live site for testing***
+
+**Case Zero**, the built-in practice repo, works with no token and no internet connection.
+
+### Other commands
+| Command | What it does |
+|---|---|
+| `npm run build` | Builds the production site into `dist/` |
+| `npm run preview` | Serves the production build locally |
+| `npm run lint` | Checks the code with oxlint |
+
+### Deploying
+The live site runs on Vercel, with a small serverless function (`api/github.js`) that adds a
+server-side GitHub token so players don't need their own. See [docs/DEPLOY.md](docs/DEPLOY.md)
+for the steps. Locally, `npm run dev` doesn't run that function, so the game calls GitHub directly.
+
+## Credits
+
+- The assets like spider character and logo is generated using ChatGPT
+- React 19, Vite 8, JavaScript
+-   GSAP (animations), lucide-react (icons)
+-   The GitHub REST API, Vercel (hosting plus a serverless function), oxlint (linting)
+-   Google Fonts: Inter, JetBrains Mono, Space Grotesk
+-   The Web Audio API (the sound effects are generated in code, with no audio files)
+
+## AI DISCLOSURE
++ we used AI tools like VScode with claude code extension and Antigravity
++ on backend AI designed the levels and in frontend AI designed common things like navbar, icons , animations
++ we ourselves wrote the core-engine of the game , in frontend we placed and installed mascot ourselves and other things like color-schemes, folder theme , navigation , state management
++ we reviewed every changes AI made and gave us our opinions and suggested the fixes 
++ we tested in browser after every prompts , we had a checklist with us
+
+## Team
++ ejinbt - the game engine , game logic , integration
++ AlenJoby - UI , design , state management , routing 
+
+## Challenges and what we learned
+ **1. Keeping a secret token safe with no backend**
+ Without a token, GitHub allows only 60 requests an hour, which is about 6 games. But our site runs entirely in the browser, so any token we put in the code would be visible to anyone who opened DevTools, and GitHub automatically revokes tokens it finds in public repos. We added a small Vercel serverless function that holds the token on the server and forwards only the three read-only requests the game needs. 
+ **Lesson:** a frontend can't keep secrets, so anything secret has to live on a server, even a tiny one.
+
+**2. Merging two people's work in the same files**
+ One of us built the game engine and the other the interface, but both of us ended up editing the same files, like `App.jsx` and the case screen. A careless merge could silently drop one person's feature, and once one did conflict when we both rewrote the magnifying-glass cursor. We switched to pull requests, did a trial merge on a scratch branch first, and checked that both sides' features still worked before merging into `main`. 
+ **Lesson:** agree on who owns which files, and test a merge before trusting it.
+
+**3. Mascot animations and placement** 
+We added an animated spider detective that peeks in from the screen edges and reacts to right and wrong answers. Getting it to appear at the right moments, without covering the game or sliding off-screen on different window sizes, took several rounds of fixes to its position and timing. 
+**Lesson:** creating animation engine , image placement 
+
+
+
+
+## Future works
++ leaderboards
++ a story-mode mystery
++ more git commands (git blame, git bisect)
++ multiplayer race mod
++ private repos
