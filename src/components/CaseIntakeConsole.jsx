@@ -35,7 +35,11 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
   // Token Management
   const [showTokenSettings, setShowTokenSettings] = useState(false);
   const [githubToken, setGithubToken] = useState(() => {
-    return typeof window !== 'undefined' ? localStorage.getItem('cb_github_token') || '' : '';
+    try {
+      return localStorage.getItem('cb_github_token') || '';
+    } catch {
+      return ''; // storage blocked (private mode)
+    }
   });
   const [tokenSaved, setTokenSaved] = useState(false);
 
@@ -130,10 +134,14 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
 
   const handleSaveToken = (e) => {
     e.preventDefault();
-    if (githubToken.trim()) {
-      localStorage.setItem('cb_github_token', githubToken.trim());
-    } else {
-      localStorage.removeItem('cb_github_token');
+    try {
+      if (githubToken.trim()) {
+        localStorage.setItem('cb_github_token', githubToken.trim());
+      } else {
+        localStorage.removeItem('cb_github_token');
+      }
+    } catch {
+      // Storage blocked (private mode): the token can't be saved, but the game still works.
     }
     setTokenSaved(true);
     setTimeout(() => setTokenSaved(false), 2000);
