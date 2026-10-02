@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 import logoImg from '../assets/logo.png';
 import { playClickSound } from '../utils/audio';
+import SpiderChief from './character/SpiderChief';
 import './BureauBriefing.css';
 
 /**
@@ -196,9 +197,10 @@ export default function BureauBriefing({ onScrollToIntake }) {
             </div>
           </div>
 
-          {/* Right Column: Always Visible 3D Tilting Terminal Card */}
+          {/* Right Column: Always Visible 3D Tilting Terminal Card & Chief Detective */}
           <div className="cb-hero-visual">
             <div className="cb-ambient-glow" aria-hidden="true" />
+            <SpiderChief className="cb-hero-chief" />
             <div ref={terminalRef} className="cb-glass-card cb-terminal-window">
               {/* Window Header */}
               <div className="cb-terminal-header">

@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FEATURED_REPOS, getUserRepos } from '../api';
 import LevelPicker from './LevelPicker';
+import { SpiderPeep, SpiderLoader, SpiderInspector } from './character';
 import './CaseIntakeConsole.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -194,6 +195,9 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
 
   return (
     <section id="case-intake" className="cb-intake-section">
+      {/* Interactive Spider Detective Surveillance Peep */}
+      <SpiderPeep side="left" mode="viewport" top="36%" delay={3.5} interval={16} />
+
       <div className="cb-container">
         {/* Section Header */}
         <div className="cb-intake-header">
@@ -304,9 +308,12 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                 </div>
 
                 <div className="cb-folder-body cb-custom-body">
-                  <div className="cb-custom-header">
-                    <h3 className="cb-heading">Investigate Any Public Repository</h3>
-                    <p>Paste a GitHub link or specify owner and repository name.</p>
+                  <div className="cb-custom-top-row">
+                    <div className="cb-custom-header">
+                      <h3 className="cb-heading">Investigate Any Public Repository</h3>
+                      <p>Paste a GitHub link or specify owner and repository name.</p>
+                    </div>
+                    <SpiderInspector label="TARGET FORENSIC AUDITOR" className="cb-custom-inspector" />
                   </div>
 
                   <form onSubmit={handleLaunchCustom} className="cb-custom-form">
@@ -392,6 +399,16 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                       </div>
                     )}
                   </form>
+
+                  {/* High-Action Forensic Detective Loader */}
+                  {loadingRepos && (
+                    <div className="cb-archive-loader-wrapper">
+                      <SpiderLoader
+                        text="SCANNING GITHUB USER ARCHIVE..."
+                        subtext={`INTERROGATING PUBLIC REPOSITORIES FOR @${username.toUpperCase() || 'USER'}`}
+                      />
+                    </div>
+                  )}
 
                   {/* Retrieved User Repos List */}
                   {userRepos.length > 0 && (

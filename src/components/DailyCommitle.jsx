@@ -25,6 +25,7 @@ import {
   VALID_GUESSES 
 } from '../data/commitleCases';
 import { playClickSound, playCorrectSound, playWrongSound } from '../utils/audio';
+import { SpiderPeep, SpiderReaction } from './character';
 import './DailyCommitle.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -128,6 +129,7 @@ export default function DailyCommitle({ onScrollToCases }) {
     return false;
   });
 
+  const [showReactionModal, setShowReactionModal] = useState(false);
   const [shakeRow, setShakeRow] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
   const [showHint, setShowHint] = useState(false);
@@ -271,6 +273,7 @@ export default function DailyCommitle({ onScrollToCases }) {
           playCorrectSound();
           setIsGameOver(true);
           setHasWon(true);
+          setShowReactionModal(true);
           showToast('CASE SOLVED! EVIDENCE CONFIRMED');
           
           const newStats = {
@@ -287,6 +290,7 @@ export default function DailyCommitle({ onScrollToCases }) {
           playWrongSound();
           setIsGameOver(true);
           setHasWon(false);
+          setShowReactionModal(true);
           showToast(`EVIDENCE SEALED. WORD: ${dailyCase.word}`);
 
           const newStats = {
@@ -622,6 +626,40 @@ export default function DailyCommitle({ onScrollToCases }) {
           </div>
         </div>
       </div>
+
+      {/* Interactive Spider Detective Surveillance Peep */}
+      <SpiderPeep side="right" mode="viewport" top="44%" delay={2.5} interval={14} />
+
+      {/* Spider Bureau Detective Reaction Modal */}
+      {showReactionModal && (
+        <SpiderReaction
+          type={hasWon ? 'correct' : 'wrong'}
+          title={hasWon ? `CIPHER CRACKED IN ${guesses.length}/${MAX_GUESSES} GUESSES!` : `ARCHIVE SEALED: ${dailyCase.word}`}
+          subtitle={hasWon 
+            ? `Forensic telemetry verified. Real Command: $ ${dailyCase.command}. ${dailyCase.explanation}` 
+            : `All decrypt attempts were exhausted. The real command was: $ ${dailyCase.command}. ${dailyCase.explanation}`
+          }
+          onClose={() => setShowReactionModal(false)}
+        >
+          <div className="cb-reaction-actions-group">
+            <button
+              type="button"
+              className="commitle-share-btn"
+              onClick={handleShare}
+            >
+              {copiedShare ? <Check size={14} /> : <Copy size={14} />}
+              <span>{copiedShare ? 'COPIED TO CLIPBOARD' : 'SHARE DEBRIEF'}</span>
+            </button>
+            <button
+              type="button"
+              className="cb-reaction-dismiss-btn cb-mono"
+              onClick={() => setShowReactionModal(false)}
+            >
+              INSPECT CIPHER MATRIX
+            </button>
+          </div>
+        </SpiderReaction>
+      )}
 
       {/* Bottom-Right Viewport Scroll Arrow to Section 3 (Cases) */}
       <div className="cb-section-scroll-arrow">

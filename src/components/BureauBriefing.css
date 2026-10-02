@@ -210,7 +210,7 @@
   background-color: var(--cb-border-subtle);
 }
 
-/* Right Column: 3D Tilting Terminal */
+/* Right Column: 3D Tilting Terminal & Chief Detective */
 .cb-hero-visual {
   position: relative;
   display: flex;
@@ -218,6 +218,12 @@
   align-items: center;
   perspective: 1000px;
   width: 100%;
+  gap: clamp(0.75rem, 1.5vw, 2rem);
+}
+
+.cb-hero-chief {
+  flex-shrink: 0;
+  z-index: 3;
 }
 
 .cb-ambient-glow {
