@@ -375,3 +375,16 @@
   outline: 1px solid var(--cb-green-vivid);
   outline-offset: -1px;
 }
+
+/* 2K / 4K screens: text scales with the root font size; give the output more room to match. */
+@media (min-width: 1800px) {
+  .inv-output { min-height: 280px; max-height: 540px; }
+}
+
+@media (min-width: 2560px) {
+  .inv-output { min-height: 340px; max-height: 680px; }
+}
+
+@media (min-width: 3200px) {
+  .inv-output { min-height: 420px; max-height: 840px; }
+}

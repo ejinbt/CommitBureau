@@ -1,4 +1,18 @@
 # CommitBureau
+
+<p align="center">
+  <img src="docs/images/banner.png" alt="CommitBureau: solve real cases from real GitHub repos, one git command at a time" width="100%">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white" alt="React 19">
+  <img src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white" alt="Vite 8">
+  <img src="https://img.shields.io/badge/node-%E2%89%A522-339933?logo=node.js&logoColor=white" alt="Node 22 or newer">
+  <img src="https://img.shields.io/badge/data-GitHub%20REST%20API-181717?logo=github&logoColor=white" alt="GitHub REST API">
+  <img src="https://img.shields.io/badge/hosted%20on-Vercel-000000?logo=vercel&logoColor=white" alt="Hosted on Vercel">
+  <img src="https://img.shields.io/badge/First%20Commit-hackathon%202026-00ff66" alt="First Commit hackathon 2026">
+</p>
+
 **it's a detective game , it uses real GitHub repos, and you solve the cases by typing real Git commands**
 
 ~~*live demo
