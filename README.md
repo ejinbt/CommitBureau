@@ -44,7 +44,8 @@ Git is hard to learn because tutorials teach commands on toy examples, but never
 + **Terminal**: it doesn't run real Git and doesn't require user to connect his github account. It **imitates** Git's output using the API data, and **masks** the clue the player has to find.
  + **The token proxy:**  a Vercel Function (`api/github.js`) adds a GitHub token  **on the server**, so players get 5,000 requests an hour and the browser never sees the token.
  + **Case Zero**: answers from local data, with no network at all (DEMO)
-
+   
+***We're proudest of the investigation terminal, which imitates real Git so players can solve cases in the browser without installing Git, cloning a repo, or connecting their GitHub account. It runs commands like `git log`, `git show` and `git shortlog` against commit data from the GitHub API, prints output in Git's own format, and hides the key clue (such as a commit's author) so it has to be deduced rather than read off***
 
  ## Technologies
 -   React 19, Vite 8, JavaScript
