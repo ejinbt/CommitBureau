@@ -164,6 +164,7 @@ export default function InvestigationPage({
 
       <main className="investigation-viewport">
         <SpiderPeep side="right" mode="viewport" top="40%" delay={5} interval={20} />
+        <SpiderPeep side="left" mode="viewport" top="58%" delay={15} interval={20} />
 
         {loading && (
           <div className="investigation-loading-hero">
