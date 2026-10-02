@@ -17,7 +17,6 @@ import './InvestigationPage.css';
 export default function InvestigationPage({
   targetRepo,
   level = 1,
-  mode = 'classic',
   rank = 'Rookie',
   onFinishCase,
   onExitCase,
@@ -340,7 +339,6 @@ export default function InvestigationPage({
               isCorrect={isCorrect}
               pointsAwarded={pointsAwarded}
               onNextRound={handleNextRound}
-              mode={mode}
               targetRepo={targetRepo}
             />
           </div>

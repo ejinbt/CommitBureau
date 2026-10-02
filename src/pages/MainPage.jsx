@@ -18,7 +18,7 @@ gsap.registerPlugin(ScrollToPlugin);
  * - Footer: System telemetry, clearance matrix & protocol links
  * - Butter-smooth GSAP ScrollToPlugin navigation physics
  */
-export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, mode, onSelectMode, onStartDaily }) {
+export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, onStartDaily }) {
   const commitleSectionRef = useRef(null);
   const intakeSectionRef = useRef(null);
 
@@ -86,7 +86,7 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
 
         {/* SECTION 2: DAILY REPOS (three real repos a day: easy, medium, hard) */}
         <div ref={commitleSectionRef} id="daily-commitle">
-          <DailyRepos onStartDaily={onStartDaily} mode={mode} />
+          <DailyRepos onStartDaily={onStartDaily} />
         </div>
 
         {/* SECTION 3: Case Intake Console (Repository Selection) */}
@@ -96,8 +96,6 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
             initialTab={intakeTab}
             level={level}
             onSelectLevel={onSelectLevel}
-            mode={mode}
-            onSelectMode={onSelectMode}
           />
         </div>
       </main>

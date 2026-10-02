@@ -58,9 +58,9 @@ function timeToMidnight() {
 /**
  * DailyRepos
  * Three real repositories a day, Easy, Medium and Hard, the same for every player. One click starts the
- * case straight away at that repo's level, in the player's chosen mode.
+ * case straight away at that repo's level, with the investigation terminal ready.
  */
-export default function DailyRepos({ onStartDaily, mode = 'detective' }) {
+export default function DailyRepos({ onStartDaily }) {
   const daily = useMemo(() => getDailyRepos(), []);
   const [countdown, setCountdown] = useState(timeToMidnight);
 
@@ -80,8 +80,8 @@ export default function DailyRepos({ onStartDaily, mode = 'detective' }) {
           </div>
           <h2 className="daily-repos-title">Three real repos. One day. Crack all three.</h2>
           <p className="daily-repos-subtitle">
-            Everyone gets the same three cases today. Each opens straight into the investigation
-            {mode === 'detective' ? ', with your terminal ready.' : '.'}
+            Everyone gets the same three cases today. Each opens straight into the investigation, with your
+            terminal ready.
           </p>
           <div className="daily-repos-meta">
             <span className="daily-meta-chip">
