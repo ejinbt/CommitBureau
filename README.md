@@ -15,8 +15,10 @@
 
 **it's a detective game , it uses real GitHub repos, and you solve the cases by typing real Git commands**
 
-***[live demo](https://commitbureau67.vercel.app/)***
-***[devpost](https://devpost.com/software/commitbureau)***
+<p align="center">
+  <a href="https://commitbureau67.vercel.app/"><img src="https://img.shields.io/badge/Play%20now-commitbureau67.vercel.app-00ff66?style=for-the-badge&logo=vercel&logoColor=white&labelColor=0a110d" alt="Play now: commitbureau67.vercel.app"></a>
+  <a href="https://devpost.com/software/commitbureau"><img src="https://img.shields.io/badge/Devpost-CommitBureau-003E54?style=for-the-badge&logo=devpost&logoColor=white" alt="Devpost: CommitBureau"></a>
+</p>
 
 ## Why we built it
 Git is hard to learn because tutorials teach commands on toy examples, but never show you how to read a real project's history. We wanted a way to practise on the real thing, so CommitBureau turns any public GitHub repo, even the Linux kernel, into detective cases you solve with real Git commands. 
