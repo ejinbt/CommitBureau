@@ -174,7 +174,7 @@ export default function BureauBriefing({ onScrollToIntake }) {
                 className="cb-cta-secondary"
                 onClick={onScrollToIntake}
               >
-                Featured Repos
+                Daily Cases
               </button>
             </div>
 
