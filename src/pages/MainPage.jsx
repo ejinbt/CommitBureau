@@ -6,6 +6,7 @@ import BureauBriefing from '../components/BureauBriefing';
 import DailyRepos from '../components/DailyRepos';
 import CaseIntakeConsole from '../components/CaseIntakeConsole';
 import Footer from '../components/Footer';
+import HowItWorks from '../components/HowItWorks';
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -21,6 +22,7 @@ gsap.registerPlugin(ScrollToPlugin);
 export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', intakeTab = 'featured', onNavigate, onSelectLevel, onStartDaily }) {
   const commitleSectionRef = useRef(null);
   const intakeSectionRef = useRef(null);
+  const howSectionRef = useRef(null);
 
   const smoothScrollTo = (target) => {
     if (typeof target === 'number') {
@@ -61,6 +63,10 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
       handleScrollToCommitle();
       return;
     }
+    if (section === 'how') {
+      smoothScrollTo(howSectionRef);
+      return;
+    }
     if (onNavigate) {
       onNavigate(section, tab);
     }
@@ -97,6 +103,11 @@ export default function MainPage({ onStartCase, level = 1, rank = 'Rookie', inta
             level={level}
             onSelectLevel={onSelectLevel}
           />
+        </div>
+
+        {/* SECTION 4: How It Works (field manual: steps, an example round, levels, scoring) */}
+        <div ref={howSectionRef} id="how-it-works">
+          <HowItWorks />
         </div>
       </main>
 

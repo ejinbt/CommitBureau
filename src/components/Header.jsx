@@ -123,7 +123,7 @@ export default function Header({ onStartCaseClick, onNavigate }) {
           <button 
             type="button" 
             className="cb-hud-tab"
-            onClick={handleNavClick('home', 'featured')}
+            onClick={handleNavClick('how')}
           >
             <FileText size={13} className="hud-tab-icon" />
             <span className="hud-tab-label">HOW IT WORKS</span>

@@ -55,6 +55,10 @@ export default function Footer({ onNavigate }) {
               CASES
             </a>
             <span className="cb-footer-bullet" aria-hidden="true">/</span>
+            <a href="#how-it-works" onClick={handleLinkClick('how')}>
+              HOW IT WORKS
+            </a>
+            <span className="cb-footer-bullet" aria-hidden="true">/</span>
             <a 
               href="https://github.com/ejinbt/CommitBureau" 
               target="_blank" 
