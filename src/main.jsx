@@ -7,7 +7,8 @@ import faviconUrl from './assets/favicon.png'
 // Ensure browser tab displays the official brand favicon dynamically
 if (typeof document !== 'undefined') {
   const setFavicon = (url) => {
-    const existing = document.querySelectorAll("link[rel*='icon'], link[rel='apple-touch-icon']");
+    // Replace only the tab icons (rel "icon" / "shortcut icon"); keep the apple-touch-icon for phones.
+    const existing = document.querySelectorAll("link[rel~='icon']");
     existing.forEach((el) => el.remove());
     const link = document.createElement('link');
     link.type = 'image/png';
