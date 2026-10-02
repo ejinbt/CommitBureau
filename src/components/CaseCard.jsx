@@ -26,11 +26,10 @@ export default function CaseCard({
   isCorrect,
   pointsAwarded,
   onNextRound,
-  mode = 'classic',
   targetRepo
 }) {
-  // Detective mode: the player digs up the evidence with git commands instead of being shown it.
-  const investigating = mode === 'detective' && Boolean(round.investigate);
+  // The player digs up the evidence with git commands. Level 5 has no investigation, only the scenario.
+  const investigating = Boolean(round.investigate);
   const [hintOpen, setHintOpen] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
   const [verifyingIdx, setVerifyingIdx] = useState(null);
@@ -108,14 +107,14 @@ export default function CaseCard({
         <h2 className="inquiry-statement">{round.prompt}</h2>
       </div>
 
-      {/* Detective mode: investigation terminal. Keyed by round so each case starts fresh. */}
+      {/* Investigation terminal. Keyed by round so each case starts fresh. */}
       {investigating && (
         <div className="case-evidence-envelope">
           <InvestigationTerminal key={round.id} round={round} targetRepo={targetRepo} />
         </div>
       )}
 
-      {/* Classic mode: Evidence Terminal Diff Viewer (Only when diff exists) */}
+      {/* Fallback: show the evidence when a round has no investigation but has a diff */}
       {!investigating && round.evidence?.diff && (
         <div className="case-evidence-envelope">
           <DiffViewer

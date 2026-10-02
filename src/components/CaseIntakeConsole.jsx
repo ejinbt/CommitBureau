@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
  * Features tactile Forensic Folder Dossier cards,
  * smooth tab transition physics, and staggered entrance animations.
  */
-export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured', level = 1, onSelectLevel, mode, onSelectMode }) {
+export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured', level = 1, onSelectLevel }) {
   const [activeTab, setActiveTab] = useState(initialTab); // 'featured' | 'custom' | 'archive'
   const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
 
@@ -228,7 +228,7 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
 
         {/* Level Picker: jump to any clearance level */}
         {onSelectLevel && (
-          <LevelPicker level={level} onSelectLevel={onSelectLevel} mode={mode} onSelectMode={onSelectMode} />
+          <LevelPicker level={level} onSelectLevel={onSelectLevel} />
         )}
 
         {/* Tab Switcher */}
