@@ -27,7 +27,7 @@ Git is hard to learn because tutorials teach commands on toy examples, but never
 + **UI**: ui talks engine through src/api.js
 + **Data**: GitHub REST API
 + **Rate-limit handling**: Responses are cached, if limit is hit mid-game , player can provide his own github token or game gets shorter automatically
-+ **Terminal**: it doesn't run real Git , it requires user to connect his github account. for easier It **imitates** Git's output using the API data, and **masks** the clue the player has to find.
++ **Terminal**: it doesn't run real Git and doesn't require user to connect his github account. It **imitates** Git's output using the API data, and **masks** the clue the player has to find.
  + **The token proxy:**  a Vercel Function (`api/github.js`) adds a GitHub token  **on the server**, so players get 5,000 requests an hour and the browser never sees the token.
  + **Case Zero**: answers from local data, with no network at all (DEMO)
 
