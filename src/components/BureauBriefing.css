@@ -28,7 +28,7 @@
 
 @media (min-width: 960px) {
   .cb-hero-grid {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); /* the headline needs less width than the spider plus the code card */
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); /* the headline needs less width than the spider plus the code card */
     gap: clamp(2rem, 3vw, 3rem);
   }
 }
@@ -237,12 +237,26 @@
 /* In the hero, size the spider by its column rather than the whole screen (the shared component uses 22vw,
    which left the code card a sliver of width on every desktop size). */
 .cb-hero-visual .cb-spider-chief-wrapper {
-  width: clamp(180px, 15vw, 420px);
+  width: clamp(170px, 13vw, 400px);
 }
 
 .cb-hero-visual .cb-terminal-window {
   flex: 1 1 auto;
   min-width: min(23rem, 100%); /* never squash into a narrow square: dots, filename and code need room */
+  max-width: 42rem; /* bigger showcase card; in rem so it also grows on 2K/4K */
+}
+
+/* Larger, easier-to-read code in the hero card (desktop; phones keep their own smaller size below). */
+@media (min-width: 961px) {
+  .cb-hero-visual .cb-terminal-diff {
+    font-size: 0.98rem;
+    padding: 1.5rem 1.35rem;
+  }
+
+  .cb-hero-visual .cb-terminal-header,
+  .cb-hero-visual .cb-terminal-footer {
+    font-size: 1.05em;
+  }
 }
 
 .cb-ambient-glow {
@@ -509,7 +523,7 @@
 
   .cb-metrics-row {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, minmax(0, 1fr)));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
     padding: 1rem;
   }
