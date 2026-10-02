@@ -105,9 +105,8 @@ for the steps. Locally, `npm run dev` doesn't run that function, so the game cal
  One of us built the game engine and the other the interface, but both of us ended up editing the same files, like `App.jsx` and the case screen. A careless merge could silently drop one person's feature, and once one did conflict when we both rewrote the magnifying-glass cursor. We switched to pull requests, did a trial merge on a scratch branch first, and checked that both sides' features still worked before merging into `main`. 
  **Lesson:** agree on who owns which files, and test a merge before trusting it.
 
-**3. Mascot animations and placement** 
-We added an animated spider detective that peeks in from the screen edges and reacts to right and wrong answers. Getting it to appear at the right moments, without covering the game or sliding off-screen on different window sizes, took several rounds of fixes to its position and timing. 
-**Lesson:** creating animation engine , image placement 
+Our spider detective peeks in from the screen edges, but at first it covered buttons on smaller screens, slid off-screen or caused sideways scrolling on phones, and either stayed forever or moved stiffly. We tuned its edge offsets, scaled it with the screen size using clamp(120px, 14vw, 360px), and hid it on screens narrower than 480 px so it never blocks touch controls. For motion, GSAP timelines give it a springy entrance, an automatic retreat after 4.5 seconds, and clean resets with killTweensOf(). 
+**Lesson:** a decorative feature still has to respect the layout. Test it on every screen size, not just your own monitor.
 
 
 
