@@ -145,7 +145,7 @@
 /* Metrics Summary */
 .verdict-metrics-summary {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -243,7 +243,7 @@
 /* Dual Grid */
 .debrief-dual-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -491,7 +491,7 @@
 
   .verdict-metrics-summary {
     width: 100%;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .metric-cell {
@@ -501,12 +501,12 @@
 
 @media (max-width: 768px) {
   .verdict-metrics-summary {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
   .debrief-dual-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .debrief-action-bar {
@@ -570,7 +570,7 @@
 
 @media (max-width: 400px) {
   .verdict-metrics-summary {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .action-next-case-btn,

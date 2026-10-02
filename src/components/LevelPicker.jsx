@@ -24,7 +24,7 @@ export default function LevelPicker({ level, onSelectLevel }) {
           <button
             key={item.level}
             type="button"
-            className={`cb-level-option ${item.level === level ? 'active' : ''}`}
+            className={`cb-level-option lvl-${item.level} ${item.level === level ? 'active' : ''}`}
             aria-pressed={item.level === level}
             onClick={() => onSelectLevel(item.level)}
           >

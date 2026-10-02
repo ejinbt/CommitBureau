@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
-import logoImg from '../assets/logo.png';
+import logoImg from '../assets/logo.webp';
 import { playClickSound } from '../utils/audio';
 import SpiderChief from './character/SpiderChief';
 import './BureauBriefing.css';
@@ -174,7 +174,7 @@ export default function BureauBriefing({ onScrollToIntake }) {
                 className="cb-cta-secondary"
                 onClick={onScrollToIntake}
               >
-                Featured Repos
+                Daily Cases
               </button>
             </div>
 
@@ -219,7 +219,7 @@ export default function BureauBriefing({ onScrollToIntake }) {
               <div className="cb-terminal-diff cb-mono">
                 <div className="cb-diff-row hunk">
                   <span className="cb-row-num">--</span>
-                  <span className="cb-row-code">@@ -34,4 +34,5 @@ async function verifyRequest(req)</span>
+                  <span className="cb-row-code">@@ -34,4 +34,5 @@ verifyRequest(req)</span>
                 </div>
                 <div className="cb-diff-row del">
                   <span className="cb-row-num">34</span>
@@ -227,15 +227,15 @@ export default function BureauBriefing({ onScrollToIntake }) {
                 </div>
                 <div className="cb-diff-row add">
                   <span className="cb-row-num">34</span>
-                  <span className="cb-row-code">+   const token = req.headers["authorization"];</span>
+                  <span className="cb-row-code">+   const token = req.headers.auth;</span>
                 </div>
                 <div className="cb-diff-row add">
                   <span className="cb-row-num">35</span>
-                  <span className="cb-row-code">+   if (!token) throw new AuthError("Missing Token");</span>
+                  <span className="cb-row-code">+   if (!token) throw new AuthError();</span>
                 </div>
                 <div className="cb-diff-row add">
                   <span className="cb-row-num">36</span>
-                  <span className="cb-row-code">+   await verifyHMACSignature(token, secret);</span>
+                  <span className="cb-row-code">+   await verifyHMAC(token, secret);</span>
                 </div>
               </div>
 

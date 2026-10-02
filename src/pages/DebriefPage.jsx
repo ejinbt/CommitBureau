@@ -11,7 +11,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import Header from '../components/Header';
-import logoImg from '../assets/logo.png';
+import logoImg from '../assets/logo.webp';
 import { finalReport, HINT_PENALTY } from '../api';
 import './DebriefPage.css';
 

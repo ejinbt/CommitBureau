@@ -19,7 +19,7 @@
 /* Header */
 .cb-intake-header {
   text-align: center;
-  max-width: 680px;
+  max-width: 42.5rem; /* 680px at normal size; grows on 2K/4K */
   margin: 0 auto 3rem auto;
 }
 
@@ -115,7 +115,8 @@
 
 .cb-folders-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+  /* Four case folders per row: wider, shorter cards. Tablet and phone layouts below. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 2rem;
   margin-bottom: 3.5rem;
 }
@@ -523,7 +524,7 @@
    ========================================================================== */
 
 .cb-token-container {
-  max-width: 680px;
+  max-width: 42.5rem; /* 680px at normal size; grows on 2K/4K */
   margin: 0 auto;
   text-align: center;
 }
@@ -629,7 +630,7 @@
 
 @media (max-width: 1024px) {
   .cb-folders-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
   }
 }
@@ -657,7 +658,7 @@
   }
 
   .cb-folders-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
   }
 }
