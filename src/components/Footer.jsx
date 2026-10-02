@@ -48,7 +48,7 @@ export default function Footer({ onNavigate }) {
             </a>
             <span className="cb-footer-bullet" aria-hidden="true">/</span>
             <a href="#daily-commitle" onClick={handleLinkClick('commitle')}>
-              COMMITLE
+              DAILY CASES
             </a>
             <span className="cb-footer-bullet" aria-hidden="true">/</span>
             <a href="#case-intake" onClick={handleLinkClick('intake', 'featured')}>

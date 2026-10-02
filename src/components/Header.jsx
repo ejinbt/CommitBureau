@@ -105,7 +105,7 @@ export default function Header({ onStartCaseClick, onNavigate }) {
             onClick={handleNavClick('commitle', 'daily')}
           >
             <Sparkles size={13} className="hud-tab-icon icon-glow-gold" />
-            <span className="hud-tab-label">COMMITLE</span>
+            <span className="hud-tab-label">DAILY</span>
             <span className="hud-daily-pill">DAILY</span>
           </button>
 

@@ -261,9 +261,9 @@ export default function BureauBriefing({ onScrollToIntake }) {
             playClickSound();
             onScrollToIntake();
           }}
-          aria-label="Scroll to Commitle"
+          aria-label="Scroll to Daily Cases"
         >
-          <span className="cb-scroll-label">COMMITLE</span>
+          <span className="cb-scroll-label">DAILY CASES</span>
           <ChevronDown size={18} className="cb-scroll-chevron" />
         </button>
       </div>
