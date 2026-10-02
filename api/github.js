@@ -1,6 +1,6 @@
 // CommitBureau demo proxy, as a Vercel Function at /api/github.
 // The game sends its GitHub API requests here as /api/github?p=<GitHub path>. This function adds a token
-// from Vercel's environment variables (GITHUB_TOKEN) and forwards them to api.github.com, so players get
+// from Vercel's environment variables (GITHUB_TOKEN, with GITHUB_BACKUP_TOKEN as a fallback) and forwards them to api.github.com, so players get
 // 5,000 requests an hour without a token of their own, and the browser never sees the token.
 //
 // It only forwards the three read-only requests the game makes, so it can't be used as a general GitHub client.
@@ -39,20 +39,25 @@ export async function GET(request) {
   for (const key of url.searchParams.keys()) {
     if (!ALLOWED_QUERY.has(key)) return reply(400, { message: `Query parameter "${key}" is not allowed.` })
   }
-  if (!process.env.GITHUB_TOKEN) return reply(500, { message: 'The proxy has no GitHub token configured.' })
+  // GITHUB_TOKEN first; GITHUB_BACKUP_TOKEN takes over if the first is missing, rejected or out of requests.
+  const tokens = [process.env.GITHUB_TOKEN, process.env.GITHUB_BACKUP_TOKEN].filter(Boolean)
+  if (!tokens.length) return reply(500, { message: 'The proxy has no GitHub token configured.' })
 
   let upstream
-  try {
-    upstream = await fetch(url, {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-        'User-Agent': 'CommitBureau-proxy',
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
-    })
-  } catch {
-    return reply(502, { message: "The proxy couldn't reach GitHub." })
+  for (const token of tokens) {
+    try {
+      upstream = await fetch(url, {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          Authorization: `Bearer ${token}`,
+          'User-Agent': 'CommitBureau-proxy',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      })
+    } catch {
+      return reply(502, { message: "The proxy couldn't reach GitHub." })
+    }
+    if (!tokenFailed(upstream)) break
   }
 
   // Pass GitHub's status and body through, plus the rate limit headers the engine explains to players.
@@ -75,4 +80,10 @@ function reply(status, body) {
     status,
     headers: { 'Content-Type': 'application/json', [PROXY_HEADER]: '1', 'Cache-Control': 'no-store' },
   })
+}
+
+// A token is unusable when GitHub rejects it (401) or it has run out of requests (403/429 with none left).
+function tokenFailed(res) {
+  if (res.status === 401) return true
+  return (res.status === 403 || res.status === 429) && res.headers.get('x-ratelimit-remaining') === '0'
 }
