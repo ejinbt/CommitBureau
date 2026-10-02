@@ -6,6 +6,7 @@ import { fetchUserRepos } from './github.js'
 
 export { parseRepo } from './parseRepo.js'
 export { createInvestigation, HELP_TEXT } from './terminal.js'
+export { getDailyRepos, dailyDateKey } from './dailyRepos.js'
 export { setToken, demoAccessAvailable, isDemoAccessOn, setDemoAccess } from './github.js'
 export { FEATURED_REPOS } from '../data/featuredRepos.js'
 export { buildGame, ROUNDS_PER_GAME } from './game.js'
