@@ -1,6 +1,3 @@
-// Featured repos shelf on the home screen. List written by the UI side (src/mocks/sampleGame.js),
-// moved here so the real engine can export it too.
-
 import { DEMO_REPO } from './demoRepo.js'
 
 export const FEATURED_REPOS = [

@@ -1,6 +1,3 @@
-// Level 3 (Detective): the history of one file.
-// Each generator takes the game context and returns one round, or null if this repo can't support it.
-
 import { freshCommits } from '../diff.js'
 import { getCommit, getFileHistory } from '../github.js'
 import {
@@ -18,18 +15,16 @@ import {
   uniqueOthers,
 } from '../utils.js'
 
-const SHOWN_COMMITS = 12 // commits listed for "who touched most"
-const MAX_NAME_WIDTH = 22 // author column width in that list
-const MAX_CREATED_HISTORY = 15 // "which commit created" only uses files whose whole history fits on screen
-const POOL_COMMITS = 3 // commits to collect file names from, once per game
+const SHOWN_COMMITS = 12
+const MAX_NAME_WIDTH = 22
+const MAX_CREATED_HISTORY = 15
+const POOL_COMMITS = 3
 
-// File names from recent commits, shared by both question types for the whole game.
-// Starts from a few commits and pulls in a few more whenever the files found so far run out.
 async function growFilePool(ctx) {
   if (!ctx.filePool) {
     ctx.filePool = []
-    ctx.poolSource = shuffle(freshCommits(ctx)) // commits not yet mined for file names
-    ctx.rejected = new Set() // "type:path" pairs that didn't fit a question type
+    ctx.poolSource = shuffle(freshCommits(ctx))
+    ctx.rejected = new Set()
   }
   const known = new Set(ctx.filePool)
   const added = []
@@ -49,8 +44,6 @@ function poolCandidates(ctx, type) {
   return (ctx.filePool || []).filter((p) => !ctx.usedFiles.has(p) && !ctx.rejected.has(`${type}:${p}`))
 }
 
-// Find a file whose history passes `historyOk`. Each new file costs one API call, and histories are
-// cached, so a file that didn't fit one question type can still be tried for the other at no cost.
 async function findFileHistory(ctx, type, historyOk, tries = 3) {
   let candidates = poolCandidates(ctx, type)
   while (!candidates.length && (!ctx.poolSource || ctx.poolSource.length)) {
@@ -69,7 +62,6 @@ async function findFileHistory(ctx, type, historyOk, tries = 3) {
   return null
 }
 
-// Count commits per human author, most first: [["Ada", 5], ["Linus", 2], ...]
 function countAuthors(history) {
   const counts = new Map()
   for (const c of history) {
@@ -79,16 +71,11 @@ function countAuthors(history) {
   return [...counts].sort((a, b) => b[1] - a[1])
 }
 
-// Who touched this file most? Pick the author with the most commits to one file.
-// Who touched this file most? Show the file's recent commits with authors, the player counts the names.
 export async function whoTouchedMost(ctx) {
   const found = await findFileHistory(ctx, 'who_touched_most', (history) => {
-    // Count only what's on screen, so the evidence always matches the answer. Bots don't count.
     const shown = newestFirst(history.filter((c) => !isBot(authorName(c)))).slice(0, SHOWN_COMMITS)
     const ranking = countAuthors(shown)
-    // Needs a clear winner: at least 2 people and no tie for first place.
     if (shown.length < 3 || ranking.length < 2 || ranking[0][1] === ranking[1][1]) return null
-    // The terminal's `git shortlog` counts the whole history, so it must crown the same winner.
     const full = countAuthors(history)
     if (full[0][0] !== ranking[0][0] || (full[1] && full[0][1] === full[1][1])) return null
     return { shown, ranking }
@@ -98,12 +85,10 @@ export async function whoTouchedMost(ctx) {
 
   const [top, topCount] = ranking[0]
   const [second, secondCount] = ranking[1]
-  // Wrong answers: other people who touched this file (harder), then anyone in the repo.
   const repoAuthors = ctx.commits.map(authorName).filter((n) => !isBot(n))
   const wrong = uniqueOthers([...ranking.slice(1).map(([name]) => name), ...shuffle(repoAuthors)], top, 3)
   if (wrong.length < 2) return null
 
-  // Like `git log --format="%h %an %s" -- <file>`, with names padded into a column for easy counting.
   const width = Math.min(Math.max(...shown.map((c) => authorName(c).length)), MAX_NAME_WIDTH)
   const log = shown.map((c) => `${shortSha(c.sha)}  ${authorName(c).padEnd(width)}  ${clipMessage(c, 50)}`)
 
@@ -123,10 +108,8 @@ export async function whoTouchedMost(ctx) {
   }
 }
 
-// Which commit created this file? Show the file's whole history, the creating commit is at the bottom.
 export async function whichCommitCreated(ctx) {
   const found = await findFileHistory(ctx, 'which_commit_created', (history) => {
-    // The whole history has to fit on screen, or the bottom line (the creation) would be cut off.
     if (history.length < 3 || history.length > MAX_CREATED_HISTORY) return null
     const ordered = newestFirst(history)
     return { ordered, oldest: ordered[ordered.length - 1] }
@@ -134,13 +117,11 @@ export async function whichCommitCreated(ctx) {
   if (!found) return null
   const { path, ordered: history, oldest } = found
 
-  // Make sure the oldest commit really added the file (it wasn't renamed from somewhere else).
   const detail = await getCommit(ctx.owner, ctx.repo, oldest.sha)
   const added = (detail.files || []).find((f) => f.filename === path)
   if (added?.status !== 'added') return null
 
   const real = firstLine(oldest.commit.message)
-  // Wrong answers: later commits to the same file. They all touched it, but only one created it.
   const later = history.filter((c) => c.sha !== oldest.sha).map((c) => firstLine(c.commit.message))
   const wrong = uniqueOthers(shuffle(later), real, 3)
   if (wrong.length < 2) return null

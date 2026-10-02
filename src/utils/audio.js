@@ -1,9 +1,3 @@
-/**
- * CommitBureau Web Audio Synthesizer
- * Zero-latency procedural sound effects using native browser Web Audio API.
- * Guaranteed instant playback without external file loading or network lag.
- */
-
 let audioCtx = null;
 let lastClickTime = 0;
 
@@ -21,7 +15,6 @@ function getAudioContext() {
   return audioCtx;
 }
 
-// Auto-unlock audio context on first user interaction anywhere
 if (typeof window !== 'undefined') {
   const unlockAudio = () => {
     const ctx = getAudioContext();
@@ -37,14 +30,10 @@ if (typeof window !== 'undefined') {
   window.addEventListener('touchstart', unlockAudio, { passive: true });
 }
 
-/**
- * Tactical UI Click Sound
- * Crisp, punchy tactile micro-click feedback for button presses.
- */
 export function playClickSound() {
   try {
     const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
-    if (now - lastClickTime < 35) return; // Prevent double-trigger within 35ms
+    if (now - lastClickTime < 35) return;
     lastClickTime = now;
 
     const ctx = getAudioContext();
@@ -69,14 +58,9 @@ export function playClickSound() {
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + 0.045);
   } catch {
-    // Audio playback blocked or unsupported
   }
 }
 
-/**
- * Correct Case Solved Sound
- * Upbeat, rewarding cyber chime (3-note ascending arpeggio C5 -> E5 -> G5).
- */
 export function playCorrectSound() {
   try {
     const ctx = getAudioContext();
@@ -85,7 +69,7 @@ export function playCorrectSound() {
       ctx.resume().catch(() => {});
     }
 
-    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+    const notes = [523.25, 659.25, 783.99];
     const now = ctx.currentTime;
 
     notes.forEach((freq, idx) => {
@@ -108,14 +92,9 @@ export function playCorrectSound() {
       osc.stop(startTime + duration);
     });
   } catch {
-    // Audio playback blocked or unsupported
   }
 }
 
-/**
- * Wrong Clue Sound
- * Descending cyber warning buzz for incorrect selections.
- */
 export function playWrongSound() {
   try {
     const ctx = getAudioContext();
@@ -141,14 +120,9 @@ export function playWrongSound() {
     osc.start(now);
     osc.stop(now + 0.26);
   } catch {
-    // Audio playback blocked or unsupported
   }
 }
 
-/**
- * Global Tactile Audio Listener
- * Guarantees every single interactive button in the app / game triggers tactile click sound.
- */
 export function attachTactileAudioListener() {
   if (typeof window === 'undefined') return () => {};
 
@@ -166,4 +140,3 @@ export function attachTactileAudioListener() {
     document.removeEventListener('click', handleGlobalClick, { capture: true });
   };
 }
-

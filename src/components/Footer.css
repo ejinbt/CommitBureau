@@ -1,8 +1,3 @@
-/* ==========================================================================
-   CLEAN CYBER-FORENSIC MINIMALIST FOOTER
-   Clean single-row HUD layout with essential links and return-to-top button
-   ========================================================================== */
-
 .cb-footer-clean {
   width: 100%;
   background: rgba(3, 7, 4, 0.95);
@@ -22,7 +17,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Brand & Telemetry */
+
 .cb-footer-clean-brand {
   display: flex;
   align-items: center;
@@ -71,10 +66,10 @@
   box-shadow: 0 0 6px #00ff66;
 }
 
-/* Navigation Links */
+
 .cb-footer-clean-nav {
   display: flex;
-  flex-wrap: wrap; /* wrap whole links onto a new line on phones instead of squeezing them */
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 0.6rem 0.85rem;
@@ -85,7 +80,7 @@
 }
 
 .cb-footer-clean-nav a {
-  white-space: nowrap; /* keep "HOW IT WORKS" on one line */
+  white-space: nowrap;
   color: var(--cb-text-muted);
   text-decoration: none;
   transition: all 0.2s ease;
@@ -109,7 +104,7 @@
   color: var(--cb-text-muted);
 }
 
-/* Return to Top Button */
+
 .cb-footer-clean-btn {
   display: inline-flex;
   align-items: center;
@@ -135,7 +130,7 @@
   box-shadow: 0 4px 16px rgba(0, 255, 102, 0.3);
 }
 
-/* Minimal Bottom Line */
+
 .cb-footer-clean-bottom {
   display: flex;
   align-items: center;

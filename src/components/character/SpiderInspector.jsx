@@ -3,17 +3,12 @@ import gsap from 'gsap';
 import { SPIDER_SPRITES } from '../../assets/spiderAssets';
 import './SpiderInspector.css';
 
-/**
- * SpiderInspector: Crouched detective examining evidence with a magnifying glass.
- * Perfect for placement beside diff viewers, case search inputs, and forensic logs.
- */
 export default function SpiderInspector({ className = '', label = 'ANALYZING CODE SIGNATURES' }) {
   const spriteRef = useRef(null);
   const lensRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Crouched observation micro-bobbing
       if (spriteRef.current) {
         gsap.to(spriteRef.current, {
           y: -4,
@@ -25,7 +20,6 @@ export default function SpiderInspector({ className = '', label = 'ANALYZING COD
         });
       }
 
-      // Lens scan pulse
       if (lensRef.current) {
         gsap.to(lensRef.current, {
           scale: 1.25,

@@ -15,15 +15,6 @@ import logoImg from '../assets/logo.webp';
 import { finalReport, HINT_PENALTY } from '../api';
 import './DebriefPage.css';
 
-/**
- * DebriefPage Component (Section 4)
- * Case clearance debrief and detective rank promotion:
- * - Classified clearance stamp (Promoted / Solved)
- * - Detective Rank badge and level progression
- * - Forensic skills breakdown
- * - Shareable case verdict & copy to clipboard
- * - Launch next archive case action
- */
 export default function DebriefPage({
   targetRepo,
   gameState,
@@ -35,7 +26,6 @@ export default function DebriefPage({
 }) {
   const [copiedShare, setCopiedShare] = useState(false);
 
-  // Compute official report per engine contract using level played
   const report = finalReport(gameState, level);
   const repoName = targetRepo ? `${targetRepo.owner}/${targetRepo.repo}` : 'torvalds/linux';
 
@@ -63,7 +53,6 @@ Inspect your commits: ${window.location.origin}`;
 
       <main className="debrief-viewport">
         <div className="debrief-dossier-frame">
-          {/* Dossier Header Tag */}
           <div className="debrief-header-strip">
             <div className="clearance-stamp-row">
               <span className="clearance-tag">// CLASSIFIED DEBRIEF</span>
@@ -74,7 +63,6 @@ Inspect your commits: ${window.location.origin}`;
             </div>
           </div>
 
-          {/* Main Clearance Banner */}
           <div className="debrief-verdict-hero">
             <div className="verdict-rank-badge">
               <div className="debrief-logo-emblem">
@@ -106,7 +94,6 @@ Inspect your commits: ${window.location.origin}`;
             </div>
           </div>
 
-          {/* Promotion / Clearance Status Callout. A Daily case doesn't change the player's level, so it gets its own banner. */}
           {daily ? (
             <div className={`clearance-unlock-banner ${report.unlocked ? 'banner-promoted' : 'banner-retained'}`}>
               <Sparkles size={18} className="unlock-ico" />
@@ -147,9 +134,7 @@ Inspect your commits: ${window.location.origin}`;
             </div>
           )}
 
-          {/* Two-Column Grid: Forensic Skills & Round Breakdown */}
           <div className="debrief-dual-grid">
-            {/* Skills Breakdown */}
             <div className="debrief-panel skills-panel">
               <div className="panel-title-bar">
                 <Terminal size={14} className="panel-ico" />
@@ -174,7 +159,6 @@ Inspect your commits: ${window.location.origin}`;
               </div>
             </div>
 
-            {/* Case Rounds Breakdown */}
             <div className="debrief-panel rounds-panel">
               <div className="panel-title-bar">
                 <ShieldCheck size={14} className="panel-ico" />
@@ -212,7 +196,6 @@ Inspect your commits: ${window.location.origin}`;
             </div>
           </div>
 
-          {/* Action Suite & Share Bar */}
           <div className="debrief-action-bar">
             <button
               type="button"
@@ -230,7 +213,6 @@ Inspect your commits: ${window.location.origin}`;
                 onClick={onPlayAgain}
               >
                 <RotateCcw size={14} />
-                {/* After a promotion, App has already moved to the next level, so say so. */}
                 <span>{daily ? 'REPLAY CASE' : report.unlocked && level < 5 ? `START LEVEL ${level + 1}` : 'RE-EXAMINE REPO'}</span>
               </button>
 

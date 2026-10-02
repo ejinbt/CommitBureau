@@ -95,7 +95,7 @@
   margin: 0;
 }
 
-/* CLI command bar */
+
 .verdict-cli-bar {
   background: #030604;
   border: 1px solid rgba(0, 255, 102, 0.2);
@@ -164,7 +164,7 @@
   color: #ffffff;
 }
 
-/* Action row */
+
 .verdict-action-row {
   display: flex;
   align-items: center;
@@ -217,10 +217,6 @@
   box-shadow: 0 6px 20px rgba(0, 255, 102, 0.5);
   transform: translateY(-1px);
 }
-
-/* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
-   ========================================================================== */
 
 @media (max-width: 640px) {
   .verdict-pane {

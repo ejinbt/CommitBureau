@@ -1,7 +1,5 @@
-/* Daily Repos: three repo cards (Easy, Medium, Hard) in a fullscreen section, like COMMITLE's. */
-
 .daily-repos-section {
-  position: relative; /* anchors the bottom-right scroll arrow */
+  position: relative;
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
@@ -229,7 +227,7 @@
   }
 }
 
-/* 2K / 4K screens: widen with the site's .cb-container (index.css); text already scales with the root font size. */
+
 @media (min-width: 1800px) {
   .daily-repos-inner { max-width: 1480px; }
 }

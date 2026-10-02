@@ -1,31 +1,24 @@
-// Level 2 (Officer): reading diffs.
-// Each generator takes the game context and returns one round, or null if this repo can't support it.
-
 import { findCommitWithFile, fitsOnScreen, splitPatch } from '../diff.js'
 import { getCommit } from '../github.js'
 import { commitDate, firstLine, isMerge, makeOptions, shortSha, shuffle, uniqueOthers } from '../utils.js'
 
 const MAX_OPTION_LENGTH = 80
 
-// Long code lines don't fit on an answer button.
 function clip(text) {
   const t = text.trim()
   return t.length > MAX_OPTION_LENGTH ? t.slice(0, MAX_OPTION_LENGTH - 1) + '…' : t
 }
 
-// How many lines added or removed? Show a diff, pick the right "+added / -removed" count.
 export async function linesChanged(ctx) {
   const found = await findCommitWithFile(ctx, fitsOnScreen)
   if (!found) return null
   const { commit, file } = found
 
   const label = (added, removed) => `+${added} / -${removed}`
-  // Count from the patch itself so the answer always matches what the player sees.
   const { added, removed } = splitPatch(file.patch)
   const a = added.length
   const d = removed.length
   const real = label(a, d)
-  // Near misses: off by one, or added and removed swapped (the classic mix-up).
   const nearMisses = [
     [d, a],
     [a + 1, d],
@@ -34,7 +27,7 @@ export async function linesChanged(ctx) {
     [a, Math.max(0, d - 1)],
     [a + 2, d + 1],
   ]
-    .filter(([x, y]) => x + y > 0) // "+0 / -0" is obviously wrong when the diff has changes
+    .filter(([x, y]) => x + y > 0)
     .map(([x, y]) => label(x, y))
 
   const sha = shortSha(commit.sha)
@@ -54,15 +47,12 @@ export async function linesChanged(ctx) {
   }
 }
 
-// Which file changed? Show a diff with the file name hidden, pick the file.
 export async function whichFile(ctx) {
   const found = await findCommitWithFile(ctx, fitsOnScreen)
   if (!found) return null
   const { commit, detail, file } = found
   const changedHere = new Set(detail.files.map((f) => f.filename))
 
-  // Wrong answers: real files from other commits that this commit didn't touch.
-  // Commits already used this game are probably cached, so look at those first to save API calls.
   const others = ctx.commits
     .filter((c) => c.sha !== commit.sha && !isMerge(c))
     .sort((x, y) => Number(ctx.used.has(y.sha)) - Number(ctx.used.has(x.sha)))
@@ -98,15 +88,12 @@ export async function whichFile(ctx) {
   }
 }
 
-// Lines that were really deleted: not blank, not just moved or re-indented.
 function deletedLines(file) {
   const { added, removed, context } = splitPatch(file.patch)
   const stillThere = new Set([...added, ...context].map((t) => t.trim()))
   return removed.map((t) => t.trim()).filter((t) => t.length >= 3 && !stillThere.has(t))
 }
 
-// Spot the deleted line. Show a diff, pick the line that was removed.
-// Wrong answers are added and unchanged lines from the same diff, to practise telling +, - and context apart.
 export async function spotDeletedLine(ctx) {
   const found = await findCommitWithFile(ctx, (f) => fitsOnScreen(f) && deletedLines(f).length > 0)
   if (!found) return null
@@ -115,7 +102,6 @@ export async function spotDeletedLine(ctx) {
   const real = clip(shuffle(deletedLines(file))[0])
   const { added, context } = splitPatch(file.patch)
   const usable = (lines) => shuffle(lines.map(clip).filter((t) => t.length >= 3))
-  // Prefer added lines as wrong answers: confusing + with - is the mistake worth practising.
   const wrong = uniqueOthers([...usable(added), ...usable(context)], real, 3)
   if (wrong.length < 2) return null
 

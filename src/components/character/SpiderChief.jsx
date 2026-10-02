@@ -3,11 +3,6 @@ import gsap from 'gsap';
 import { SPIDER_SPRITES } from '../../assets/spiderAssets';
 import './SpiderChief.css';
 
-/**
- * SpiderChief: The Bureau Chief Detective ambient hero character.
- * High-presence standing detective with interactive parallax, breathing idle physics,
- * and glowing cybernetic HUD telemetry.
- */
 export default function SpiderChief({ className = '' }) {
   const containerRef = useRef(null);
   const spriteRef = useRef(null);
@@ -15,7 +10,6 @@ export default function SpiderChief({ className = '' }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Atmospheric breathing & floating idle
       if (spriteRef.current) {
         gsap.to(spriteRef.current, {
           y: -10,
@@ -27,7 +21,6 @@ export default function SpiderChief({ className = '' }) {
         });
       }
 
-      // Eye aura pulsing
       if (glowRef.current) {
         gsap.to(glowRef.current, {
           opacity: 0.85,
@@ -40,7 +33,6 @@ export default function SpiderChief({ className = '' }) {
       }
     }, containerRef);
 
-    // Subtle 3D cursor tilt parallax
     const handleMouseMove = (e) => {
       if (!spriteRef.current) return;
       const { innerWidth, innerHeight } = window;
@@ -75,7 +67,6 @@ export default function SpiderChief({ className = '' }) {
           className="cb-spider-chief-img"
           draggable="false"
         />
-        {/* Holographic HUD Badge */}
         <div className="cb-spider-chief-badge cb-mono">
           <span className="cb-spider-chief-dot" />
           <span>CHIEF INVESTIGATOR</span>

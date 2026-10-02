@@ -1,16 +1,9 @@
-/* ==========================================================================
-   REALISTIC MAGNIFYING GLASS HARDWARE CURSOR
-   Hardware-accelerated SVG cursor with crystal optical lens, metallic emerald rim,
-   specular reflection, and ergonomic dark handle.
-   ========================================================================== */
-
 @media (pointer: fine) {
-  /* Default page cursor: realistic magnifying glass */
   html, body {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Cpath d='M19 19L27 27' stroke='rgba(0,0,0,0.45)' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='12' r='9' fill='rgba(0,0,0,0.15)'/%3E%3Cpath d='M18.5 18.5L27 27' stroke='%231e293b' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M18.5 18.5L26.5 26.5' stroke='%23475569' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M18.5 18.5L26.5 26.5' stroke='%2300ff66' stroke-width='0.8' stroke-linecap='round' opacity='0.7'/%3E%3Ccircle cx='18.5' cy='18.5' r='2' fill='%23cbd5e1' stroke='%230f172a' stroke-width='0.75'/%3E%3Ccircle cx='12' cy='12' r='9' stroke='%230f172a' stroke-width='1'/%3E%3Ccircle cx='12' cy='12' r='8.2' stroke='%2300ff66' stroke-width='2.2' fill='none'/%3E%3Cpath d='M5.5 8.5A8.2 8.2 0 0 1 15.5 4' stroke='%23ffffff' stroke-width='1' stroke-linecap='round' opacity='0.9'/%3E%3Ccircle cx='12' cy='12' r='7.1' fill='rgba(0, 255, 102, 0.08)'/%3E%3Cpath d='M7 10A5.5 5.5 0 0 1 12 6.5' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' opacity='0.95'/%3E%3Ccircle cx='6.5' cy='12.5' r='0.8' fill='%23ffffff' opacity='0.8'/%3E%3C/svg%3E") 12 12, auto;
   }
 
-  /* Interactive pointer on buttons, links, inputs, and tabs */
+
   button, 
   a, 
   input, 

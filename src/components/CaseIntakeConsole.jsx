@@ -10,13 +10,8 @@ import './CaseIntakeConsole.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Section 2: Case Intake Console
- * Features tactile Forensic Folder Dossier cards,
- * smooth tab transition physics, and staggered entrance animations.
- */
 export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured', level = 1, onSelectLevel, onScrollNext }) {
-  const [activeTab, setActiveTab] = useState(initialTab); // 'featured' | 'custom' | 'archive'
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
 
   if (initialTab !== prevInitialTab) {
@@ -24,30 +19,26 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
     setActiveTab(initialTab);
   }
 
-  // Custom Target State
   const [customInput, setCustomInput] = useState('');
   const [customError, setCustomError] = useState('');
 
-  // My Archive State
   const [username, setUsername] = useState('');
   const [userRepos, setUserRepos] = useState([]);
   const [loadingRepos, setLoadingRepos] = useState(false);
   const [archiveError, setArchiveError] = useState('');
 
-  // Token Management
   const [showTokenSettings, setShowTokenSettings] = useState(false);
   const [githubToken, setGithubToken] = useState(() => {
     try {
       return localStorage.getItem('cb_github_token') || '';
     } catch {
-      return ''; // storage blocked (private mode)
+      return '';
     }
   });
   const [tokenSaved, setTokenSaved] = useState(false);
 
   const contentRef = useRef(null);
 
-  // Animate tab content whenever activeTab changes
   useEffect(() => {
     if (contentRef.current) {
       gsap.fromTo(
@@ -56,7 +47,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
         { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: 'power3.out' }
       );
 
-      // Stagger folder cards if on featured tab
       const cards = contentRef.current.querySelectorAll('.cb-folder-card');
       if (cards.length > 0) {
         gsap.fromTo(
@@ -68,7 +58,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
     }
   }, [activeTab]);
 
-  // Section 3 ScrollTrigger entrance animation (triggers when scrolling into Section 3)
   useEffect(() => {
     const ctx = gsap.context(() => {
       const header = document.querySelector('.cb-intake-header');
@@ -143,7 +132,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
         localStorage.removeItem('cb_github_token');
       }
     } catch {
-      // Storage blocked (private mode): the token can't be saved, but the game still works.
     }
     setTokenSaved(true);
     setTimeout(() => setTokenSaved(false), 2000);
@@ -186,7 +174,7 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
     }
 
     setLoadingRepos(true);
-    setUserRepos([]); // Clear previous user's repos immediately
+    setUserRepos([]);
     try {
       const repos = await getUserRepos(username.trim());
       if (!repos || repos.length === 0) {
@@ -205,11 +193,9 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
 
   return (
     <section id="case-intake" className="cb-intake-section">
-      {/* Interactive Spider Detective Surveillance Peep */}
       <SpiderPeep side="left" mode="viewport" top="36%" delay={3.5} interval={16} />
 
       <div className="cb-container">
-        {/* Section Header */}
         <div className="cb-intake-header">
           <div className="cb-intake-eyebrow cb-mono">
             <span className="cb-eyebrow-accent">//</span>
@@ -228,12 +214,10 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
           </p>
         </div>
 
-        {/* Level Picker: jump to any clearance level */}
         {onSelectLevel && (
           <LevelPicker level={level} onSelectLevel={onSelectLevel} />
         )}
 
-        {/* Tab Switcher */}
         <div className="cb-tabs-wrapper">
           <div className="cb-intake-tabs">
             <button
@@ -263,20 +247,16 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
           </div>
         </div>
 
-        {/* Animated Tab Content Container */}
         <div ref={contentRef} className="cb-tab-content-area">
-          {/* TAB 1: Forensic Case Folder Dossiers */}
           {activeTab === 'featured' && (
             <div className="cb-folders-grid">
               {FEATURED_REPOS.map((item, index) => (
                 <div key={`${item.owner}/${item.repo}`} className="cb-folder-card">
-                  {/* Folder Tab (Sticks up from the folder sleeve) */}
                   <div className="cb-folder-tab">
                     <span className="cb-folder-tab-num cb-mono">CASE 0{index + 1}</span>
                     <span className="cb-folder-tab-badge cb-mono">{item.tag}</span>
                   </div>
 
-                  {/* Folder Sleeve Body */}
                   <div className="cb-folder-body">
                     <div className="cb-folder-meta cb-mono">
                       <span className="cb-folder-stamp">CLASSIFIED</span>
@@ -308,7 +288,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
             </div>
           )}
 
-          {/* TAB 2: Custom Target URL Input */}
           {activeTab === 'custom' && (
             <div className="cb-custom-wrapper">
               <div className="cb-folder-card cb-custom-folder">
@@ -360,7 +339,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
             </div>
           )}
 
-          {/* TAB 3: My Archive Mode */}
           {activeTab === 'archive' && (
             <div className="cb-archive-wrapper">
               <div className="cb-folder-card cb-archive-folder">
@@ -410,7 +388,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                     )}
                   </form>
 
-                  {/* High-Action Forensic Detective Loader */}
                   {loadingRepos && (
                     <div className="cb-archive-loader-wrapper">
                       <SpiderLoader
@@ -420,7 +397,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                     </div>
                   )}
 
-                  {/* Retrieved User Repos List */}
                   {userRepos.length > 0 && (
                     <div className="cb-archive-results">
                       <h4 className="cb-archive-results-title cb-heading">
@@ -428,8 +404,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
                       </h4>
 
                       <div className="cb-user-repo-list">
-                        {/* The engine's getUserRepos returns { owner, repo, description, language, fork }
-                            (docs/CONTRACT.md), not GitHub's raw name / full_name. */}
                         {userRepos.map((item) => (
                           <div key={`${item.owner}/${item.repo}`} className="cb-user-repo-item">
                             <div className="cb-user-repo-info">
@@ -461,7 +435,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
           )}
         </div>
 
-        {/* Investigator Token Key (Rate Limit Helper) */}
         <div className="cb-token-container">
           <button
             type="button"
@@ -500,7 +473,6 @@ export default function CaseIntakeConsole({ onSelectRepo, initialTab = 'featured
           )}
         </div>
       </div>
-      {/* Bottom-right scroll arrow to the next section, same as the hero's */}
       <div className="cb-section-scroll-arrow">
         <button
           type="button"

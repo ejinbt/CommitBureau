@@ -1,8 +1,3 @@
-/* ==========================================================================
-   SPIDER LOADER COMPONENT STYLES
-   Marching walking detective with shadow physics & telemetry scanning
-   ========================================================================== */
-
 .cb-spider-loader {
   display: flex;
   align-items: center;
@@ -10,7 +5,7 @@
   width: 100%;
 }
 
-/* Fullscreen modal overlay */
+
 .cb-spider-loader--fullscreen {
   position: fixed;
   inset: 0;
@@ -21,7 +16,7 @@
   padding: 2rem;
 }
 
-/* Inline container mode */
+
 .cb-spider-loader--inline {
   position: relative;
   padding: 2.5rem 1.5rem;
@@ -39,7 +34,7 @@
   width: 100%;
 }
 
-/* Walking Stage */
+
 .cb-spider-loader-stage {
   position: relative;
   width: clamp(140px, 18vw, 360px);
@@ -59,7 +54,7 @@
   will-change: transform;
 }
 
-/* Ground shadow below walking shoes */
+
 .cb-spider-loader-shadow {
   position: absolute;
   bottom: 0px;
@@ -71,7 +66,7 @@
   will-change: transform, opacity;
 }
 
-/* Body & Telemetry */
+
 .cb-spider-loader-body {
   width: 100%;
   display: flex;
@@ -124,7 +119,7 @@
   margin: 0;
 }
 
-/* Progress track & laser scan */
+
 .cb-spider-loader-progress-track {
   width: 100%;
   height: 4px;

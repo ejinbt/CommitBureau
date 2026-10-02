@@ -4,17 +4,9 @@ import gsap from 'gsap';
 import logoImg from '../assets/logo.webp';
 import './Header.css';
 
-/**
- * Cyber-Forensic Capsule Navbar modeled after user's reference:
- * - Left: Official Brand Logo with green neon underglow & high-contrast brand lettering
- * - Center: Bracketed active tab "Cases", Commitle (Daily), Archive, How it works, GitHub
- * - Status Pill: Pulsing green "SYSTEM ONLINE / REPO FORENSICS READY"
- * - Right: Beveled Neon "+ NEW INVESTIGATION ->" Tactical Action Button
- */
 export default function Header({ onStartCaseClick, onNavigate }) {
   const logoRef = useRef(null);
 
-  // Magnetic spring pull on logo
   const setupMagnetic = (elementRef, strength = 0.15) => {
     const el = elementRef.current;
     if (!el) return;
@@ -72,7 +64,6 @@ export default function Header({ onStartCaseClick, onNavigate }) {
   return (
     <div className="cb-nav-wrapper">
       <header className="cb-capsule-nav">
-        {/* Left: CommitBureau Brand Official Logo Only */}
         <div 
           ref={logoRef} 
           className="cb-nav-brand-container" 
@@ -84,9 +75,7 @@ export default function Header({ onStartCaseClick, onNavigate }) {
           <img src={logoImg} alt="CommitBureau Logo" className="cb-nav-logo-standalone" />
         </div>
 
-        {/* Center: HUD Nav Tabs */}
         <nav className="cb-nav-links">
-          {/* Active Bracketed Cases Tab */}
           <button 
             type="button" 
             className="cb-hud-tab active-cases"
@@ -98,7 +87,6 @@ export default function Header({ onStartCaseClick, onNavigate }) {
             <span className="hud-corner-br" />
           </button>
 
-          {/* Daily Commitle Wordle Tab */}
           <button 
             type="button" 
             className="cb-hud-tab cb-commitle-tab"
@@ -109,7 +97,6 @@ export default function Header({ onStartCaseClick, onNavigate }) {
             <span className="hud-daily-pill">DAILY</span>
           </button>
 
-          {/* Archive Tab */}
           <button 
             type="button" 
             className="cb-hud-tab"
@@ -119,7 +106,6 @@ export default function Header({ onStartCaseClick, onNavigate }) {
             <span className="hud-tab-label">ARCHIVE</span>
           </button>
 
-          {/* How It Works / Briefing */}
           <button 
             type="button" 
             className="cb-hud-tab"
@@ -129,7 +115,6 @@ export default function Header({ onStartCaseClick, onNavigate }) {
             <span className="hud-tab-label">HOW IT WORKS</span>
           </button>
 
-          {/* GitHub Repo */}
           <a 
             href="https://github.com/ejinbt/CommitBureau" 
             target="_blank" 
@@ -149,9 +134,7 @@ export default function Header({ onStartCaseClick, onNavigate }) {
           </a>
         </nav>
 
-        {/* Right Section: Tactical Action CTA */}
         <div className="cb-nav-right-cluster">
-          {/* Rounded Beveled Neon Action Button */}
           <button 
             type="button" 
             className="cb-cyber-cta"

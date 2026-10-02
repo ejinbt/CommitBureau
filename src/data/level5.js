@@ -1,7 +1,3 @@
-// Level 5 (Chief) scenarios: real-life Git emergencies where the player picks the right command.
-// No API needed. Every option carries a "why", so a wrong pick explains what that command would have done.
-// {repo} is replaced with the repo name being played, or "your project".
-
 export const scenarios = [
   {
     type: 'undo',

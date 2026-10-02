@@ -10,7 +10,6 @@ import { attachTactileAudioListener } from './utils/audio';
 
 gsap.registerPlugin(ScrollToPlugin);
 
-// The chosen level survives a reload. Storage can be blocked (private mode), so fall back to level 1.
 const LEVEL_KEY = 'cb_level';
 function loadLevel() {
   try {
@@ -21,14 +20,8 @@ function loadLevel() {
   }
 }
 
-
-/**
- * Root Application Component
- * Manages active screen state ('main' | 'investigation' | 'debrief')
- * and global detective clearance level with browser history integration.
- */
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState('main'); // 'main' | 'investigation' | 'debrief'
+  const [currentScreen, setCurrentScreen] = useState('main');
   const [targetRepo, setTargetRepo] = useState(null);
   const [level, setLevel] = useState(loadLevel);
   const [rank, setRank] = useState(() => RANKS[loadLevel() - 1]);
@@ -36,37 +29,29 @@ export default function App() {
   const [lastLevelPlayed, setLastLevelPlayed] = useState(1);
   const [intakeTab, setIntakeTab] = useState('featured');
 
-  // Remember the level for the next visit.
   useEffect(() => {
     try {
       localStorage.setItem(LEVEL_KEY, String(level));
     } catch {
-      // Storage blocked: the level just won't survive a reload.
     }
   }, [level]);
 
-
-  // The level picker on the home screen: jump straight to any level.
   const handleSelectLevel = (nextLevel) => {
     setLevel(nextLevel);
     setRank(RANKS[nextLevel - 1]);
   };
 
-  // Mount global tactile button audio listener
   useEffect(() => {
     return attachTactileAudioListener();
   }, []);
 
-  // Handle browser back and forward button events
   useEffect(() => {
-    // Replace initial state so we have a baseline screen recorded
     window.history.replaceState({ screen: 'main' }, '', window.location.href);
 
     const handlePopState = (e) => {
       if (e.state && e.state.screen) {
         setCurrentScreen(e.state.screen);
       } else {
-        // Fallback to main screen if history state is undefined
         setCurrentScreen('main');
       }
     };
@@ -94,8 +79,7 @@ export default function App() {
     }
   };
 
-  // A Daily Repo case plays at its own level and doesn't move the player's saved level.
-  const [dailyRun, setDailyRun] = useState(null); // { difficulty, level, date } while playing a daily case
+  const [dailyRun, setDailyRun] = useState(null);
 
   const handleStartDaily = (daily) => {
     setDailyRun({ difficulty: daily.difficulty, level: daily.level, date: daily.date });
@@ -121,14 +105,12 @@ export default function App() {
     const report = finalReport(finalState, levelPlayed);
 
     if (dailyRun) {
-      // Remember today's result for this difficulty, shown on the Daily Repos card.
       try {
         localStorage.setItem(
           `cb_daily_${dailyRun.date}_${dailyRun.difficulty}`,
           JSON.stringify({ percent: report.percent, score: report.score, correct: report.correctCount, total: report.totalCount })
         );
       } catch {
-        // Storage blocked: the card just won't show the result.
       }
     } else {
       setRank(report.rank);
@@ -184,7 +166,6 @@ export default function App() {
 
   const screenContainerRef = useRef(null);
 
-  // Butter-smooth GSAP transition between screens
   useEffect(() => {
     if (screenContainerRef.current) {
       gsap.fromTo(
@@ -229,7 +210,7 @@ export default function App() {
             level={lastLevelPlayed}
             daily={dailyRun}
             onPlayAgain={handlePlayAgain}
-            onReturnIntake={handleExitCase}
+            onReturnIntake={() => handleNavigate('intake', 'featured')}
             onNavigate={handleNavigate}
           />
         )}

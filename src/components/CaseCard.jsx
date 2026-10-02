@@ -7,15 +7,6 @@ import { HINT_PENALTY } from '../api';
 import { playClickSound } from '../utils/audio';
 import './CaseCard.css';
 
-/**
- * CaseCard Component (Forensic Dossier Presentation)
- * - Forensic case dossier banner
- * - High-depth suspect hypothesis cards with role tags and scanline hover physics
- * - 150ms verification suspense state with shake on error
- * - Detective notebook clue reveal with HINT_PENALTY
- * - Shows optionNotes when answered (explaining wrong/right commands)
- * - Conditionally renders DiffViewer only when diff exists
- */
 export default function CaseCard({
   round,
   roundNumber,
@@ -28,7 +19,6 @@ export default function CaseCard({
   onNextRound,
   targetRepo
 }) {
-  // The player digs up the evidence with git commands. Level 5 has no investigation, only the scenario.
   const investigating = Boolean(round.investigate);
   const [hintOpen, setHintOpen] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
@@ -47,7 +37,6 @@ export default function CaseCard({
     playClickSound();
     setVerifyingIdx(idx);
 
-    // 180ms suspense verification delay for high-tactile game feel
     setTimeout(() => {
       onAnswer(idx, hintUsed);
       setVerifyingIdx(null);
@@ -56,7 +45,6 @@ export default function CaseCard({
 
   return (
     <div className="case-dossier-card">
-      {/* Top Case Identification Banner */}
       <div className="case-dossier-banner">
         <div className="case-identity-group">
           <div className="case-badge-primary">
@@ -72,7 +60,6 @@ export default function CaseCard({
           </div>
         </div>
 
-        {/* Notebook Clue Button */}
         <div className="case-dossier-actions">
           <button
             type="button"
@@ -86,7 +73,6 @@ export default function CaseCard({
         </div>
       </div>
 
-      {/* Detective Notebook Clue Panel */}
       {hintOpen && (
         <div className="dossier-clue-drawer">
           <div className="clue-drawer-header">
@@ -98,7 +84,6 @@ export default function CaseCard({
         </div>
       )}
 
-      {/* Main Interrogation Prompt */}
       <div className="case-inquiry-hero">
         <div className="inquiry-eyebrow">
           <span className="eyebrow-accent">//</span>
@@ -107,14 +92,12 @@ export default function CaseCard({
         <h2 className="inquiry-statement">{round.prompt}</h2>
       </div>
 
-      {/* Investigation terminal. Keyed by round so each case starts fresh. */}
       {investigating && (
         <div className="case-evidence-envelope">
           <InvestigationTerminal key={round.id} round={round} targetRepo={targetRepo} />
         </div>
       )}
 
-      {/* Fallback: show the evidence when a round has no investigation but has a diff */}
       {!investigating && round.evidence?.diff && (
         <div className="case-evidence-envelope">
           <DiffViewer
@@ -127,7 +110,6 @@ export default function CaseCard({
         </div>
       )}
 
-      {/* Suspect / Hypothesis Matrices */}
       <div className="hypotheses-investigation-section">
         <div className="section-meta-header">
           <span className="meta-title">SELECT HYPOTHESIS VERDICT</span>
@@ -159,7 +141,6 @@ export default function CaseCard({
                 disabled={isAnswered || verifyingIdx !== null}
                 onClick={() => handleSelectOption(idx)}
               >
-                {/* Card Top Pill */}
                 <div className="card-top-identity">
                   <div className="key-chip">
                     <span className="chip-key">[{idx + 1}]</span>
@@ -185,7 +166,6 @@ export default function CaseCard({
                   )}
                 </div>
 
-                {/* Option Content Body */}
                 <div className="card-content-body">
                   <span className="suspect-headline">{opt}</span>
                   {isAnswered && round.optionNotes?.[idx] && (
@@ -196,7 +176,6 @@ export default function CaseCard({
                   )}
                 </div>
 
-                {/* Subtle bottom scanline bar */}
                 <div className="card-accent-bar" />
               </button>
             );
@@ -204,7 +183,6 @@ export default function CaseCard({
         </div>
       </div>
 
-      {/* Post-Answer Verdict Component */}
       {isAnswered && (
         <VerdictCard
           isCorrect={isCorrect}

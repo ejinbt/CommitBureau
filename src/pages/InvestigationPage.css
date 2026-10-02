@@ -37,7 +37,7 @@
   }
 }
 
-/* Loading Card & Hero */
+
 .investigation-loading-hero {
   padding: 60px 20px;
   width: 100%;
@@ -87,7 +87,7 @@
   color: #6ee7b7;
 }
 
-/* Error Card */
+
 .investigation-error-block {
   background: #0c0606;
   border: 1px solid rgba(239, 68, 68, 0.35);
@@ -110,7 +110,7 @@
 .error-desc {
   color: #fca5a5;
   font-size: 0.88rem;
-  max-width: 27.5rem; /* 440px at normal size; grows on 2K/4K */
+  max-width: 27.5rem;
 }
 
 .investigation-token-box {
@@ -119,7 +119,7 @@
   border: 1px solid rgba(0, 255, 102, 0.2);
   border-radius: 8px;
   padding: 16px 20px;
-  max-width: 28.75rem; /* 460px at normal size; grows on 2K/4K */
+  max-width: 28.75rem;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -243,14 +243,14 @@
   background: rgba(239, 68, 68, 0.25);
 }
 
-/* Investigation Flow */
+
 .investigation-flow {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-/* 3-Column Cockpit Bar */
+
 .investigation-cockpit-bar {
   background: #050a06;
   border: 1px solid rgba(0, 255, 102, 0.22);
@@ -263,7 +263,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(0, 255, 102, 0.12);
 }
 
-/* Left: Target Repo */
+
 .cockpit-left {
   display: flex;
   align-items: center;
@@ -365,7 +365,7 @@
   box-shadow: 0 0 6px #00ff66;
 }
 
-/* Center: Segmented Pips */
+
 .cockpit-center {
   display: flex;
   flex-direction: column;
@@ -407,7 +407,7 @@
   border-color: #00ff66;
 }
 
-/* Right: Phosphor Digital Score */
+
 .cockpit-right {
   display: flex;
   align-items: center;
@@ -452,9 +452,7 @@
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.45);
 }
 
-/* ==========================================================================
-   IN-GAME TOKEN MODAL
-   ========================================================================== */
+
 .investigation-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -479,7 +477,7 @@
   border: 1px solid rgba(0, 255, 102, 0.3);
   border-radius: 12px;
   padding: 24px;
-  max-width: 27.5rem; /* 440px at normal size; grows on 2K/4K */
+  max-width: 27.5rem;
   width: 100%;
   box-shadow: 
     0 24px 50px rgba(0, 0, 0, 0.8),
@@ -657,10 +655,6 @@
   font-size: 0.75rem;
   color: #00ff66;
 }
-
-/* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
-   ========================================================================== */
 
 @media (max-width: 860px) {
   .investigation-viewport {

@@ -1,12 +1,3 @@
-/**
- * COMMITLE / The Daily Git Forensics Dossier
- * Wordle-style daily puzzle: a terminal session from Case Zero (Night Owl Cafe, the game's fictional
- * demo repo) with one git command redacted. The player reads the real Git output and works out which
- * 5-letter command printed it. Every answer is a real git command, so solving it teaches real Git.
- *
- * In `terminal`, lines starting with "$ " are commands. {{?}} marks the redacted 5-letter command.
- */
-
 export const COMMITLE_TARGETS = [
   {
     word: 'STASH',
@@ -209,11 +200,8 @@ export const COMMITLE_TARGETS = [
   },
 ]
 
-// Every puzzle is set in Case Zero, the game's built-in fictional repo.
 const CASE_REPO = 'commitbureau/case-zero'
 
-// Three puzzles a day, one per difficulty. Easy: everyday commands, clue shown. Medium: trickier
-// commands and output, clue on request. Hard: rarer commands, and only the terminal output is given.
 export const DIFFICULTIES = ['easy', 'medium', 'hard']
 
 const DIFFICULTY_BY_COMMAND = {
@@ -237,8 +225,6 @@ const DIFFICULTY_BY_COMMAND = {
 
 for (const t of COMMITLE_TARGETS) t.difficulty = DIFFICULTY_BY_COMMAND[t.command] || 'medium'
 
-// Words players may guess: real 5-letter words, weighted towards Git and programming so guesses are
-// meaningful. Every answer is added below, so the list can never reject the solution.
 const WORD_LIST = `
   apply blame clean clone fetch merge notes prune reset stage stash
   about above abort actor added adder admin adopt after again agent alert alias align alike alive allow
@@ -281,9 +267,6 @@ export const VALID_GUESSES = new Set([
   ...COMMITLE_TARGETS.map((t) => t.word),
 ])
 
-/**
- * Today's puzzle: the same for every player on the same local calendar date.
- */
 export function getDailyCommitleCase(customDate = new Date()) {
   const epoch = new Date('2026-01-01T00:00:00Z');
   const now = new Date(Date.UTC(customDate.getFullYear(), customDate.getMonth(), customDate.getDate()));
@@ -305,10 +288,6 @@ function dayInfo(customDate) {
   return { dayIndex, dayNumber: dayIndex + 1, dateString: now.toISOString().split('T')[0] };
 }
 
-/**
- * Today's three puzzles, [easy, medium, hard], the same for every player on the same local date.
- * Each difficulty rotates through its own pool, and the three never share an answer on one day.
- */
 export function getDailyCommitleSet(customDate = new Date()) {
   const { dayIndex, dayNumber, dateString } = dayInfo(customDate);
   const used = new Set();
@@ -323,17 +302,12 @@ export function getDailyCommitleSet(customDate = new Date()) {
   });
 }
 
-/**
- * Evaluate Wordle guess against target
- * Returns array of { letter, status: 'correct' | 'present' | 'absent' }
- */
 export function evaluateCommitleGuess(guess, target) {
   const result = [];
   const targetArr = target.split('');
   const guessArr = guess.split('');
   const targetRemaining = {};
 
-  // First pass: identify correct matches
   for (let i = 0; i < 5; i++) {
     const letter = guessArr[i];
     if (letter === targetArr[i]) {
@@ -343,7 +317,6 @@ export function evaluateCommitleGuess(guess, target) {
     }
   }
 
-  // Second pass: identify present vs absent
   for (let i = 0; i < 5; i++) {
     if (!result[i]) {
       const letter = guessArr[i];
