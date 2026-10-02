@@ -279,6 +279,27 @@
   margin: 0 auto 3.5rem auto;
 }
 
+@media (min-width: 1800px) {
+  .cb-custom-wrapper,
+  .cb-archive-wrapper {
+    max-width: 1100px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .cb-custom-wrapper,
+  .cb-archive-wrapper {
+    max-width: 1480px;
+  }
+}
+
+@media (min-width: 3200px) {
+  .cb-custom-wrapper,
+  .cb-archive-wrapper {
+    max-width: 1880px;
+  }
+}
+
 .cb-custom-body,
 .cb-archive-body {
   border-radius: 0 16px 16px 16px;

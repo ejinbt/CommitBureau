@@ -15,7 +15,7 @@
 
 .cb-spider-chief-wrapper {
   position: relative;
-  width: clamp(200px, 22vw, 320px);
+  width: clamp(200px, 22vw, 560px);
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -16,6 +16,27 @@
   padding: 100px 20px 0 20px;
 }
 
+@media (min-width: 1800px) {
+  .debrief-viewport {
+    max-width: 1360px;
+    padding: 130px 30px 0 30px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .debrief-viewport {
+    max-width: 1800px;
+    padding: 160px 40px 0 40px;
+  }
+}
+
+@media (min-width: 3200px) {
+  .debrief-viewport {
+    max-width: 2200px;
+    padding: 180px 50px 0 50px;
+  }
+}
+
 /* Dossier Frame */
 .debrief-dossier-frame {
   background: #040905;
